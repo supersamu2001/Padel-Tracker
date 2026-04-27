@@ -1,7 +1,6 @@
 package com.example.padeltracker
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -10,13 +9,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import com.example.padeltracker.shared.MatchConfig
 import com.example.padeltracker.ui.theme.*
-import com.example.padeltracker.ui.screens.* // This links to your new screens package
-import com.google.android.gms.wearable.PutDataMapRequest
+import com.example.padeltracker.ui.screens.*
 import com.google.android.gms.wearable.Wearable
 
-// Navigation state
+// Navigation states for the application
 enum class AppScreen { Home, Setup, History }
 
 class MainActivity : ComponentActivity() {
@@ -25,8 +22,24 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PadelTrackerTheme {
-                // Tracking current screen
+                // Navigation state management
                 var currentScreen by remember { mutableStateOf(AppScreen.Home) }
+
+                // STATE: Track if a Wear OS device is currently connected via Bluetooth
+                var isWatchConnected by remember { mutableStateOf(false) }
+
+                // EFFECT: Check for connected wearable nodes when the app is launched
+                LaunchedEffect(Unit) {
+                    Wearable.getNodeClient(this@MainActivity).connectedNodes
+                        .addOnSuccessListener { nodes ->
+                            // If the list of nodes is not empty, at least one watch is connected
+                            isWatchConnected = nodes.isNotEmpty()
+                        }
+                        .addOnFailureListener {
+                            // Default to disconnected state if the query fails
+                            isWatchConnected = false
+                        }
+                }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(
@@ -35,10 +48,11 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                             .background(BackgroundBeige)
                     ) {
-                        // Navigation Logic
                         when (currentScreen) {
                             AppScreen.Home -> {
                                 HomeScreen(
+                                    // Pass the connectivity status to the Home Screen
+                                    isConnected = isWatchConnected,
                                     onNewGameClick = { currentScreen = AppScreen.Setup },
                                     onHistoryClick = { currentScreen = AppScreen.History }
                                 )
@@ -46,7 +60,7 @@ class MainActivity : ComponentActivity() {
                             AppScreen.Setup -> {
                                 MatchSetupScreen(
                                     onBackClick = { currentScreen = AppScreen.Home },
-                                    onSendToWatch = { config -> sendConfigToWatch(config) }
+                                    onSendToWatch = { /* Wearable sync logic goes here */ }
                                 )
                             }
                             AppScreen.History -> {
@@ -59,21 +73,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    // This function stays here because it needs the Activity's context to talk to the Wearable API
-    private fun sendConfigToWatch(config: MatchConfig) {
-        val putDataMapReq = PutDataMapRequest.create(MatchConfig.PATH)
-        putDataMapReq.dataMap.putString(MatchConfig.KEY_TEAM_A_P1, config.teamAPlayer1)
-        putDataMapReq.dataMap.putString(MatchConfig.KEY_TEAM_A_P2, config.teamAPlayer2)
-        putDataMapReq.dataMap.putString(MatchConfig.KEY_TEAM_B_P1, config.teamBPlayer1)
-        putDataMapReq.dataMap.putString(MatchConfig.KEY_TEAM_B_P2, config.teamBPlayer2)
-        putDataMapReq.setUrgent()
-
-        val putDataReq = putDataMapReq.asPutDataRequest()
-        Wearable.getDataClient(this).putDataItem(putDataReq)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Sent to watch!", Toast.LENGTH_SHORT).show()
-            }
     }
 }
