@@ -11,58 +11,88 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.example.padeltracker.ui.theme.*
 import com.example.padeltracker.ui.screens.*
+import com.example.padeltracker.shared.MatchConfig
 import com.google.android.gms.wearable.Wearable
 
-// Navigation states for the application
-enum class AppScreen { Home, Setup, History }
+// Enum to define the different screens in the app
+enum class AppScreen { Home, Setup, History, LiveMatch }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Enables edge-to-edge display (status bar and navigation bar transparency)
         enableEdgeToEdge()
+
         setContent {
             PadelTrackerTheme {
-                // Navigation state management
+                // NAVIGATION STATE: Tracks which screen is currently visible
                 var currentScreen by remember { mutableStateOf(AppScreen.Home) }
 
-                // STATE: Track if a Wear OS device is currently connected via Bluetooth
+                // CONNECTIVITY STATE: Tracks if a Wear OS watch is connected
                 var isWatchConnected by remember { mutableStateOf(false) }
 
-                // EFFECT: Check for connected wearable nodes when the app is launched
+                // DATA STATE: Holds the player names and match settings entered in SetupScreen
+                // This is shared between SetupScreen and LiveScoreScreen
+                var activeMatchConfig by remember { mutableStateOf<MatchConfig?>(null) }
+
+                // SIDE EFFECT: Check for connected Wear OS nodes when the app starts
                 LaunchedEffect(Unit) {
                     Wearable.getNodeClient(this@MainActivity).connectedNodes
                         .addOnSuccessListener { nodes ->
-                            // If the list of nodes is not empty, at least one watch is connected
                             isWatchConnected = nodes.isNotEmpty()
                         }
                         .addOnFailureListener {
-                            // Default to disconnected state if the query fails
                             isWatchConnected = false
                         }
                 }
 
+                // Root layout using Scaffold for basic material design structure
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(
                         modifier = Modifier
                             .padding(innerPadding)
                             .fillMaxSize()
-                            .background(BackgroundBeige)
+                            .background(BackgroundBeige) // Using our custom theme color
                     ) {
+                        // NATIVE NAVIGATION LOGIC
                         when (currentScreen) {
                             AppScreen.Home -> {
                                 HomeScreen(
-                                    // Pass the connectivity status to the Home Screen
                                     isConnected = isWatchConnected,
                                     onNewGameClick = { currentScreen = AppScreen.Setup },
                                     onHistoryClick = { currentScreen = AppScreen.History }
                                 )
                             }
+
                             AppScreen.Setup -> {
                                 MatchSetupScreen(
                                     onBackClick = { currentScreen = AppScreen.Home },
-                                    onSendToWatch = { /* Wearable sync logic goes here */ }
+                                    onSendToWatch = { config ->
+                                        // 1. Capture the configuration from the setup screen
+                                        activeMatchConfig = config
+                                        // 2. Navigate to the live scoring screen
+                                        currentScreen = AppScreen.LiveMatch
+                                    }
                                 )
                             }
+
+                            AppScreen.LiveMatch -> {
+                                // Safety Check: Only show LiveScoreScreen if we have a valid configuration
+                                activeMatchConfig?.let { config ->
+                                    LiveScoreScreen(
+                                        config = config,
+                                        onFinish = {
+                                            // After saving the match, go straight to History
+                                            currentScreen = AppScreen.History
+                                        }
+                                    )
+                                } ?: run {
+                                    // Fallback: If config is null, return to Home
+                                    currentScreen = AppScreen.Home
+                                }
+                            }
+
                             AppScreen.History -> {
                                 HistoryScreen(
                                     onBackClick = { currentScreen = AppScreen.Home }
