@@ -108,6 +108,10 @@ fun MatchHistoryCard(match: MatchRecord) {
                 StatItem(label = "BPM", value = "${match.avgHeartRate}")
                 StatItem(label = "Forehands", value = "${match.forehands}")
                 StatItem(label = "Backhands", value = "${match.backhands}")
+                StatItem(label = "Forehand lobs", value = "${match.forehandLobs}")
+                StatItem(label = "Backhand lobs", value = "${match.backhandLobs}")
+                StatItem(label = "Smashes", value = "${match.smashes}")
+                StatItem(label = "Services", value = "${match.services}")
             }
         }
     }

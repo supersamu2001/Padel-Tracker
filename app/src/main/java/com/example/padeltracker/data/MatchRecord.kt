@@ -13,6 +13,10 @@ data class MatchRecord(
     val avgHeartRate: Int,     // Average BPM from Watch
     val forehands: Int,        // Total forehand shots
     val backhands: Int,        // Total backhand shots
+    val forehandLobs: Int,     // Total forehand lobs
+    val backhandLobs: Int,     // Total backhand lobs
+    val smashes: Int,          // Total smash shots
+    val services: Int,         // Total services
     val teamAPlayers: String,  // Names of Team A
     val teamBPlayers: String   // Names of Team B
 )

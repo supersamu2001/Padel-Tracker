@@ -8,5 +8,9 @@ data class MatchRecord(
     val score: String,
     val avgHeartRate: Int,
     val forehands: Int,
-    val backhands: Int
+    val backhands: Int,
+    val forehandLobs : Int,
+    val backhandLobs: Int,
+    val smashes: Int,
+    val services: Int
 )
