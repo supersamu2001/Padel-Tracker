@@ -41,7 +41,7 @@ class ShotClassifier(private val context: Context) {
 
         // TO DO: ADAPTATION (FOR INSTANCE NORMALIZATION!!)
 
-        // Esempio: il modello accetta un input di forma [1, 100, 3] (100 campioni, 3 assi)
+        // Esempio: il modello accetta un input di forma (1, 40, 6) float32
         // Dobbiamo convertire il FloatArray in un ByteBuffer o un input compatibile
         
         // Supponiamo che l'output sia un array di probabilità per ogni classe
@@ -50,7 +50,7 @@ class ShotClassifier(private val context: Context) {
         try {
             // Se il modello accetta direttamente FloatArray multidimensionali:
             // interpreter?.run(input, output)
-            
+
             // Per ora usiamo un placeholder per l'input basato sul tuo specifico modello
             val inputBuffer = ByteBuffer.allocateDirect(sensorData.size * 4)
             inputBuffer.order(ByteOrder.nativeOrder())
