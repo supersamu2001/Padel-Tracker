@@ -1,6 +1,7 @@
 package com.example.padeltracker
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -20,6 +21,11 @@ enum class AppScreen { Home, Setup, History, LiveMatch }
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        println(">>> TEST PRINTLN: L'APP E' PARTITA! <<<")
+        Log.d("TEST_LOG", ">>> TEST LOG: L'APP E' PARTITA! <<<")
+        Log.d("AIUTOO", "Funzionaaaaaaaaa")
+
 
         // Enables edge-to-edge display (status bar and navigation bar transparency)
         enableEdgeToEdge()

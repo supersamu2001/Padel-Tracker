@@ -39,6 +39,15 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
 }
 
 dependencies {
@@ -65,8 +74,8 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
 
     // TensorFlow Lite
-    implementation("org.tensorflow:tensorflow-lite:2.17.0")
-    implementation("org.tensorflow:tensorflow-lite-support:0.5.0")
+    implementation("org.tensorflow:tensorflow-lite:2.16.1")
+    // implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
 
     // Testing libraries
     testImplementation("junit:junit:4.13.2")

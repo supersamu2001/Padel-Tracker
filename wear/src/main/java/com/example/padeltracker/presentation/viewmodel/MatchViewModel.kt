@@ -1,27 +1,35 @@
 package com.example.padeltracker.presentation.viewmodel
 
+import android.app.Application
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import com.example.padeltracker.presentation.model.ScoreTrackerState
 import com.example.padeltracker.presentation.model.TeamId
 import com.example.padeltracker.presentation.scoring.PadelScoreEngine
+import com.example.padeltracker.presentation.sensors.WearSensorManager
 
 /**
  * ViewModel that manages the padel match state and delegates logic to the PadelScoreEngine.
  */
-class MatchViewModel(
+class MatchViewModel @JvmOverloads constructor(
+    application: Application,
     private val engine: PadelScoreEngine = PadelScoreEngine()
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     private val _state = mutableStateOf(engine.createDefaultMatch())
     val state: State<ScoreTrackerState> = _state
+
+    private val sensorManager = WearSensorManager(application)
 
     /**
      * Moves the match status to server selection.
      */
     fun startMatch() {
         _state.value = engine.startMatch(_state.value)
+
+        // start the collection of data from sensors
+        sensorManager.startTracking()
     }
 
     /**
@@ -50,5 +58,13 @@ class MatchViewModel(
      */
     fun resetMatch() {
         _state.value = engine.createDefaultMatch()
+
+        // stops the collection of data from sensors
+        sensorManager.stopTracking()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        sensorManager.stopTracking()
     }
 }

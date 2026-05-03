@@ -1,10 +1,12 @@
 package com.example.padeltracker.ml
 
 import android.content.Context
+import android.content.res.AssetManager
 import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.support.common.FileUtil
+import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.nio.channels.FileChannel
 
 enum class ShotType {
     FOREHAND,
@@ -22,12 +24,21 @@ class ShotClassifier(private val context: Context) {
 
     init {
         try {
-            val modelBuffer = FileUtil.loadMappedFile(context, modelPath)
+            val modelBuffer = loadModelFile(context.assets, modelPath)
             val options = Interpreter.Options()
             interpreter = Interpreter(modelBuffer, options)
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun loadModelFile(assetManager: AssetManager, modelPath: String): ByteBuffer {
+        val fileDescriptor = assetManager.openFd(modelPath)
+        val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
+        val fileChannel = inputStream.channel
+        val startOffset = fileDescriptor.startOffset
+        val declaredLength = fileDescriptor.declaredLength
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
     }
 
     /**
