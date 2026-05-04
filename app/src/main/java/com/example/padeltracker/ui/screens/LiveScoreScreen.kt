@@ -18,6 +18,7 @@ import com.example.padeltracker.R
 import com.example.padeltracker.data.AppDatabase
 import com.example.padeltracker.data.MatchRecord
 import com.example.padeltracker.shared.MatchConfig
+import com.example.padeltracker.ml.ShotDetectionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -33,6 +34,8 @@ fun LiveScoreScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val db = remember { AppDatabase.getDatabase(context) }
+
+    val shotCounts by ShotDetectionState.shotCounts.collectAsState()
 
     // State for the score counters
     var scoreTeamA by remember { mutableStateOf(0) }
@@ -139,8 +142,14 @@ fun LiveScoreScreen(
                         duration = timeString,
                         score = "$scoreTeamA - $scoreTeamB",
                         avgHeartRate = 0, // Placeholder until watch integration
-                        forehands = 0,    // Placeholder until watch integration
-                        backhands = 0,    // Placeholder until watch integration
+
+                        forehands = shotCounts.forehands,
+                        backhands = shotCounts.backhands,
+                        forehandLobs = shotCounts.forehandLobs,
+                        backhandLobs = shotCounts.backhandLobs,
+                        smashes = shotCounts.smashes,
+                        services = shotCounts.services,
+
                         teamAPlayers = "${config.teamAPlayer1}, ${config.teamAPlayer2}",
                         teamBPlayers = "${config.teamBPlayer1}, ${config.teamBPlayer2}"
                     )
@@ -148,6 +157,8 @@ fun LiveScoreScreen(
                     // Execute database insertion on a background thread (IO)
                     scope.launch(Dispatchers.IO) {
                         db.matchDao().insertMatch(record)
+
+                        ShotDetectionState.reset()
 
                         // Switch back to the Main thread to handle UI navigation
                         withContext(Dispatchers.Main) {
