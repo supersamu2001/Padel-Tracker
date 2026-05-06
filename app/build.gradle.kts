@@ -18,6 +18,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters.addAll(setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
+        }
     }
 
     buildTypes {
@@ -45,7 +49,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
         jniLibs {
-            useLegacyPackaging = true
+            useLegacyPackaging = false
         }
     }
 }
@@ -74,8 +78,11 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
 
     // TensorFlow Lite
-    implementation("org.tensorflow:tensorflow-lite:2.16.1")
+    // implementation("org.tensorflow:tensorflow-lite:2.17.0")
     // implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
+
+    // LiteRT
+    implementation("com.google.ai.edge.litert:litert:2.1.4")
 
     // Testing libraries
     testImplementation("junit:junit:4.13.2")
