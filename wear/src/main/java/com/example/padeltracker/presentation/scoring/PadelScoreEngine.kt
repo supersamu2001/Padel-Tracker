@@ -3,12 +3,13 @@ package com.example.padeltracker.presentation.scoring
 import com.example.padeltracker.presentation.model.*
 
 /**
- * Pure padel scoring engine. Independent from Android UI.
+ * Pure padel scoring logic. Independent from Android UI.
  */
 class PadelScoreEngine {
 
     /**
      * Creates a default ScoreTrackerState with placeholder players.
+     * Useful for testing or initializing a match with default settings.
      */
     fun createDefaultMatch(): ScoreTrackerState {
         val teamA = Team(
@@ -53,7 +54,10 @@ class PadelScoreEngine {
         val updatedMatch = state.currentMatch.copy(
             servingTeam = teamId,
             initialServingTeam = teamId,
-            status = MatchStatus.IN_PROGRESS
+            status = MatchStatus.IN_PROGRESS,
+            servingPlayerIndex = 0,
+            teamANextServerIndex = 0,
+            teamBNextServerIndex = 0
         )
         return state.copy(
             initialMatch = updatedMatch,
@@ -94,7 +98,8 @@ class PadelScoreEngine {
             val updatedMatch = state.currentMatch.copy(
                 status = MatchStatus.SELECTING_SERVER,
                 servingTeam = null,
-                initialServingTeam = null
+                initialServingTeam = null,
+                servingPlayerIndex = null
             )
             return state.copy(
                 initialMatch = updatedMatch,
@@ -102,7 +107,8 @@ class PadelScoreEngine {
                 pointHistory = emptyList()
             )
         }
-        
+
+        // default case if the fun is called in a not IN_PROGRESS match
         return state
     }
 
@@ -119,6 +125,7 @@ class PadelScoreEngine {
 
     /**
      * Internal logic to apply a single point to a MatchState.
+     * it manages what happen after a point e.g. game won/set won
      */
     private fun applyPoint(match: MatchState, winnerId: TeamId): MatchState {
         if (match.status == MatchStatus.FINISHED) return match
@@ -130,72 +137,217 @@ class PadelScoreEngine {
         
         return when {
             isGameWon(nextGame, match.config) -> {
+                // the point causes the game to finish -> we need to check if also the set/match is finish
                 val nextSet = incrementGames(currentSet.copy(currentGame = nextGame), winnerId, match.config)
-                val newCompletedSets = match.completedSets + nextSet
-                val matchWinner = getMatchWinner(newCompletedSets, match.config)
+                
+                if (isSetWon(nextSet, match.config)) {
+                    val newCompletedSets = match.completedSets + nextSet
+                    val matchWinner = getMatchWinner(newCompletedSets, match.config)
 
-                if (matchWinner != null) {
-                    match.copy(
-                        currentSet = SetState(),
-                        completedSets = newCompletedSets,
-                        status = MatchStatus.FINISHED,
-                        winner = matchWinner
-                    )
-                } else {
-                    val nextServingTeam = if (currentGame.type == GameType.TIE_BREAK) {
-                        val tieBreakStarter = inferTieBreakStartingServer(match.servingTeam, currentGame)
-                        switchServer(tieBreakStarter)
-                    } else {
-                        switchServer(match.servingTeam)
-                    }
-
-                    if (isSetWon(nextSet, match.config)) {
+                    if (matchWinner != null) { // someone win
                         match.copy(
                             currentSet = SetState(),
                             completedSets = newCompletedSets,
-                            servingTeam = nextServingTeam
+                            status = MatchStatus.FINISHED,
+                            winner = matchWinner
                         )
-                    } else {
-                        match.copy(
-                            currentSet = nextSet,
-                            servingTeam = nextServingTeam
+                    } else { // match not finish
+                        // Set ended, Match continues
+                        val nextMatch = if (currentGame.type == GameType.TIE_BREAK) {
+                            /*
+                             * The tie-break has just ended.
+                             *
+                             * The next set must start with the next server in the normal serving cycle
+                             * after the player who started the tie-break.
+                             *
+                             * Important:
+                             * We do not use the player who served the final tie-break point.
+                             */
+                            val nextSetServer = getNextSetServerAfterTieBreak(match)
+
+                            if (nextSetServer != null) {
+                                match.copy(
+                                    servingTeam = nextSetServer.team,
+                                    servingPlayerIndex = nextSetServer.playerIndex,
+                                    tieBreakStartingTeam = null,
+                                    tieBreakStartingPlayerIndex = null
+                                )
+                            } else { //fallback
+                                match.copy(
+                                    tieBreakStartingTeam = null,
+                                    tieBreakStartingPlayerIndex = null
+                                )
+                            }
+                        } else {
+                            rotateService(match)
+                        }
+                        
+                        nextMatch.copy(
+                            currentSet = SetState(),
+                            completedSets = newCompletedSets
                         )
                     }
+                } else {
+                    // Game ended, Set continues
+                    val rotatedMatch = rotateService(match)
+
+                    val nextMatch = if (nextSet.currentGame.type == GameType.TIE_BREAK) {
+                        //Tie-break just started, we need to set which player is serving
+
+                        rotatedMatch.copy(
+                            currentSet = nextSet,
+                            tieBreakStartingTeam = rotatedMatch.servingTeam,
+                            tieBreakStartingPlayerIndex = rotatedMatch.servingPlayerIndex
+                        )
+                    } else {
+                        rotatedMatch.copy(currentSet = nextSet)
+                    }
+
+                    nextMatch
                 }
             }
             else -> {
-                val nextServingTeam = if (nextGame.type == GameType.TIE_BREAK) {
-                    val totalPoints = nextGame.teamAPoints + nextGame.teamBPoints
-                    if (totalPoints % 2 != 0) switchServer(match.servingTeam) else match.servingTeam
+                // Point won, Game continues
+                if (nextGame.type == GameType.TIE_BREAK) {
+                    // extra check because in the tiebreak service can change mid-game
+                    val updatedServerMatch = updateTieBreakServingDisplay(
+                        match = match,
+                        gameAfterPoint = nextGame
+                    )
+
+                    updatedServerMatch.copy(
+                        currentSet = currentSet.copy(currentGame = nextGame)
+                    )
                 } else {
-                    match.servingTeam
+                    match.copy(
+                        currentSet = currentSet.copy(currentGame = nextGame)
+                    )
                 }
-                match.copy(
-                    currentSet = currentSet.copy(currentGame = nextGame),
-                    servingTeam = nextServingTeam
-                )
             }
         }
     }
 
-    private fun inferTieBreakStartingServer(currentServer: TeamId?, gameBeforePoint: GameState): TeamId? {
-        val totalPoints = gameBeforePoint.teamAPoints + gameBeforePoint.teamBPoints
-        // pattern: A BB AA BB ...
-        // total 0: A
-        // total 1: B
-        // total 2: B
-        // total 3: A
-        // total 4: A
-        // total 5: B
-        // total 6: B
-        // total 7: A
-        // total 8: A
-        // so if mod 4 is 0 or 3, currentServer is the starter.
-        // if mod 4 is 1 or 2, currentServer is the opposite of the starter.
-        return if (totalPoints % 4 == 0 || totalPoints % 4 == 3) {
-            currentServer
+    /**
+     * Represents one serving slot in the doubles serving cycle.
+     *
+     * The simplified service cycle used in this project is:
+     * Team A player 0 -> Team B player 0 -> Team A player 1 -> Team B player 1 -> repeat.
+     */
+    private data class ServingSlot(
+        val team: TeamId,
+        val playerIndex: Int
+    )
+
+    /**
+     * Converts a serving team/player into its position in the simplified serving cycle.
+     *
+     * Cycle:
+     * 0 = Team A player 0
+     * 1 = Team B player 0
+     * 2 = Team A player 1
+     * 3 = Team B player 1
+     */
+    private fun servingSlotIndex(team: TeamId, playerIndex: Int): Int {
+        return when (team) {
+            TeamId.TEAM_A -> if (playerIndex == 0) 0 else 2
+            TeamId.TEAM_B -> if (playerIndex == 0) 1 else 3
+        }
+    }
+
+    /**
+     * Converts a serving cycle index back into a serving team/player.
+     */
+    private fun servingSlotFromIndex(index: Int): ServingSlot {
+        return when (index.mod(4)) {
+            0 -> ServingSlot(TeamId.TEAM_A, 0)
+            1 -> ServingSlot(TeamId.TEAM_B, 0)
+            2 -> ServingSlot(TeamId.TEAM_A, 1)
+            else -> ServingSlot(TeamId.TEAM_B, 1)
+        }
+    }
+
+    /**
+     * Returns the serving slot for the next tie-break point.
+     *
+     * Tie-break rule:
+     * - first point: starting server
+     * - next two points: next server in the normal cycle
+     * - next two points: next server in the normal cycle
+     * - and so on
+     */
+    private fun getTieBreakServingSlotAfterPoints(
+        startingTeam: TeamId?,
+        startingPlayerIndex: Int?,
+        pointsPlayed: Int
+    ): ServingSlot? {
+        if (startingTeam == null || startingPlayerIndex == null) return null
+
+        val startSlotIndex = servingSlotIndex(startingTeam, startingPlayerIndex)
+
+        val serverChanges = if (pointsPlayed == 0) {
+            0
         } else {
-            switchServer(currentServer)
+            (pointsPlayed + 1) / 2
+        }
+
+        return servingSlotFromIndex(startSlotIndex + serverChanges)
+    }
+
+    /**
+     * Updates only the displayed serving team/player during a tie-break.
+     *
+     * Important:
+     * This function must NOT update teamANextServerIndex or teamBNextServerIndex.
+     * The tie-break has its own temporary serving sequence.
+     */
+    private fun updateTieBreakServingDisplay(
+        match: MatchState,
+        gameAfterPoint: GameState
+    ): MatchState {
+        val totalPoints = gameAfterPoint.teamAPoints + gameAfterPoint.teamBPoints
+
+        val nextSlot = getTieBreakServingSlotAfterPoints(
+            startingTeam = match.tieBreakStartingTeam,
+            startingPlayerIndex = match.tieBreakStartingPlayerIndex,
+            pointsPlayed = totalPoints
+        ) ?: return match
+
+        return match.copy(
+            servingTeam = nextSlot.team,
+            servingPlayerIndex = nextSlot.playerIndex
+        )
+    }
+
+    /**
+     * Returns the serving slot that should start the next set after a tie-break.
+     */
+    private fun getNextSetServerAfterTieBreak(match: MatchState): ServingSlot? {
+        val startingTeam = match.tieBreakStartingTeam ?: return null
+        val startingPlayerIndex = match.tieBreakStartingPlayerIndex ?: return null
+
+        val startSlotIndex = servingSlotIndex(startingTeam, startingPlayerIndex)
+
+        return servingSlotFromIndex(startSlotIndex + 1)
+    }
+
+    private fun rotateService(match: MatchState): MatchState {
+        val oldTeam = match.servingTeam ?: return match
+        val rotatedMatch = rotatePlayerWithinTeam(match, oldTeam)
+        
+        val nextTeam = switchServer(oldTeam)
+        val nextPlayerIndex = if (nextTeam == TeamId.TEAM_A) rotatedMatch.teamANextServerIndex else rotatedMatch.teamBNextServerIndex
+        
+        return rotatedMatch.copy(
+            servingTeam = nextTeam,
+            servingPlayerIndex = nextPlayerIndex
+        )
+    }
+
+    private fun rotatePlayerWithinTeam(match: MatchState, teamId: TeamId): MatchState {
+        return if (teamId == TeamId.TEAM_A) {
+            match.copy(teamANextServerIndex = (match.teamANextServerIndex + 1) % 2)
+        } else {
+            match.copy(teamBNextServerIndex = (match.teamBNextServerIndex + 1) % 2)
         }
     }
 
@@ -207,7 +359,11 @@ class PadelScoreEngine {
         }
     }
 
-    private fun isGameWon(game: GameState, config: MatchConfig): Boolean {
+    /**
+     * Determines if a game has been won based on the current points and match configuration.
+     * Handles both normal games (40-40/Deuce) and tie-breaks.
+     */
+    fun isGameWon(game: GameState, config: MatchConfig): Boolean {
         val p1 = game.teamAPoints
         val p2 = game.teamBPoints
         return if (game.type == GameType.TIE_BREAK) {
@@ -252,9 +408,6 @@ class PadelScoreEngine {
         return isNormalWin || isTieBreakWin
     }
 
-    /**
-     * Helper function to calculate the match winner from completed sets.
-     */
     private fun getMatchWinner(completedSets: List<SetState>, config: MatchConfig): TeamId? {
         val winsA = completedSets.count { it.teamAGames > it.teamBGames }
         val winsB = completedSets.count { it.teamBGames > it.teamAGames }
