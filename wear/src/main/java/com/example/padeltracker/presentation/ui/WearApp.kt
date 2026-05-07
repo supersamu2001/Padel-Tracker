@@ -5,7 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,7 +40,8 @@ fun WearApp(viewModel: MatchViewModel) {
                 MatchStatus.IN_PROGRESS -> MatchScoreScreen(
                     state = state,
                     onAddPoint = { viewModel.addPoint(it) },
-                    onUndo = { viewModel.undo() }
+                    onUndo = { viewModel.undo() },
+                    onEndMatch = { viewModel.endMatchEarly() }
                 )
                 MatchStatus.FINISHED -> MatchFinishedScreen(
                     state = state,
@@ -157,95 +158,40 @@ fun ServerSelectionCard(modifier: Modifier, label: String, color: Color, onClick
 }
 
 @Composable
-fun MatchScoreScreen(
-    state: ScoreTrackerState,
-    onAddPoint: (TeamId) -> Unit,
-    onUndo: () -> Unit
+fun ScoreHeader(
+    teamASets: Int,
+    teamBSets: Int,
+    teamAGames: Int,
+    teamBGames: Int,
+    onMenuClick: () -> Unit
 ) {
-    val match = state.currentMatch
-    val teamASets = match.completedSets.count { it.teamAGames > it.teamBGames }
-    val teamBSets = match.completedSets.count { it.teamBGames > it.teamAGames }
-    
-    val currentServingPlayerName = when (match.servingTeam) {
-        TeamId.TEAM_A -> match.teamA.players.getOrNull(match.servingPlayerIndex ?: 0)?.name ?: "Player"
-        TeamId.TEAM_B -> match.teamB.players.getOrNull(match.servingPlayerIndex ?: 0)?.name ?: "Player"
-        else -> "Player"
-    }
-
-    ScreenScaffold { contentPadding ->
-        Column(
-            modifier = Modifier.fillMaxSize().padding(contentPadding),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // 1. Compact Header
-            ScoreHeader(
-                teamASets = teamASets,
-                teamBSets = teamBSets,
-                teamAGames = match.currentSet.teamAGames,
-                teamBGames = match.currentSet.teamBGames
-            )
-
-            // 2. Main Score Area (Tappable Zones)
-            Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-                Row(modifier = Modifier.fillMaxSize()) {
-                    // Team A Zone (Left)
-                    TeamScoreArea(
-                        modifier = Modifier.weight(1f),
-                        label = "Team A",
-                        points = formatPointDisplay(
-                            match.currentSet.currentGame.teamAPoints,
-                            match.currentSet.currentGame.teamBPoints,
-                            match.currentSet.currentGame.type
-                        ),
-                        isServing = match.servingTeam == TeamId.TEAM_A,
-                        servingPlayer = currentServingPlayerName,
-                        color = TeamAColor,
-                        onClick = { onAddPoint(TeamId.TEAM_A) }
-                    )
-
-                    // Vertical Separator
-                    Box(modifier = Modifier.fillMaxHeight().width(1.dp).background(Color.White.copy(alpha = BorderAlpha)))
-
-                    // Team B Zone (Right)
-                    TeamScoreArea(
-                        modifier = Modifier.weight(1f),
-                        label = "Team B",
-                        points = formatPointDisplay(
-                            match.currentSet.currentGame.teamBPoints,
-                            match.currentSet.currentGame.teamAPoints,
-                            match.currentSet.currentGame.type
-                        ),
-                        isServing = match.servingTeam == TeamId.TEAM_B,
-                        servingPlayer = currentServingPlayerName,
-                        color = TeamBColor,
-                        onClick = { onAddPoint(TeamId.TEAM_B) }
-                    )
-                }
-            }
-
-            // Horizontal Separator
-            Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(Color.White.copy(alpha = BorderAlpha)))
-
-            // 3. Bottom Undo Area
-            UndoArea(onUndo = onUndo)
-        }
-    }
-}
-
-@Composable
-fun ScoreHeader(teamASets: Int, teamBSets: Int, teamAGames: Int, teamBGames: Int) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 4.dp, bottom = 4.dp),
+            .padding(top = 2.dp, bottom = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        TextButton(
+            onClick = onMenuClick,
+            modifier = Modifier
+                .height(20.dp)
+                .width(36.dp)
+        ) {
+            Text(
+                text = "⋮",
+                fontSize = 16.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+            )
+        }
+
         Text(
             text = "SETS: $teamASets - $teamBSets",
             style = MaterialTheme.typography.labelSmall,
             color = Color.LightGray,
             fontSize = 11.sp
         )
+
         Text(
             text = "GAMES: $teamAGames - $teamBGames",
             style = MaterialTheme.typography.titleMedium,
@@ -322,8 +268,11 @@ fun UndoArea(onUndo: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(44.dp)
-            .background(Color.White.copy(alpha = 0.02f), shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+            .height(34.dp)
+            .background(
+                Color.White.copy(alpha = 0.02f),
+                shape = RoundedCornerShape(topStart = 14.dp, topEnd = 14.dp)
+            )
             .combinedClickable(
                 onClick = { /* Normal tap ignored */ },
                 onLongClick = onUndo
@@ -332,22 +281,160 @@ fun UndoArea(onUndo: () -> Unit) {
     ) {
         Text(
             text = "Hold to undo",
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.labelSmall,
             color = Color.Gray,
+            fontSize = 12.sp,
             textAlign = TextAlign.Center
         )
     }
 }
 
 @Composable
+fun MatchScoreScreen(
+    state: ScoreTrackerState,
+    onAddPoint: (TeamId) -> Unit,
+    onUndo: () -> Unit,
+    onEndMatch: () -> Unit
+) {
+    val match = state.currentMatch
+    val teamASets = match.completedSets.count { it.teamAGames > it.teamBGames }
+    val teamBSets = match.completedSets.count { it.teamBGames > it.teamAGames }
+
+    val currentServingPlayerName = when (match.servingTeam) {
+        TeamId.TEAM_A -> match.teamA.players.getOrNull(match.servingPlayerIndex ?: 0)?.name ?: "Player"
+        TeamId.TEAM_B -> match.teamB.players.getOrNull(match.servingPlayerIndex ?: 0)?.name ?: "Player"
+        else -> "Player"
+    }
+
+    var showEndMatchAction by remember { mutableStateOf(false) }
+
+    ScreenScaffold { contentPadding ->
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(contentPadding),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // 1. Compact Header with menu trigger
+                ScoreHeader(
+                    teamASets = teamASets,
+                    teamBSets = teamBSets,
+                    teamAGames = match.currentSet.teamAGames,
+                    teamBGames = match.currentSet.teamBGames,
+                    onMenuClick = { showEndMatchAction = true }
+                )
+
+                // 2. Main Score Area (Tappable Zones)
+                Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+                    Row(modifier = Modifier.fillMaxSize()) {
+                        // Team A Zone (Left)
+                        TeamScoreArea(
+                            modifier = Modifier.weight(1f),
+                            label = "Team A",
+                            points = formatPointDisplay(
+                                match.currentSet.currentGame.teamAPoints,
+                                match.currentSet.currentGame.teamBPoints,
+                                match.currentSet.currentGame.type
+                            ),
+                            isServing = match.servingTeam == TeamId.TEAM_A,
+                            servingPlayer = currentServingPlayerName,
+                            color = TeamAColor,
+                            onClick = { onAddPoint(TeamId.TEAM_A) }
+                        )
+
+                        // Vertical Separator
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .width(1.dp)
+                                .background(Color.White.copy(alpha = BorderAlpha))
+                        )
+
+                        // Team B Zone (Right)
+                        TeamScoreArea(
+                            modifier = Modifier.weight(1f),
+                            label = "Team B",
+                            points = formatPointDisplay(
+                                match.currentSet.currentGame.teamBPoints,
+                                match.currentSet.currentGame.teamAPoints,
+                                match.currentSet.currentGame.type
+                            ),
+                            isServing = match.servingTeam == TeamId.TEAM_B,
+                            servingPlayer = currentServingPlayerName,
+                            color = TeamBColor,
+                            onClick = { onAddPoint(TeamId.TEAM_B) }
+                        )
+                    }
+                }
+
+                // Horizontal Separator
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(Color.White.copy(alpha = BorderAlpha))
+                )
+
+                // 3. Bottom Undo Area
+                UndoArea(onUndo = onUndo)
+            }
+
+            // End Match Confirmation Overlay
+            if (showEndMatchAction) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.8f))
+                        .clickable { showEndMatchAction = false },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .background(Color.DarkGray, shape = RoundedCornerShape(14.dp))
+                            .padding(horizontal = 18.dp, vertical = 14.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Court time over?",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Color.LightGray,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Medium
+                        )
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = Color.White.copy(alpha = 0.10f),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .clickable(onClick = onEndMatch)
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "End match",
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 13.sp,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun MatchFinishedScreen(state: ScoreTrackerState, onReset: () -> Unit, onUndo: () -> Unit) {
     val match = state.currentMatch
-    val winnerColor = if (match.winner == TeamId.TEAM_A) TeamAColor else TeamBColor
-    val winnerName = if (match.winner == TeamId.TEAM_A) "Team A" else "Team B"
-    
+
     val listState = rememberTransformingLazyColumnState()
     val transformationSpec = rememberTransformationSpec()
-    
+
     ScreenScaffold(
         scrollState = listState,
         edgeButton = {
@@ -364,38 +451,97 @@ fun MatchFinishedScreen(state: ScoreTrackerState, onReset: () -> Unit, onUndo: (
         ) {
             item {
                 ListHeader(
-                    modifier = Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec),
                     transformation = SurfaceTransformation(transformationSpec),
                 ) {
-                    Text(text = "MATCH FINISHED", textAlign = TextAlign.Center)
+                    val headerText = if (match.endedEarly) {
+                        "MATCH STOPPED"
+                    } else {
+                        "MATCH FINISHED"
+                    }
+
+                    Text(text = headerText, textAlign = TextAlign.Center)
                 }
             }
+
+            item {
+                if (match.endedEarly) {
+                    Text(
+                        text = "Draw",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Gray,
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        fontWeight = FontWeight.Bold
+                    )
+                } else {
+                    val winnerColor = if (match.winner == TeamId.TEAM_A) {
+                        TeamAColor
+                    } else {
+                        TeamBColor
+                    }
+
+                    val winnerName = if (match.winner == TeamId.TEAM_A) {
+                        "Team A"
+                    } else {
+                        "Team B"
+                    }
+
+                    Text(
+                        text = "$winnerName Wins!",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = winnerColor,
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
             item {
                 Text(
-                    text = "$winnerName Wins!",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = winnerColor,
-                    modifier = Modifier.padding(vertical = 4.dp),
-                    fontWeight = FontWeight.Bold
+                    text = "Final Score:",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color.Gray
                 )
             }
+
             item {
-                Text(text = "Final Score:", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
-            }
-            item {
+                val completedScore = match.completedSets.joinToString(" | ") {
+                    "${it.teamAGames}-${it.teamBGames}"
+                }
+
+                val currentSetScore = "Current: ${match.currentSet.teamAGames}-${match.currentSet.teamBGames}"
+
+                val finalScore = if (match.endedEarly) {
+                    if (match.completedSets.isEmpty()) {
+                        currentSetScore
+                    } else {
+                        "$completedScore | $currentSetScore"
+                    }
+                } else {
+                    completedScore
+                }
+
                 Text(
-                    text = match.completedSets.joinToString(" | ") { "${it.teamAGames}-${it.teamBGames}" },
+                    text = finalScore,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(bottom = 8.dp),
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center
                 )
             }
+
             item {
                 TextButton(
                     onClick = onUndo,
                     modifier = Modifier.padding(top = 4.dp)
                 ) {
-                    Text("Undo", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                    Text(
+                        text = "Undo",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.Gray
+                    )
                 }
             }
         }

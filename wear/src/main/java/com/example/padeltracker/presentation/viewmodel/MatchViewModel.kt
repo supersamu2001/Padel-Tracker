@@ -63,6 +63,13 @@ class MatchViewModel @JvmOverloads constructor(
         sensorManager.stopTracking()
     }
 
+    /**
+     * Ends the match early manually.
+     */
+    fun endMatchEarly() {
+        _state.value = engine.endMatchEarly(_state.value)
+    }
+
     override fun onCleared() {
         super.onCleared()
         sensorManager.stopTracking()

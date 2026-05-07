@@ -57,7 +57,8 @@ data class MatchState(
     val teamANextServerIndex: Int = 0,
     val teamBNextServerIndex: Int = 0,
     val tieBreakStartingTeam: TeamId? = null,
-    val tieBreakStartingPlayerIndex: Int? = null
+    val tieBreakStartingPlayerIndex: Int? = null,
+    val endedEarly: Boolean = false
 )
 
 data class ScoreTrackerState(
