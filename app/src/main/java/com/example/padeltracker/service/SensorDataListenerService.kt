@@ -13,6 +13,7 @@ import java.nio.ByteOrder
 class SensorDataListenerService : WearableListenerService() {
 
     private var classifier: ShotClassifier? = null
+    private var shotLogger: ShotLogger? = null
     private val TAG = "SensorDataListener"
 
     // Buffers for data accumulation
@@ -30,12 +31,14 @@ class SensorDataListenerService : WearableListenerService() {
             Log.e(TAG, "ERRORE durante inizializzazione Classifier: ${e.message}")
             e.printStackTrace()
         }
+        shotLogger = ShotLogger(this)
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         // Log verbose per vedere OGNI messaggio che arriva al telefono
-        Log.v(TAG, "Ricevuto messaggio sul path: ${messageEvent.path}")
+        // Log.v(TAG, "Ricevuto messaggio sul path: ${messageEvent.path}")
 
+        // RECEPTION OF ALL THE SAMPLES
         if (messageEvent.path == SensorConstants.SENSOR_DATA_PATH) {
             val data = messageEvent.data ?: return
 
@@ -62,7 +65,41 @@ class SensorDataListenerService : WearableListenerService() {
                 }
                  **/
             } catch (e: Exception) {
-                Log.e(TAG, "Errore parsing dati: ${e.message}")
+                Log.e(TAG, "Parsing error: ${e.message}")
+            }
+        }
+        
+        // RECEPTION OF THE SHOT SAMPLES (Batch)
+        if (messageEvent.path == SensorConstants.SHOT_DATA_PATH) {
+            val data = messageEvent.data ?: return
+            
+            try {
+                val numSamples = data.size / (2 * 12) // 2 sensors * 3 floats * 4 bytes
+                Log.d(TAG, "Received shot: $numSamples samples")
+
+                val buffer = ByteBuffer.wrap(data)
+                buffer.order(ByteOrder.LITTLE_ENDIAN)
+
+                val accBatch = mutableListOf<FloatArray>()
+                val gyroBatch = mutableListOf<FloatArray>()
+
+                // Read Acc samples
+                for (i in 0 until numSamples) {
+                    accBatch.add(floatArrayOf(buffer.float, buffer.float, buffer.float))
+                }
+                // Read Gyro samples
+                for (i in 0 until numSamples) {
+                    gyroBatch.add(floatArrayOf(buffer.float, buffer.float, buffer.float))
+                }
+
+                // Save in the CSV file
+                shotLogger?.logShot(accBatch, gyroBatch)
+
+                // Update the state of UI
+                SensorStatusState.recordShot(numSamples)
+                
+            } catch (e: Exception) {
+                Log.e(TAG, "Errore nel parsing del batch colpo: ${e.message}")
             }
         }
     }

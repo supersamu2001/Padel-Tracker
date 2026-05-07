@@ -37,6 +37,8 @@ fun HomeScreen(
     val lastDataTime by SensorStatusState.lastMessageReceived.collectAsState()
     val accValues by SensorStatusState.lastAccValues.collectAsState()
     val gyroValues by SensorStatusState.lastGyroValues.collectAsState()
+    val lastShotTime by SensorStatusState.lastShotTime.collectAsState()
+    val lastShotSamples by SensorStatusState.lastShotSamplesCount.collectAsState()
 
 
     // Animation for the bouncing tennis ball
@@ -104,7 +106,7 @@ fun HomeScreen(
             val timeString = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Ultimo dato ricevuto: $timeString",
+                text = "Last data received: $timeString",
                 color = Color.Gray,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Medium
@@ -117,6 +119,43 @@ fun HomeScreen(
                 text = "GYRO: ${"%.2f".format(gyroValues[0])}, ${"%.2f".format(gyroValues[1])}, ${"%.2f".format(gyroValues[2])}",
                 fontSize = 10.sp, color = Color.Gray
             )
+        }
+
+        // NEW: Sezione Colpi Rilevati
+        lastShotTime?.let { timestamp ->
+            val shotTimeString = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
+            Spacer(modifier = Modifier.height(16.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = PadelLimeGreen.copy(alpha = 0.1f)),
+                border = BorderStroke(1.dp, PadelLimeGreen)
+            ) {
+                Column(modifier = Modifier.padding(12.dp)) {
+                    Text(
+                        text = "SHOT DETECTED",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = DarkTeal,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Hour: $shotTimeString",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = DarkTeal
+                        )
+                        Text(
+                            text = "$lastShotSamples samples",
+                            fontSize = 12.sp,
+                            color = Color.DarkGray
+                        )
+                    }
+                }
+            }
         }
 
         // Animated ball area

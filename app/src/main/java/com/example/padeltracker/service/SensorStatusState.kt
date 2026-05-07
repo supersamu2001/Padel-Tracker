@@ -18,6 +18,13 @@ object SensorStatusState {
     private val _lastGyroValues = MutableStateFlow(floatArrayOf(0f, 0f, 0f))
     val lastGyroValues = _lastGyroValues.asStateFlow()
 
+    // Stato per l'ultimo colpo rilevato
+    private val _lastShotTime = MutableStateFlow<Long?>(null)
+    val lastShotTime = _lastShotTime.asStateFlow()
+
+    private val _lastShotSamplesCount = MutableStateFlow(0)
+    val lastShotSamplesCount = _lastShotSamplesCount.asStateFlow()
+
     fun updateData(type: Int, x: Float, y: Float, z: Float) {
         _lastMessageReceived.value = System.currentTimeMillis()
         if (type == android.hardware.Sensor.TYPE_ACCELEROMETER) {
@@ -25,5 +32,11 @@ object SensorStatusState {
         } else {
             _lastGyroValues.value = floatArrayOf(x, y, z)
         }
+    }
+
+    // Called each time a new shot batch is received by the phone
+    fun recordShot(samplesCount: Int) {
+        _lastShotTime.value = System.currentTimeMillis()
+        _lastShotSamplesCount.value = samplesCount
     }
 }
