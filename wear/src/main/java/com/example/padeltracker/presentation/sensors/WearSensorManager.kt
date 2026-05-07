@@ -11,6 +11,8 @@ import com.example.padeltracker.shared.SensorConstants
 import com.google.android.gms.wearable.Wearable
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.util.ArrayDeque
+import kotlin.math.abs
 
 class WearSensorManager(private val context: Context) : SensorEventListener {
 
@@ -22,6 +24,24 @@ class WearSensorManager(private val context: Context) : SensorEventListener {
     private val gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
 
     private val TAG = "WearSensorManager"
+
+    // Recognition Thresholds
+    private val ACC_THRESHOLD = 3 * 9.81f   // ~29.43 m/s^2
+    private val GYRO_THRESHOLD = 5.0f       // rad/s
+    private val WINDOW_SIZE = 20            // Number of samples before and after the trigger
+
+    // Buffers for recognition
+    private val accHistory = ArrayDeque<FloatArray>()
+    private val gyroHistory = ArrayDeque<FloatArray>()
+    private var lastAccValues: FloatArray? = null
+    private var lastGyroValues: FloatArray? = null
+
+    // State for shot recording
+    private var isRecordingShot = false     // tell us if a shot has been detected
+    private var postShotAccCount = 0        // number of acceleration samples after the detection
+    private var postShotGyroCount = 0       // number of gyroscope samples after the detection
+    private val shotAccData = mutableListOf<FloatArray>()
+    private val shotGyroData = mutableListOf<FloatArray>()
 
     // 25Hz means 1 sample each 40ms.
     // The parameter of the periodic listener must be in microseconds
@@ -66,28 +86,78 @@ class WearSensorManager(private val context: Context) : SensorEventListener {
 
     // called each time a sensor registers a new value
     override fun onSensorChanged(event: SensorEvent) {
-        // Prepare data packet: [SensorType (Int), X (Float), Y (Float), Z (Float)]
-        val buffer = ByteBuffer.allocate(16) 
-        buffer.order(ByteOrder.LITTLE_ENDIAN)
-        buffer.putInt(event.sensor.type)
-        buffer.putFloat(event.values[0])
-        buffer.putFloat(event.values[1])
-        buffer.putFloat(event.values[2])
+        // values => values obtained by the sensor
+        val values = event.values.copyOf()
 
-        val data = buffer.array()
+        // 1. Update buffers for history and tracking
+        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+            lastAccValues = values
+            accHistory.addLast(values)
 
-        // Send to phone the registered data
-        // p0 => smartphone address
-        // p1 => object of the message (in order to let the phone identify the content of the packet)
-        // p2 => actual data, which is [SensorType (Int), X (Float), Y (Float), Z (Float)]
+            // each time we only keep the 20 most recent samples (plus the actual one)
+            if (accHistory.size > WINDOW_SIZE + 1) accHistory.removeFirst()
+
+            if (isRecordingShot) {
+                shotAccData.add(values)
+                postShotAccCount++
+            }
+        } else if (event.sensor.type == Sensor.TYPE_GYROSCOPE) {
+            lastGyroValues = values
+            gyroHistory.addLast(values)
+            if (gyroHistory.size > WINDOW_SIZE + 1) gyroHistory.removeFirst()
+
+            if (isRecordingShot) {
+                shotGyroData.add(values)
+                postShotGyroCount++
+            }
+        }
+
+        // 2. Check for trigger (if not already recording)
+        if (!isRecordingShot && lastAccValues != null && lastGyroValues != null) {
+            val accTrigger = lastAccValues!!.any { abs(it) > ACC_THRESHOLD }
+            val gyroTrigger = lastGyroValues!!.any { abs(it) > GYRO_THRESHOLD }
+
+            if (accTrigger && gyroTrigger) {
+                isRecordingShot = true
+                postShotAccCount = 0
+                postShotGyroCount = 0
+                shotAccData.clear()
+                shotGyroData.clear()
+
+                // Capture history: 20 previous samples + the trigger sample (which is last in history)
+                shotAccData.addAll(accHistory)
+                shotGyroData.addAll(gyroHistory)
+
+                Log.d(TAG, "!!! SHOT DETECTED !!! Collecting post-shot data...")
+            }
+        }
+
+        // 3. Check if recording is complete (trigger + 20 samples after)
+        if (isRecordingShot && postShotAccCount >= WINDOW_SIZE && postShotGyroCount >= WINDOW_SIZE) {
+            sendShotBatch()
+            isRecordingShot = false
+        }
+
+        // TO SEND ALL THE SAMPLES TO THE PHONE
+        // Existing streaming logic (optional: can be removed if only shot detection is needed)
+        val streamBuffer = ByteBuffer.allocate(16)
+        streamBuffer.order(ByteOrder.LITTLE_ENDIAN)
+        streamBuffer.putInt(event.sensor.type)
+        streamBuffer.putFloat(event.values[0])
+        streamBuffer.putFloat(event.values[1])
+        streamBuffer.putFloat(event.values[2])
+
+        val streamData = streamBuffer.array()
+
         targetNodeId?.let { nodeId ->
-            messageClient.sendMessage(nodeId, SensorConstants.SENSOR_DATA_PATH, data)
+            messageClient.sendMessage(nodeId, SensorConstants.SENSOR_DATA_PATH, streamData)
                 .addOnFailureListener { e ->
-                    Log.e(TAG, "FAILED TO SEND: ${e.message}")
+                    Log.e(TAG, "FAILED TO SEND STREAM: ${e.message}")
                 }
         }
 
-
+        /**
+        // ... logging code ...
         // Keep local logging for verification
         when (event.sensor.type) {
             Sensor.TYPE_ACCELEROMETER -> {
@@ -105,7 +175,42 @@ class WearSensorManager(private val context: Context) : SensorEventListener {
                 
                 // Log.d(TAG, "GYRO -> x: ${event.values[0]}, y: ${event.values[1]}, z: ${event.values[2]}, interval: ${diffMs}ms")
             }
+        }
+        */
+    }
 
+    // SEND THE 41 SAMPLES RELATED TO THE SHOT
+    private fun sendShotBatch() {
+        val numSamples = shotAccData.size.coerceAtMost(shotGyroData.size)
+        // Each sample is 3 floats (12 bytes) * 2 sensors
+        val buffer = ByteBuffer.allocate(numSamples * 2 * 12)
+        buffer.order(ByteOrder.LITTLE_ENDIAN)
+
+        // Accelerometer data block
+        for (i in 0 until numSamples) {
+            val vals = shotAccData[i]
+            buffer.putFloat(vals[0])
+            buffer.putFloat(vals[1])
+            buffer.putFloat(vals[2])
+        }
+
+        // Gyroscope data block
+        for (i in 0 until numSamples) {
+            val vals = shotGyroData[i]
+            buffer.putFloat(vals[0])
+            buffer.putFloat(vals[1])
+            buffer.putFloat(vals[2])
+        }
+
+        val data = buffer.array()
+        targetNodeId?.let { nodeId ->
+            messageClient.sendMessage(nodeId, SensorConstants.SHOT_DATA_PATH, data)
+                .addOnSuccessListener {
+                    Log.d(TAG, "Shot batch sent successfully! ($numSamples samples)")
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "FAILED TO SEND SHOT BATCH: ${e.message}")
+                }
         }
     }
 
