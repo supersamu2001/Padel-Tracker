@@ -20,8 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.padeltracker.R
+import com.example.padeltracker.service.SensorStatusState
 import com.example.padeltracker.ui.theme.*
 import com.example.padeltracker.ui.components.TennisBallView
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun HomeScreen(
@@ -29,6 +33,12 @@ fun HomeScreen(
     onNewGameClick: () -> Unit,
     onHistoryClick: () -> Unit
 ) {
+    // Osserva l'ultimo messaggio ricevuto dai sensori
+    val lastDataTime by SensorStatusState.lastMessageReceived.collectAsState()
+    val accValues by SensorStatusState.lastAccValues.collectAsState()
+    val gyroValues by SensorStatusState.lastGyroValues.collectAsState()
+
+
     // Animation for the bouncing tennis ball
     val infiniteTransition = rememberInfiniteTransition(label = "ball_anim")
     val offsetY by infiniteTransition.animateFloat(
@@ -86,6 +96,26 @@ fun HomeScreen(
                 color = DarkTeal,
                 fontWeight = FontWeight.Bold,
                 fontSize = 11.sp
+            )
+        }
+
+        // INFO: Stato ricezione dati sensori
+        lastDataTime?.let { timestamp ->
+            val timeString = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Ultimo dato ricevuto: $timeString",
+                color = Color.Gray,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium
+            )
+            Text(
+                text = "ACC: ${"%.2f".format(accValues[0])}, ${"%.2f".format(accValues[1])}, ${"%.2f".format(accValues[2])}",
+                fontSize = 10.sp, color = Color.Gray
+            )
+            Text(
+                text = "GYRO: ${"%.2f".format(gyroValues[0])}, ${"%.2f".format(gyroValues[1])}, ${"%.2f".format(gyroValues[2])}",
+                fontSize = 10.sp, color = Color.Gray
             )
         }
 

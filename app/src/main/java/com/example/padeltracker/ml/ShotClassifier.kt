@@ -54,7 +54,7 @@ class ShotClassifier(private val context: Context) {
 
         // Esempio: il modello accetta un input di forma (1, 40, 6) float32
         // Dobbiamo convertire il FloatArray in un ByteBuffer o un input compatibile
-        
+
         // Supponiamo che l'output sia un array di probabilità per ogni classe
         val output = Array(1) { FloatArray(6) } // 6 classi: forehand, backhand, etc.
 
@@ -66,13 +66,13 @@ class ShotClassifier(private val context: Context) {
             val inputBuffer = ByteBuffer.allocateDirect(sensorData.size * 4)
             inputBuffer.order(ByteOrder.nativeOrder())
             sensorData.forEach { inputBuffer.putFloat(it) }
-            
+
             interpreter?.run(inputBuffer, output)
 
             // Trova l'indice con la probabilità più alta
             val probabilities = output[0]
             val maxIndex = probabilities.indices.maxByOrNull { probabilities[it] } ?: -1
-            
+
             return when (maxIndex) {
                 0 -> ShotType.FOREHAND
                 1 -> ShotType.BACKHAND

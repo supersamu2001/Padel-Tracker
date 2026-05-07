@@ -91,7 +91,7 @@ fun MatchHistoryCard(match: MatchRecord) {
                 )
             }
 
-            Divider(modifier = Modifier.padding(vertical = 8.dp), thickness = 0.5.dp, color = BackgroundBeige)
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), thickness = 0.5.dp, color = BackgroundBeige)
 
             // Players Info
             Text(
