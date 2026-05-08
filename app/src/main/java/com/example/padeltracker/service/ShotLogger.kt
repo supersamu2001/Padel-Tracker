@@ -32,6 +32,15 @@ class ShotLogger(private val context: Context) {
         }
     }
 
+    // Save the shot samples in a CSV file
+    /**
+     * CSV format:
+     * shotId => identifier of the shot
+     * timestamp => human-readable date and hour
+     * sample_index => sample index within the shot (from 0 to 40)
+     * acc_x, acc_y, acc_z => accelerometer values
+     * gyro_x, gyro_y, gyro_z => gyroscope values
+     */
     fun logShot(accSamples: List<FloatArray>, gyroSamples: List<FloatArray>) {
         val file = File(context.getExternalFilesDir(null), fileName)
         val shotId = System.currentTimeMillis()
@@ -39,6 +48,9 @@ class ShotLogger(private val context: Context) {
         
         try {
             val writer = FileWriter(file, true) // Append mode
+
+            // coerceAtMost: take the lowest value between accSampes and gyroSamples
+            // Avoid, in case of errors, that the two lists have always the same number of values
             val numSamples = accSamples.size.coerceAtMost(gyroSamples.size)
             
             for (i in 0 until numSamples) {

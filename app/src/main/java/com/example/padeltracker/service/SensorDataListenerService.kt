@@ -80,14 +80,16 @@ class SensorDataListenerService : WearableListenerService() {
                 val buffer = ByteBuffer.wrap(data)
                 buffer.order(ByteOrder.LITTLE_ENDIAN)
 
+                // array containing the values of all the distinct samples
                 val accBatch = mutableListOf<FloatArray>()
                 val gyroBatch = mutableListOf<FloatArray>()
 
-                // Read Acc samples
+                // Read all the acceleration samples
                 for (i in 0 until numSamples) {
                     accBatch.add(floatArrayOf(buffer.float, buffer.float, buffer.float))
                 }
-                // Read Gyro samples
+
+                // Read all the gyroscope samples
                 for (i in 0 until numSamples) {
                     gyroBatch.add(floatArrayOf(buffer.float, buffer.float, buffer.float))
                 }
