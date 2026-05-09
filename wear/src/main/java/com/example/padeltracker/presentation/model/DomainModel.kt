@@ -66,3 +66,4 @@ data class ScoreTrackerState(
     val currentMatch: MatchState,
     val pointHistory: List<TeamId> = emptyList()
 )
+

@@ -20,13 +20,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.padeltracker.data.MatchPreferences
-import com.example.padeltracker.shared.MatchConfig
+import com.example.padeltracker.shared.*
 import com.example.padeltracker.ui.theme.*
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchConfig) -> Unit) {
+fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val prefs = remember { MatchPreferences(context) }
@@ -147,7 +148,29 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchConfig) -> Un
                     scope.launch {
                         prefs.savePlayerNames(tAP1, tAP2, tBP1, tBP2)
                     }
-                    onSendToWatch(MatchConfig(tAP1, tAP2, tBP1, tBP2))
+
+                    val setup = MatchSetup(
+                        matchId = UUID.randomUUID().toString(),
+                        teamA = TeamSetup(
+                            id = "team_a",
+                            name = "Team A",
+                            players = listOf(
+                                PlayerSetup(id = "a1", name = tAP1),
+                                PlayerSetup(id = "a2", name = tAP2)
+                            )
+                        ),
+                        teamB = TeamSetup(
+                            id = "team_b",
+                            name = "Team B",
+                            players = listOf(
+                                PlayerSetup(id = "b1", name = tBP1),
+                                PlayerSetup(id = "b2", name = tBP2)
+                            )
+                        ),
+                        rules = MatchRules(), // Use default rules for now
+                        createdAt = System.currentTimeMillis()
+                    )
+                    onSendToWatch(setup)
                 },
                 modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp).height(50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = DarkTeal, disabledContainerColor = Color.LightGray),

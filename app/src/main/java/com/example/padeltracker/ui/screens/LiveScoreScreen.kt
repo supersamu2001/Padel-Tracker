@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import com.example.padeltracker.R
 import com.example.padeltracker.data.AppDatabase
 import com.example.padeltracker.data.MatchRecord
-import com.example.padeltracker.shared.MatchConfig
+import com.example.padeltracker.shared.MatchSetup
 import com.example.padeltracker.ml.ShotDetectionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -28,7 +28,7 @@ import java.util.*
 
 @Composable
 fun LiveScoreScreen(
-    config: MatchConfig,
+    setup: MatchSetup,
     onFinish: () -> Unit
 ) {
     val context = LocalContext.current
@@ -95,7 +95,7 @@ fun LiveScoreScreen(
 
             // --- Team A Section ---
             Text(
-                text = "${config.teamAPlayer1} & ${config.teamAPlayer2}",
+                text = setup.teamA.players.joinToString(" & ") { it.name },
                 color = Color.White,
                 style = MaterialTheme.typography.titleLarge
             )
@@ -115,7 +115,7 @@ fun LiveScoreScreen(
 
             // --- Team B Section ---
             Text(
-                text = "${config.teamBPlayer1} & ${config.teamBPlayer2}",
+                text = setup.teamB.players.joinToString(" & ") { it.name },
                 color = Color.White,
                 style = MaterialTheme.typography.titleLarge
             )
@@ -150,8 +150,8 @@ fun LiveScoreScreen(
                         smashes = shotCounts.smashes,
                         services = shotCounts.services,
 
-                        teamAPlayers = "${config.teamAPlayer1}, ${config.teamAPlayer2}",
-                        teamBPlayers = "${config.teamBPlayer1}, ${config.teamBPlayer2}"
+                        teamAPlayers = setup.teamA.players.joinToString(", ") { it.name },
+                        teamBPlayers = setup.teamB.players.joinToString(", ") { it.name }
                     )
 
                     // Execute database insertion on a background thread (IO)

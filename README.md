@@ -47,7 +47,7 @@ Ottimizzato per l'uso durante l'attività sportiva.
 Contiene classi e costanti utilizzate sia dall'app che dal wear.
 
 - **`src/main/java/com/example/padeltracker/shared/`**
-    - `MatchConfig.kt`: Modello dati per le impostazioni della partita (nomi dei giocatori, tipo di set).
+    - `MatchSetup.kt`: Modello dati per le impostazioni della partita (nomi dei giocatori, regole del match) e costanti di comunicazione Wear OS.
     - `SensorConstants.kt`: Definisce i percorsi di comunicazione (Path) per il Bluetooth.
 
 ---
