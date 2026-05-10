@@ -45,7 +45,7 @@ fun WearApp(viewModel: MatchViewModel) {
                 )
                 MatchStatus.FINISHED -> MatchFinishedScreen(
                     state = state,
-                    onReset = { viewModel.resetMatch() },
+                    onEndMatch = { viewModel.confirmEndMatch() },
                     onUndo = { viewModel.undo() }
                 )
             }
@@ -409,7 +409,10 @@ fun MatchScoreScreen(
                                     color = Color.White.copy(alpha = 0.10f),
                                     shape = RoundedCornerShape(8.dp)
                                 )
-                                .clickable(onClick = onEndMatch)
+                                .clickable(onClick = {
+                                    showEndMatchAction = false
+                                    onEndMatch()
+                                })
                                 .padding(horizontal = 16.dp, vertical = 8.dp),
                             contentAlignment = Alignment.Center
                         ) {
@@ -429,7 +432,7 @@ fun MatchScoreScreen(
 }
 
 @Composable
-fun MatchFinishedScreen(state: ScoreTrackerState, onReset: () -> Unit, onUndo: () -> Unit) {
+fun MatchFinishedScreen(state: ScoreTrackerState, onEndMatch: () -> Unit, onUndo: () -> Unit) {
     val match = state.currentMatch
 
     val listState = rememberTransformingLazyColumnState()
@@ -438,8 +441,8 @@ fun MatchFinishedScreen(state: ScoreTrackerState, onReset: () -> Unit, onUndo: (
     ScreenScaffold(
         scrollState = listState,
         edgeButton = {
-            EdgeButton(onClick = onReset) {
-                Text("New Match")
+            EdgeButton(onClick = onEndMatch) {
+                Text("End Match")
             }
         }
     ) { contentPadding ->

@@ -1,6 +1,7 @@
 package com.example.padeltracker.presentation.data
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import com.example.padeltracker.shared.MatchRules
 import com.example.padeltracker.shared.MatchSetup
@@ -37,6 +38,15 @@ class PendingMatchSetupStore(context: Context) {
         }
     }
 
+    fun consume(): MatchSetup? {
+        val setup = load()
+        if (setup != null) {
+            clear()
+            Log.d(TAG, "Pending match setup consumed: ${setup.matchId}")
+        }
+        return setup
+    }
+
     fun clear() {
         prefs.edit()
             .remove(KEY_SETUP_JSON)
@@ -44,6 +54,16 @@ class PendingMatchSetupStore(context: Context) {
 
         Log.d(TAG, "Pending match setup cleared")
     }
+
+    fun registerChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+    }
+
+    fun unregisterChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        prefs.unregisterOnSharedPreferenceChangeListener(listener)
+    }
+
+    fun isPendingSetupKey(key: String?): Boolean = key == KEY_SETUP_JSON
 
     private fun MatchSetup.toJson(): JSONObject {
         return JSONObject().apply {
