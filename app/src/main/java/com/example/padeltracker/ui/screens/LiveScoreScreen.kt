@@ -3,172 +3,134 @@ package com.example.padeltracker.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.padeltracker.R
-import com.example.padeltracker.data.AppDatabase
-import com.example.padeltracker.data.MatchRecord
 import com.example.padeltracker.shared.MatchSetup
-import com.example.padeltracker.ml.ShotDetectionState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
 fun LiveScoreScreen(
     setup: MatchSetup,
     onFinish: () -> Unit
 ) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val db = remember { AppDatabase.getDatabase(context) }
+    // NOTE FOR THE FUTURE:
+    // The score and timer will be updated dynamically from the ViewModel
+    // which communicates with the Wear OS watch.
+    // For now (UI Design phase), we use static placeholder values.
+    val scoreTeamA = "0"
+    val scoreTeamB = "0"
+    val timeString = "00:00"
 
-    val shotCounts by ShotDetectionState.shotCounts.collectAsState()
+    // Match status (waiting for the watch to initiate the match)
+    val matchStatusText = "Waiting for watch to start..."
 
-    // State for the score counters
-    var scoreTeamA by remember { mutableStateOf(0) }
-    var scoreTeamB by remember { mutableStateOf(0) }
-
-    // State for the live timer (in seconds)
-    var timeInSeconds by remember { mutableStateOf(0) }
-
-    // LaunchedEffect starts the timer as soon as the screen is displayed
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(1000L) // Wait for exactly 1 second
-            timeInSeconds++
-        }
-    }
-
-    // Convert total seconds into a Minutes:Seconds format (e.g., "12:05")
-    val minutes = timeInSeconds / 60
-    val seconds = timeInSeconds % 60
-    val timeString = String.format("%02d:%02d", minutes, seconds)
-
-    // Main container (Box allows us to stack UI elements on top of the background image)
+    // Main container
     Box(modifier = Modifier.fillMaxSize()) {
 
-        // 1. The Background Image
+        // 1. Full-screen background image
         Image(
-            painter = painterResource(id = R.drawable.green_balls), // Ensure your image is named correctly in the res/drawable folder
+            painter = painterResource(id = R.drawable.green_balls),
             contentDescription = "Padel balls background",
-            contentScale = ContentScale.Crop, // Stretches the image to fill the entire screen
+            contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
 
-        // 2. A semi-transparent black overlay to make the white text readable
+        // 2. Semi-transparent black overlay for better text readability
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Black.copy(alpha = 0.6f))
         )
 
-        // 3. The actual UI elements (Score, Timer, and Buttons)
+        // 3. Dashboard UI Content (Centered)
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center // This centers everything vertically
         ) {
-            // Live Timer Display
+            // Status Info Pill
+            Card(
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.2f)),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Text(
+                    text = matchStatusText,
+                    color = Color.White,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Timer Display (Passive, controlled by watch)
             Text(
                 text = timeString,
                 color = Color.White,
-                fontSize = 48.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 56.sp,
+                fontWeight = FontWeight.Black
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(50.dp))
 
             // --- Team A Section ---
             Text(
                 text = setup.teamA.players.joinToString(" & ") { it.name },
-                color = Color.White,
-                style = MaterialTheme.typography.titleLarge
-            )
-            Text(
-                text = "$scoreTeamA",
-                color = Color.White,
-                fontSize = 64.sp,
+                color = Color.White.copy(alpha = 0.8f),
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            Button(onClick = { scoreTeamA++ }) {
-                Text("+1 Point")
-            }
+            Text(
+                text = scoreTeamA,
+                color = Color.White,
+                fontSize = 80.sp, // Enlarged font since buttons were removed
+                fontWeight = FontWeight.Black
+            )
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // "VS" Divider
             Text("VS", color = Color.Gray, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(30.dp))
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             // --- Team B Section ---
             Text(
                 text = setup.teamB.players.joinToString(" & ") { it.name },
-                color = Color.White,
-                style = MaterialTheme.typography.titleLarge
-            )
-            Text(
-                text = "$scoreTeamB",
-                color = Color.White,
-                fontSize = 64.sp,
+                color = Color.White.copy(alpha = 0.8f),
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            Button(onClick = { scoreTeamB++ }) {
-                Text("+1 Point")
-            }
+            Text(
+                text = scoreTeamB,
+                color = Color.White,
+                fontSize = 80.sp,
+                fontWeight = FontWeight.Black
+            )
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(50.dp)) // Fixed spacing instead of pushing to the bottom
 
-            // --- Finish Match Button ---
-            Button(
-                onClick = {
-                    val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-
-                    // Create the match record using the actual timer duration
-                    val record = MatchRecord(
-                        date = currentDate,
-                        duration = timeString,
-                        score = "$scoreTeamA - $scoreTeamB",
-                        avgHeartRate = 0, // Placeholder until watch integration
-
-                        forehands = shotCounts.forehands,
-                        backhands = shotCounts.backhands,
-                        forehandLobs = shotCounts.forehandLobs,
-                        backhandLobs = shotCounts.backhandLobs,
-                        smashes = shotCounts.smashes,
-                        services = shotCounts.services,
-
-                        teamAPlayers = setup.teamA.players.joinToString(", ") { it.name },
-                        teamBPlayers = setup.teamB.players.joinToString(", ") { it.name }
-                    )
-
-                    // Execute database insertion on a background thread (IO)
-                    scope.launch(Dispatchers.IO) {
-                        db.matchDao().insertMatch(record)
-
-                        ShotDetectionState.reset()
-
-                        // Switch back to the Main thread to handle UI navigation
-                        withContext(Dispatchers.Main) {
-                            onFinish()
-                        }
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            // --- DEV HACK: Fake Watch Signal Button ---
+            // KEEP THIS ONLY for UI development to navigate to the next screen.
+            // It simulates the "Match Finished" signal from the watch.
+            OutlinedButton(
+                onClick = { onFinish() },
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red),
+                border = null
             ) {
-                Text("Finish & Save Match")
+                Text("DEV MODE: Simulate Watch Finish ->")
             }
         }
     }
