@@ -3,6 +3,7 @@ package com.example.padeltracker.presentation.data
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.core.content.edit
 import com.example.padeltracker.shared.MatchRules
 import com.example.padeltracker.shared.MatchSetup
 import com.example.padeltracker.shared.PlayerSetup
@@ -20,9 +21,9 @@ class PendingMatchSetupStore(context: Context) {
     fun save(setup: MatchSetup) {
         val json = setup.toJson().toString()
 
-        prefs.edit()
-            .putString(KEY_SETUP_JSON, json)
-            .apply()
+        prefs.edit {
+            putString(KEY_SETUP_JSON, json)
+        }
 
         Log.d(TAG, "Pending match setup saved: ${setup.matchId}")
     }
@@ -48,9 +49,9 @@ class PendingMatchSetupStore(context: Context) {
     }
 
     fun clear() {
-        prefs.edit()
-            .remove(KEY_SETUP_JSON)
-            .apply()
+        prefs.edit {
+            remove(KEY_SETUP_JSON)
+        }
 
         Log.d(TAG, "Pending match setup cleared")
     }

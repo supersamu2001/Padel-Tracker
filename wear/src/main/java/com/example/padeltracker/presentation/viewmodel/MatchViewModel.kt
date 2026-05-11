@@ -110,13 +110,6 @@ class MatchViewModel @JvmOverloads constructor(
     }
 
     /**
-     * Loads the pending match setup if no match is currently active.
-     */
-    fun loadPendingSetupIfAvailable() {
-        applyPendingSetupIfAvailable()
-    }
-
-    /**
      * Moves the match status to server selection.
      */
     fun startMatch() {
