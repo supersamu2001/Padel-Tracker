@@ -115,21 +115,27 @@ fun HomeScreen(
             }
 
             // Detected Shots Section
-            lastShotTime?.let { timestamp ->
-                val shotTimeString = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
-                Spacer(modifier = Modifier.height(16.dp))
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = PadelLimeGreen.copy(alpha = 0.1f)),
-                    border = BorderStroke(1.dp, PadelLimeGreen)
-                ) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        Text(
-                            text = "SHOT DETECTED",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
+            Spacer(modifier = Modifier.height(16.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (lastShotTime != null) PadelLimeGreen.copy(alpha = 0.1f) else Color.White.copy(alpha = 0.05f)
+                ),
+                border = BorderStroke(
+                    1.dp, 
+                    if (lastShotTime != null) PadelLimeGreen else Color.White.copy(alpha = 0.2f)
+                )
+            ) {
+                Column(modifier = Modifier.padding(12.dp)) {
+                    Text(
+                        text = if (lastShotTime != null) "SHOT DETECTED" else "NO SHOT DETECTED",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    if (lastShotTime != null) {
+                        val shotTimeString = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(lastShotTime!!))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -147,6 +153,12 @@ fun HomeScreen(
                                 color = Color.White.copy(alpha = 0.7f)
                             )
                         }
+                    } else {
+                        Text(
+                            text = "Swing your racket to record a shot",
+                            fontSize = 12.sp,
+                            color = Color.White.copy(alpha = 0.4f)
+                        )
                     }
                 }
             }

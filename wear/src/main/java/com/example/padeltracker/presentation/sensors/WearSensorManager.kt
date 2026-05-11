@@ -140,6 +140,7 @@ class WearSensorManager(private val context: Context) : SensorEventListener {
 
         // TO SEND ALL THE SAMPLES TO THE PHONE
         // Existing streaming logic (optional: can be removed if only shot detection is needed)
+        /**
         val streamBuffer = ByteBuffer.allocate(16)
         streamBuffer.order(ByteOrder.LITTLE_ENDIAN)
         streamBuffer.putInt(event.sensor.type)
@@ -155,6 +156,7 @@ class WearSensorManager(private val context: Context) : SensorEventListener {
                     Log.e(TAG, "FAILED TO SEND STREAM: ${e.message}")
                 }
         }
+        */
 
         /**
         // ... logging code ...
