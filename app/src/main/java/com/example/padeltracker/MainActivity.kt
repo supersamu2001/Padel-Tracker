@@ -112,19 +112,63 @@ class MainActivity : ComponentActivity() {
                         }
                 }
 
-                // INITIAL CHECK WHEN THE APP STARTS
-                LaunchedEffect(Unit) {
-                    Wearable.getCapabilityClient(this@MainActivity)
+                // Keep the HomeScreen watch status updated while the app is open
+                val watchCapabilityListener = remember {
+                    CapabilityClient.OnCapabilityChangedListener { capabilityInfo ->
+                        val hasReachableWatch = capabilityInfo.nodes.isNotEmpty()
+
+                        Log.d(
+                            "WATCH_DEBUG",
+                            "Capability changed. hasReachableWatch=$hasReachableWatch"
+                        )
+
+                        isWatchConnected = hasReachableWatch
+                        isCheckingWatch = false
+                    }
+                }
+
+                DisposableEffect(Unit) {
+                    val capabilityClient = Wearable.getCapabilityClient(this@MainActivity)
+
+                    // Initial status check
+                    isCheckingWatch = true
+
+                    capabilityClient
                         .getCapability(
                             WearCommunicationConstants.WATCH_CAPABILITY,
                             CapabilityClient.FILTER_REACHABLE
                         )
                         .addOnSuccessListener { capabilityInfo ->
                             isWatchConnected = capabilityInfo.nodes.isNotEmpty()
+                            isCheckingWatch = false
                         }
-                        .addOnFailureListener {
+                        .addOnFailureListener { error ->
+                            Log.e("WATCH_DEBUG", "Initial capability check failed", error)
                             isWatchConnected = false
+                            isCheckingWatch = false
                         }
+
+                    // Live updates while the app is open
+                    capabilityClient
+                        .addListener(
+                            watchCapabilityListener,
+                            WearCommunicationConstants.WATCH_CAPABILITY
+                        )
+                        .addOnSuccessListener {
+                            Log.d("WATCH_DEBUG", "Watch capability listener registered")
+                        }
+                        .addOnFailureListener { error ->
+                            Log.e("WATCH_DEBUG", "Failed to register capability listener", error)
+                        }
+
+                    onDispose {
+                        capabilityClient.removeListener(
+                            watchCapabilityListener,
+                            WearCommunicationConstants.WATCH_CAPABILITY
+                        )
+
+                        Log.d("WATCH_DEBUG", "Watch capability listener removed")
+                    }
                 }
 
                 Scaffold(
