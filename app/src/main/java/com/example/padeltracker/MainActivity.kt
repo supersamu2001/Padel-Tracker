@@ -15,6 +15,7 @@ import com.example.padeltracker.shared.MatchSetup
 import com.example.padeltracker.shared.WearCommunicationConstants
 import com.example.padeltracker.ui.screens.*
 import com.example.padeltracker.ui.theme.*
+import com.example.padeltracker.wear.PhoneMatchEndedEventBus
 import com.example.padeltracker.wear.WearMatchSetupSender
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.Wearable
@@ -49,6 +50,30 @@ class MainActivity : ComponentActivity() {
 
                 val matchSetupSender = remember {
                     WearMatchSetupSender(this@MainActivity)
+                }
+
+                // Listen for match-ended messages coming from the Wear app
+                LaunchedEffect(Unit) {
+                    PhoneMatchEndedEventBus.events.collect { endedAt ->
+                        Log.d(
+                            "PHONE_MATCH_ENDED",
+                            "Match ended event received in MainActivity: $endedAt"
+                        )
+
+                        if (currentScreen == AppScreen.LiveMatch) {
+                            selectedMatchForAnalysis = null
+                            currentScreen = AppScreen.Analysis
+
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Match ended from watch")
+                            }
+                        } else {
+                            Log.d(
+                                "PHONE_MATCH_ENDED",
+                                "Match ended event ignored because currentScreen=$currentScreen"
+                            )
+                        }
+                    }
                 }
 
                 // WATCH CHECK FUNCTION (From your old Main)
