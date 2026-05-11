@@ -14,6 +14,11 @@ import java.nio.ByteOrder
 import java.util.ArrayDeque
 import kotlin.math.abs
 
+//toast debug
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
+
 //heartbeat
 import androidx.health.services.client.HealthServices
 import androidx.health.services.client.MeasureCallback
@@ -43,6 +48,10 @@ class WearSensorManager(
     private val gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
 
     private val TAG = "WearSensorManager"
+
+    //toast debug
+    private val DEBUG_SHOW_SHOT_TOAST = true
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     // Recognition Thresholds
     private val ACC_THRESHOLD = 3 * 9.81f   // ~29.43 m/s^2
@@ -157,6 +166,19 @@ class WearSensorManager(
 
     }
 
+    //toast debug
+    private fun showShotDetectedToast() {
+        if (!DEBUG_SHOW_SHOT_TOAST) return
+
+        mainHandler.post {
+            Toast.makeText(
+                context.applicationContext,
+                "SHOT DETECTED",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
     // called each time a sensor registers a new value
     override fun onSensorChanged(event: SensorEvent) {
         // values => values obtained by the sensor
@@ -202,6 +224,8 @@ class WearSensorManager(
                 shotGyroData.addAll(gyroHistory)
 
                 Log.d(TAG, "!!! SHOT DETECTED !!! Collecting post-shot data...")
+                // toast debug
+                showShotDetectedToast()
             }
         }
 
