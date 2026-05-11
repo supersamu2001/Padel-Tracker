@@ -21,7 +21,7 @@ import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.launch
 
-// Navigation Enum (Now includes Analysis)
+// Navigation Enum
 enum class AppScreen { Home, Setup, History, LiveMatch, Analysis }
 
 class MainActivity : ComponentActivity() {
@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                 var activeMatchSetup by remember { mutableStateOf<MatchSetup?>(null) }
                 var selectedMatchForAnalysis by remember { mutableStateOf<MatchRecord?>(null) }
 
-                // Temporary list for History (until we add the database back)
+                // Temporary list for History
                 val matchHistory = remember { mutableStateListOf<MatchRecord>() }
 
                 val snackbarHostState = remember { SnackbarHostState() }
@@ -52,31 +52,22 @@ class MainActivity : ComponentActivity() {
                     WearMatchSetupSender(this@MainActivity)
                 }
 
-                // Listen for match-ended messages coming from the Wear app
+                // 1. Listen for match-ended messages from Wear
                 LaunchedEffect(Unit) {
                     PhoneMatchEndedEventBus.events.collect { endedAt ->
-                        Log.d(
-                            "PHONE_MATCH_ENDED",
-                            "Match ended event received in MainActivity: $endedAt"
-                        )
+                        Log.d("PHONE_MATCH_ENDED", "Match ended event received: $endedAt")
 
                         if (currentScreen == AppScreen.LiveMatch) {
                             selectedMatchForAnalysis = null
                             currentScreen = AppScreen.Analysis
-
                             scope.launch {
                                 snackbarHostState.showSnackbar("Match ended from watch")
                             }
-                        } else {
-                            Log.d(
-                                "PHONE_MATCH_ENDED",
-                                "Match ended event ignored because currentScreen=$currentScreen"
-                            )
                         }
                     }
                 }
 
-                // WATCH CHECK FUNCTION (From your old Main)
+                // 2. WATCH CHECK FUNCTION (Επαναφορά ελέγχου)
                 fun checkWatchAndOpenSetup() {
                     if (isCheckingWatch) return
                     isCheckingWatch = true
@@ -91,11 +82,11 @@ class MainActivity : ComponentActivity() {
                         .addOnSuccessListener { capabilityInfo ->
                             isCheckingWatch = false
                             if (capabilityInfo.nodes.isNotEmpty()) {
-                                Log.d("WATCH_DEBUG", "Padel Tracker watch found. Opening setup screen.")
+                                Log.d("WATCH_DEBUG", "Watch found. Opening setup.")
                                 isWatchConnected = true
                                 currentScreen = AppScreen.Setup
                             } else {
-                                Log.d("WATCH_DEBUG", "No reachable Padel Tracker watch found.")
+                                Log.d("WATCH_DEBUG", "No watch found.")
                                 isWatchConnected = false
                                 scope.launch {
                                     snackbarHostState.showSnackbar("No Padel Tracker watch connected")
@@ -105,70 +96,26 @@ class MainActivity : ComponentActivity() {
                         .addOnFailureListener { error ->
                             isCheckingWatch = false
                             isWatchConnected = false
-                            Log.e("WATCH_DEBUG", "Unable to check reachable watch capability", error)
+                            Log.e("WATCH_DEBUG", "Connection check failed", error)
                             scope.launch {
                                 snackbarHostState.showSnackbar("Unable to check watch connection")
                             }
                         }
                 }
 
-                // Keep the HomeScreen watch status updated while the app is open
-                val watchCapabilityListener = remember {
-                    CapabilityClient.OnCapabilityChangedListener { capabilityInfo ->
-                        val hasReachableWatch = capabilityInfo.nodes.isNotEmpty()
-
-                        Log.d(
-                            "WATCH_DEBUG",
-                            "Capability changed. hasReachableWatch=$hasReachableWatch"
-                        )
-
-                        isWatchConnected = hasReachableWatch
-                        isCheckingWatch = false
-                    }
-                }
-
-                DisposableEffect(Unit) {
-                    val capabilityClient = Wearable.getCapabilityClient(this@MainActivity)
-
-                    // Initial status check
-                    isCheckingWatch = true
-
-                    capabilityClient
+                // 3. INITIAL CHECK WHEN APP STARTS
+                LaunchedEffect(Unit) {
+                    Wearable.getCapabilityClient(this@MainActivity)
                         .getCapability(
                             WearCommunicationConstants.WATCH_CAPABILITY,
                             CapabilityClient.FILTER_REACHABLE
                         )
                         .addOnSuccessListener { capabilityInfo ->
                             isWatchConnected = capabilityInfo.nodes.isNotEmpty()
-                            isCheckingWatch = false
                         }
-                        .addOnFailureListener { error ->
-                            Log.e("WATCH_DEBUG", "Initial capability check failed", error)
+                        .addOnFailureListener {
                             isWatchConnected = false
-                            isCheckingWatch = false
                         }
-
-                    // Live updates while the app is open
-                    capabilityClient
-                        .addListener(
-                            watchCapabilityListener,
-                            WearCommunicationConstants.WATCH_CAPABILITY
-                        )
-                        .addOnSuccessListener {
-                            Log.d("WATCH_DEBUG", "Watch capability listener registered")
-                        }
-                        .addOnFailureListener { error ->
-                            Log.e("WATCH_DEBUG", "Failed to register capability listener", error)
-                        }
-
-                    onDispose {
-                        capabilityClient.removeListener(
-                            watchCapabilityListener,
-                            WearCommunicationConstants.WATCH_CAPABILITY
-                        )
-
-                        Log.d("WATCH_DEBUG", "Watch capability listener removed")
-                    }
                 }
 
                 Scaffold(
@@ -184,8 +131,8 @@ class MainActivity : ComponentActivity() {
                         when (currentScreen) {
                             AppScreen.Home -> {
                                 HomeScreen(
-                                    isConnected = isWatchConnected, // Now reads the real watch status!
-                                    onNewGameClick = { checkWatchAndOpenSetup() }, // Checks before letting you enter
+                                    isConnected = isWatchConnected, // Real status
+                                    onNewGameClick = { checkWatchAndOpenSetup() }, // Real check
                                     onHistoryClick = { currentScreen = AppScreen.History }
                                 )
                             }
@@ -194,7 +141,7 @@ class MainActivity : ComponentActivity() {
                                 MatchSetupScreen(
                                     onBackClick = { currentScreen = AppScreen.Home },
                                     onSendToWatch = { setup ->
-                                        // Sends data to the watch before going to Live Match
+                                        // Επαναφορά της αποστολής στο ρολόι
                                         matchSetupSender.sendMatchSetup(
                                             setup = setup,
                                             onSuccess = {
@@ -219,7 +166,6 @@ class MainActivity : ComponentActivity() {
                                     LiveScoreScreen(
                                         setup = setup,
                                         onFinish = {
-                                            // Go to Analysis (or History) when the match finishes
                                             currentScreen = AppScreen.Analysis
                                         }
                                     )

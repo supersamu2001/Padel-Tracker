@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.lifecycle.AndroidViewModel
 import com.example.padeltracker.presentation.communication.MatchEndedSender
 import com.example.padeltracker.presentation.data.PendingMatchSetupStore
@@ -29,7 +30,19 @@ class MatchViewModel @JvmOverloads constructor(
     private val _state = mutableStateOf(createInitialState())
     val state: State<ScoreTrackerState> = _state
 
-    private val sensorManager = WearSensorManager(application)
+    // HEARTBEAT
+    private val _heartRate = mutableStateOf(0.0)
+    val heartRate: State<Double> = _heartRate
+
+    //private val sensorManager = WearSensorManager(application)
+
+    // 2. Εδώ συνδέσαμε τον Manager με τον παλμό του ViewModel
+    private val sensorManager = WearSensorManager(application) { newRate ->
+        _heartRate.value = newRate
+
+        // TESTTTTTTTTTT
+        Log.d("VIEW_MODEL_TEST", "🚀 EXOUME ViewModel NEOS PALMOS: $newRate")
+    }
     private val matchEndedSender = MatchEndedSender(application)
 
     private val pendingSetupChangeListener =

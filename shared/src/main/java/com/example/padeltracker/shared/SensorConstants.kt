@@ -4,4 +4,6 @@ package com.example.padeltracker.shared
 object SensorConstants {
     const val SENSOR_DATA_PATH = "/sensor_data"
     const val SHOT_DATA_PATH = "/shot_data"
+
+    const val HEART_RATE_PATH = "/heart_rate_data" //heartbeat
 }

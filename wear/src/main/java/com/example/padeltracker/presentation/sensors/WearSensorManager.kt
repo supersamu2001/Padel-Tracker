@@ -14,12 +14,31 @@ import java.nio.ByteOrder
 import java.util.ArrayDeque
 import kotlin.math.abs
 
-class WearSensorManager(private val context: Context) : SensorEventListener {
+//heartbeat
+import androidx.health.services.client.HealthServices
+import androidx.health.services.client.MeasureCallback
+import androidx.health.services.client.data.Availability
+import androidx.health.services.client.data.DataPointContainer
+import androidx.health.services.client.data.DataType
+import androidx.health.services.client.data.DeltaDataType
+import androidx.health.services.client.unregisterMeasureCallback
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+class WearSensorManager(
+    private val context: Context,
+    private val onHeartRateChanged: (Double) -> Unit // <--- ΠΡΟΣΘΕΣΕ ΑΥΤΟ
+) : SensorEventListener {
 
     private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     private val messageClient = Wearable.getMessageClient(context)
     private val nodeClient = Wearable.getNodeClient(context)
-    
+
+    private val measureClientHR = HealthServices.getClient(context).measureClient
+    var latestHeartRate: Double = 0.0 // Stores the latest HR value
+
+    private val scope = CoroutineScope(Dispatchers.Main) //heavy staff
     private val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     private val gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
 
@@ -53,6 +72,36 @@ class WearSensorManager(private val context: Context) : SensorEventListener {
     private var lastAccTime: Long = 0
     private var lastGyroTime: Long = 0
 
+    // ---> NEW ADDITION FOR HEART RATE: Callback <---
+    // This listens for new heart rate values from the sensor
+
+    private val heartRateCallback = object : MeasureCallback {
+        override fun onAvailabilityChanged(dataType: DeltaDataType<*, *>, availability: Availability) {
+            Log.d(TAG, "Heart Rate Sensor Availability: $availability")
+        }
+
+        override fun onDataReceived(data: DataPointContainer) {
+            val hrData = data.getData(DataType.HEART_RATE_BPM)
+            if (hrData.isNotEmpty()) {
+                latestHeartRate = hrData.last().value
+
+                onHeartRateChanged(latestHeartRate)
+
+                Log.d(TAG, "❤️ Heart Rate: $latestHeartRate BPM")
+
+                // Send the heart rate to the phone using the new path
+                targetNodeId?.let { nodeId ->
+                    val buffer = ByteBuffer.allocate(8) // 8 bytes for a Double
+                    buffer.order(ByteOrder.LITTLE_ENDIAN)
+                    buffer.putDouble(latestHeartRate)
+
+                    messageClient.sendMessage(nodeId, SensorConstants.HEART_RATE_PATH, buffer.array())
+                        .addOnFailureListener { Log.e(TAG, "FAILED TO SEND HEART RATE") }
+                }
+            }
+        }
+    }
+
     init {
         // Search for connected phone
         nodeClient.connectedNodes.addOnSuccessListener { nodes ->
@@ -77,11 +126,35 @@ class WearSensorManager(private val context: Context) : SensorEventListener {
             sensorManager.registerListener(this, it, SENSOR_DELAY_25HZ)
             Log.d(TAG, "Gyroscope registered at 25Hz")
         } ?: Log.e(TAG, "Gyroscope not found!")
+
+        //heartbeat
+
+        scope.launch {
+            try {
+                measureClientHR.registerMeasureCallback(DataType.HEART_RATE_BPM, heartRateCallback)
+                Log.d(TAG, "Heart Rate registered successfully!")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to register HR: ${e.message}")
+            }
+        }
+
     }
 
     fun stopTracking() {
         Log.d(TAG, "Interruption tracking sensors")
         sensorManager.unregisterListener(this)
+
+        //measureClientHR.unregisterMeasureCallback(heartRateCallback) //heartbeat
+
+        scope.launch {
+            try {
+                measureClientHR.unregisterMeasureCallback(DataType.HEART_RATE_BPM,heartRateCallback)
+                Log.d(TAG, "Heart Rate unregistered.")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to unregister HR: ${e.message}")
+            }
+        }
+
     }
 
     // called each time a sensor registers a new value
