@@ -49,7 +49,7 @@ class ShotLogger(private val context: Context) {
         try {
             val writer = FileWriter(file, true) // Append mode
 
-            // coerceAtMost: take the lowest value between accSampes and gyroSamples
+            // coerceAtMost: take the lowest value between accSamples and gyroSamples
             // Avoid, in case of errors, that the two lists have always the same number of values
             val numSamples = accSamples.size.coerceAtMost(gyroSamples.size)
             

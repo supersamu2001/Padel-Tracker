@@ -25,6 +25,7 @@ object SensorStatusState {
     private val _lastShotSamplesCount = MutableStateFlow(0)
     val lastShotSamplesCount = _lastShotSamplesCount.asStateFlow()
 
+    // Called each time a new data sensor is retrieved
     fun updateData(type: Int, x: Float, y: Float, z: Float) {
         _lastMessageReceived.value = System.currentTimeMillis()
         if (type == android.hardware.Sensor.TYPE_ACCELEROMETER) {

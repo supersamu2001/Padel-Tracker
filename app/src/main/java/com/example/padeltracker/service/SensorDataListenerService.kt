@@ -23,12 +23,12 @@ class SensorDataListenerService : WearableListenerService() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d(TAG, ">>> SERVIZIO AVVIATO: onCreate chiamato correttamente! <<<")
+        Log.d(TAG, ">>> SERVICE STARTED: onCreate called correctly! <<<")
         try {
             classifier = ShotClassifier(this)
-            Log.d(TAG, "Classifier inizializzato con successo")
+            Log.d(TAG, "Classifier initialized with success")
         } catch (e: Exception) {
-            Log.e(TAG, "ERRORE durante inizializzazione Classifier: ${e.message}")
+            Log.e(TAG, "ERROR in the initialization of the Classifier: ${e.message}")
             e.printStackTrace()
         }
         shotLogger = ShotLogger(this)
@@ -135,7 +135,7 @@ class SensorDataListenerService : WearableListenerService() {
 
     override fun onDestroy() {
         classifier?.close()
-        Log.d(TAG, "Servizio distrutto")
+        Log.d(TAG, "Service destroyed")
         super.onDestroy()
     }
 }
