@@ -68,7 +68,18 @@ fun HomeScreen(
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // APP NAME
+            Text(
+                text = "Padel Tracker",
+                fontSize = 42.sp,
+                fontWeight = FontWeight.Black,
+                color = Color.White,
+                letterSpacing = 2.sp
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             // --- TOP SECTION: Smartwatch connectivity pill ---
             Row(
@@ -114,6 +125,7 @@ fun HomeScreen(
                 )
             }
 
+            /**
             // Detected Shots Section
             Spacer(modifier = Modifier.height(16.dp))
             Card(
@@ -162,6 +174,7 @@ fun HomeScreen(
                     }
                 }
             }
+            */
 
             // Animated bouncing ball area (Pushes the rest to the bottom)
             Box(
