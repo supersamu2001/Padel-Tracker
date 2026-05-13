@@ -34,12 +34,22 @@ class MatchViewModel @JvmOverloads constructor(
     private val _heartRate = mutableStateOf(0.0)
     val heartRate: State<Double> = _heartRate
 
+    private val hrHistoryBuilder = java.lang.StringBuilder()
+    private var lastSavedTimestamp = 0L
     //private val sensorManager = WearSensorManager(application)
 
     // 2. Εδώ συνδέσαμε τον Manager με τον παλμό του ViewModel
     private val sensorManager = WearSensorManager(application) { newRate ->
         _heartRate.value = newRate
 
+        // 👇 ΝΕΑ ΠΡΟΣΘΗΚΗ: Σιωπηλή καταγραφή κάθε 5 δευτερόλεπτα
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastSavedTimestamp >= 5000 && newRate > 0) {
+            if (hrHistoryBuilder.isNotEmpty()) hrHistoryBuilder.append(",")
+            hrHistoryBuilder.append(newRate.toInt())
+            lastSavedTimestamp = currentTime
+            Log.d("VIEW_MODEL_TEST", "Saved HR point: ${newRate.toInt()}")
+        }
         // TESTTTTTTTTTT
         Log.d("VIEW_MODEL_TEST", "🚀 EXOUME ViewModel NEOS PALMOS: $newRate")
     }
@@ -225,7 +235,11 @@ class MatchViewModel @JvmOverloads constructor(
         matchEndedMessageSent = true
 
         Log.d(TAG, "User confirmed end match. Sending match ended message.")
-        matchEndedSender.sendMatchEnded()
+
+        // Send the history to the sender
+        val historyString = hrHistoryBuilder.toString()
+        matchEndedSender.sendMatchEnded(historyString)
+
 
         resetMatch()
     }

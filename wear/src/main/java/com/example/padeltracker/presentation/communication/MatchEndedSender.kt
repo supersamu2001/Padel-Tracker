@@ -3,6 +3,7 @@ package com.example.padeltracker.presentation.communication
 import android.content.Context
 import android.util.Log
 import com.example.padeltracker.shared.WearCommunicationConstants
+import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 
 /**
@@ -11,10 +12,27 @@ import com.google.android.gms.wearable.Wearable
 class MatchEndedSender(
     private val context: Context
 ) {
-    fun sendMatchEnded() {
+    fun sendMatchEnded(heartRateHistory: String) {
+
         val payload = System.currentTimeMillis().toString().toByteArray()
 
         Log.d(TAG, "Preparing to send match ended message")
+
+        // send the heartbeat history to the phone (for the graph)
+        val putDataReq = PutDataMapRequest.create("/match_result").apply {
+            dataMap.putString("heartRateHistory", heartRateHistory)
+            dataMap.putLong("timestamp", System.currentTimeMillis())
+        }.asPutDataRequest()
+
+        putDataReq.setUrgent()
+
+        Wearable.getDataClient(context).putDataItem(putDataReq)
+            .addOnSuccessListener {
+                Log.d(TAG, "Successfully synced Heart Rate History to phone!")
+            }
+            .addOnFailureListener { error ->
+                Log.e(TAG, "Failed to sync DataMap", error)
+            }
 
         Wearable.getNodeClient(context).connectedNodes
             .addOnSuccessListener { nodes ->
