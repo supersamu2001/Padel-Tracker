@@ -28,4 +28,9 @@ class HistoryViewModel(
             repository.deleteMatch(match)
         }
     }
+    fun saveMatch(match: MatchRecord) {
+        viewModelScope.launch {
+            repository.insertMatch(match)
+        }
+    }
 }
