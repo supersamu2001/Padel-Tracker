@@ -21,6 +21,11 @@ import androidx.compose.ui.unit.sp
 import com.example.padeltracker.R
 import com.example.padeltracker.data.MatchRecord
 import com.example.padeltracker.shared.MatchSetup
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
 
 @Composable
 fun GameAnalysisScreen(
@@ -94,6 +99,23 @@ fun GameAnalysisScreen(
                 )
             }
 
+            // heartbeat graph
+            if (record != null && record.heartRateHistory.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(20.dp))
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
+                    shape = RoundedCornerShape(24.dp)
+                ) {
+                    Column(modifier = Modifier.padding(20.dp)) {
+                        Text("HEART RATE ZONES", color = activeRed, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        HeartRateGraph(historyStr = record.heartRateHistory, color = activeRed)
+                    }
+                }
+            }
+
+
             Spacer(modifier = Modifier.height(20.dp))
 
             // TECHNICAL PERFORMANCE - All mock values removed
@@ -126,6 +148,54 @@ fun GameAnalysisScreen(
         }
     }
 }
+
+
+// heartbeat graphs
+@Composable
+fun HeartRateGraph(historyStr: String, color: Color) {
+    // 1. Μετατροπή του "110,120,135" σε λίστα με νούμερα [110, 120, 135]
+    val points = historyStr.split(",").mapNotNull { it.trim().toFloatOrNull() }
+
+    if (points.size < 2) {
+        Text("Not enough data to draw graph", color = Color.Gray, fontSize = 12.sp)
+        return
+    }
+
+    val maxBpm = points.maxOrNull() ?: 180f
+    val minBpm = (points.minOrNull() ?: 60f) - 10f // Λίγος αέρας από κάτω
+
+    Canvas(modifier = Modifier.fillMaxWidth().height(120.dp)) {
+        val width = size.width
+        val height = size.height
+        val pointSpacing = width / (points.size - 1)
+
+        val path = Path()
+
+        points.forEachIndexed { index, bpm ->
+            val x = index * pointSpacing
+            // Υπολογισμός του Y ώστε να ταιριάζει στο ύψος (τα μεγάλα νούμερα πάνε πάνω)
+            val normalizedY = 1f - ((bpm - minBpm) / (maxBpm - minBpm))
+            val y = normalizedY * height
+
+            if (index == 0) {
+                path.moveTo(x, y)
+            } else {
+                path.lineTo(x, y)
+            }
+        }
+
+        drawPath(
+            path = path,
+            color = color,
+            style = Stroke(
+                width = 4.dp.toPx(),
+                cap = StrokeCap.Round,
+                join = StrokeJoin.Round
+            )
+        )
+    }
+}
+// end heartbeat
 
 // ... helper composables (StatCard, ShotRow) same as before ...
 @Composable

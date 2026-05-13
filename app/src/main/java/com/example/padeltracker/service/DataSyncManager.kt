@@ -20,12 +20,12 @@ class DataSyncManager(
     private val dataClient = Wearable.getDataClient(context)
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    // Ξεκινάει να "ακούει" δεδομένα από το ρολόι
+    // Start listening data from the watch
     fun startListening() {
         dataClient.addListener(this)
     }
 
-    // Σταματάει να ακούει (π.χ. όταν κλείνει η εφαρμογή)
+    // Stop listening (e.g. when the app stops)
     fun stopListening() {
         dataClient.removeListener(this)
     }
@@ -43,6 +43,7 @@ class DataSyncManager(
                     duration = dataMap.getString("duration") ?: "",
                     score = dataMap.getString("score") ?: "",
                     avgHeartRate = dataMap.getInt("avgHeartRate"),
+                    heartRateHistory = dataMap.getString("heartRateHistory") ?: "",
                     forehands = dataMap.getInt("forehands"),
                     backhands = dataMap.getInt("backhands"),
                     forehandLobs = dataMap.getInt("forehandLobs"),
@@ -54,7 +55,7 @@ class DataSyncManager(
                     winner = dataMap.getString("winner") ?: ""
                 )
 
-                // Αποθήκευση στη βάση δεδομένων
+                // Save in data base
                 scope.launch {
                     repository.insertMatch(match)
                 }
