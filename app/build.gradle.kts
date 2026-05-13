@@ -1,9 +1,14 @@
 plugins {
     // Apply plugins without versions (versions are inherited from project-level file)
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
 }
 
 android {
@@ -32,9 +37,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
@@ -68,7 +70,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Room Database with KSP for match history
-    val roomVersion = "2.6.1"
+    val roomVersion = "2.8.4"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")

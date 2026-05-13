@@ -1,7 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.android)
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
 }
 
 android {
@@ -37,9 +42,6 @@ android {
     useLibrary("wear-sdk")
     buildFeatures {
         compose = true
-    }
-    kotlinOptions {
-        jvmTarget = "11"
     }
 }
 

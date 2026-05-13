@@ -112,7 +112,7 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                /**
+
                 // Tournament Name Card
                 Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = White)) {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -135,7 +135,7 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
-                */
+
 
                 Text(
                     "PLAYERS",
