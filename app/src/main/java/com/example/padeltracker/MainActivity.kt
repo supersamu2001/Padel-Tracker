@@ -190,7 +190,9 @@ class MainActivity : ComponentActivity() {
                                     onMatchClick = { match ->
                                         selectedMatchForAnalysis = match
                                         currentScreen = AppScreen.Analysis
-                                    }
+                                    },
+                                    onDeleteMatch = { match ->
+                                        matchHistory.removeIf { it.id == match.id }                                    }
                                 )
                             }
                         }

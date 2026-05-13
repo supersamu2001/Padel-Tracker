@@ -22,13 +22,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.padeltracker.R
 import com.example.padeltracker.data.MatchRecord
+import androidx.compose.material.icons.filled.Delete
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
     matches: List<MatchRecord>,
     onBackClick: () -> Unit,
-    onMatchClick: (MatchRecord) -> Unit
+    onMatchClick: (MatchRecord) -> Unit,
+    onDeleteMatch: (MatchRecord) -> Unit
 ) {
     // Intercept system back button to go back to Home
     BackHandler {
@@ -67,8 +69,11 @@ fun HistoryScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(matches) { match ->
-                        MatchHistoryCard(match = match, onClick = { onMatchClick(match) })
-                    }
+                        MatchHistoryCard(
+                            match = match,
+                            onClick = { onMatchClick(match) },
+                            onDelete = { /* θα συνδέσουμε αργότερα */ }
+                        )                    }
                 }
             }
         }
@@ -76,16 +81,22 @@ fun HistoryScreen(
 }
 
 @Composable
-fun MatchHistoryCard(match: MatchRecord, onClick: () -> Unit) {
-    Card(
+fun MatchHistoryCard(match: MatchRecord, onClick: () -> Unit, onDelete: () -> Unit) {    Card(
         modifier = Modifier.fillMaxWidth().clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.9f))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text(text = match.date, fontSize = 12.sp, color = Color.Gray)
                 Text(text = "Final Score", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color(0xFFD32F2F))
+                IconButton(onClick = onDelete) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete match",
+                        tint = Color.Gray
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
