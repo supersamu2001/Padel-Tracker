@@ -18,5 +18,6 @@ data class MatchRecord(
     val smashes: Int,          // Total smash shots
     val services: Int,         // Total services
     val teamAPlayers: String,  // Names of Team A
-    val teamBPlayers: String   // Names of Team B
+    val teamBPlayers: String,   // Names of Team B
+    val winner: String         // Example: "Team A" or "Team B"
 )

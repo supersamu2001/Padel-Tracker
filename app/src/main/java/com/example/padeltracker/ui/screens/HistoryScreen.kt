@@ -1,14 +1,34 @@
 package com.example.padeltracker.ui.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +38,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.padeltracker.data.AppDatabase
 import com.example.padeltracker.data.MatchRecord
-import com.example.padeltracker.ui.theme.*
+import com.example.padeltracker.ui.theme.BackgroundBeige
+import com.example.padeltracker.ui.theme.ClayOrange
+import com.example.padeltracker.ui.theme.DarkTeal
+import com.example.padeltracker.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,25 +116,44 @@ fun MatchHistoryCard(match: MatchRecord) {
 
             Divider(modifier = Modifier.padding(vertical = 8.dp), thickness = 0.5.dp, color = BackgroundBeige)
 
-            // Players Info
-            Text(
-                text = "${match.teamAPlayers} vs ${match.teamBPlayers}",
-                fontWeight = FontWeight.Bold,
-                color = DarkTeal,
-                fontSize = 14.sp
-            )
+            // Players Info & Winner
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "${match.teamAPlayers} vs ${match.teamBPlayers}",
+                    fontWeight = FontWeight.Bold,
+                    color = DarkTeal,
+                    fontSize = 14.sp
+                )
+                // ΕΔΩ ΧΡΗΣΙΜΟΠΟΙΟΥΜΕ ΤΟ WINNER ΠΟΥ ΕΒΑΛΕΣ ΣΤΗ ΒΑΣΗ!
+                Text(
+                    text = "🏆 ${match.winner}",
+                    fontWeight = FontWeight.Bold,
+                    color = ClayOrange,
+                    fontSize = 12.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Stats Row 1 (Χωρισμένα για να χωράνε στην οθόνη)
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+                StatItem(label = "BPM", value = "${match.avgHeartRate}")
+                StatItem(label = "Smashes", value = "${match.smashes}")
+                StatItem(label = "Services", value = "${match.services}")
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Stats Row
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                StatItem(label = "BPM", value = "${match.avgHeartRate}")
-                StatItem(label = "Forehands", value = "${match.forehands}")
-                StatItem(label = "Backhands", value = "${match.backhands}")
-                StatItem(label = "Forehand lobs", value = "${match.forehandLobs}")
-                StatItem(label = "Backhand lobs", value = "${match.backhandLobs}")
-                StatItem(label = "Smashes", value = "${match.smashes}")
-                StatItem(label = "Services", value = "${match.services}")
+            // Stats Row 2
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+                StatItem(label = "FH", value = "${match.forehands}")
+                StatItem(label = "BH", value = "${match.backhands}")
+                StatItem(label = "FH Lobs", value = "${match.forehandLobs}")
+                StatItem(label = "BH Lobs", value = "${match.backhandLobs}")
             }
         }
     }
