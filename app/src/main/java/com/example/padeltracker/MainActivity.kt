@@ -10,63 +10,129 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import com.example.padeltracker.ui.theme.*
+import com.example.padeltracker.data.MatchRecord
+import com.example.padeltracker.shared.MatchSetup
+import com.example.padeltracker.shared.WearCommunicationConstants
 import com.example.padeltracker.ui.screens.*
-import com.example.padeltracker.shared.MatchConfig
+import com.example.padeltracker.ui.theme.*
+import com.example.padeltracker.wear.PhoneMatchEndedEventBus
+import com.example.padeltracker.wear.WearMatchSetupSender
+import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.launch
 
-// Enum to define the different screens in the app
-enum class AppScreen { Home, Setup, History, LiveMatch }
+// Navigation Enum
+enum class AppScreen { Home, Setup, History, LiveMatch, Analysis }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        println(">>> TEST PRINTLN: L'APP E' PARTITA! <<<")
-        Log.d("TEST_LOG", ">>> TEST LOG: L'APP E' PARTITA! <<<")
-        Log.d("AIUTOO", "Funzionaaaaaaaaa")
-
-
-        // Enables edge-to-edge display (status bar and navigation bar transparency)
         enableEdgeToEdge()
 
         setContent {
             PadelTrackerTheme {
-                // NAVIGATION STATE: Tracks which screen is currently visible
+                // NAVIGATION STATE
                 var currentScreen by remember { mutableStateOf(AppScreen.Home) }
 
-                // CONNECTIVITY STATE: Tracks if a Wear OS watch is connected
+                // CONNECTIVITY STATE
                 var isWatchConnected by remember { mutableStateOf(false) }
+                var isCheckingWatch by remember { mutableStateOf(false) }
 
-                // DATA STATE: Holds the player names and match settings entered in SetupScreen
-                // This is shared between SetupScreen and LiveScoreScreen
-                var activeMatchConfig by remember { mutableStateOf<MatchConfig?>(null) }
+                // DATA STATES
+                var activeMatchSetup by remember { mutableStateOf<MatchSetup?>(null) }
+                var selectedMatchForAnalysis by remember { mutableStateOf<MatchRecord?>(null) }
 
-                // SIDE EFFECT: Check for connected Wear OS nodes when the app starts
+                // Temporary list for History
+                val matchHistory = remember { mutableStateListOf<MatchRecord>() }
+
+                val snackbarHostState = remember { SnackbarHostState() }
+                val scope = rememberCoroutineScope()
+
+                val matchSetupSender = remember {
+                    WearMatchSetupSender(this@MainActivity)
+                }
+
+                // 1. Listen for match-ended messages from Wear
                 LaunchedEffect(Unit) {
-                    Wearable.getNodeClient(this@MainActivity).connectedNodes
-                        .addOnSuccessListener { nodes ->
-                            isWatchConnected = nodes.isNotEmpty()
+                    PhoneMatchEndedEventBus.events.collect { endedAt ->
+                        Log.d("PHONE_MATCH_ENDED", "Match ended event received: $endedAt")
+
+                        if (currentScreen == AppScreen.LiveMatch) {
+                            selectedMatchForAnalysis = null
+                            currentScreen = AppScreen.Analysis
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Match ended from watch")
+                            }
+                        }
+                    }
+                }
+
+                // 2. WATCH CHECK FUNCTION (Επαναφορά ελέγχου)
+                fun checkWatchAndOpenSetup() {
+                    if (isCheckingWatch) return
+                    isCheckingWatch = true
+
+                    Log.d("WATCH_DEBUG", "Starting watch capability check...")
+
+                    Wearable.getCapabilityClient(this@MainActivity)
+                        .getCapability(
+                            WearCommunicationConstants.WATCH_CAPABILITY,
+                            CapabilityClient.FILTER_REACHABLE
+                        )
+                        .addOnSuccessListener { capabilityInfo ->
+                            isCheckingWatch = false
+                            if (capabilityInfo.nodes.isNotEmpty()) {
+                                Log.d("WATCH_DEBUG", "Watch found. Opening setup.")
+                                isWatchConnected = true
+                                currentScreen = AppScreen.Setup
+                            } else {
+                                Log.d("WATCH_DEBUG", "No watch found.")
+                                isWatchConnected = false
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("No Padel Tracker watch connected")
+                                }
+                            }
+                        }
+                        .addOnFailureListener { error ->
+                            isCheckingWatch = false
+                            isWatchConnected = false
+                            Log.e("WATCH_DEBUG", "Connection check failed", error)
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Unable to check watch connection")
+                            }
+                        }
+                }
+
+                // 3. INITIAL CHECK WHEN APP STARTS
+                LaunchedEffect(Unit) {
+                    Wearable.getCapabilityClient(this@MainActivity)
+                        .getCapability(
+                            WearCommunicationConstants.WATCH_CAPABILITY,
+                            CapabilityClient.FILTER_REACHABLE
+                        )
+                        .addOnSuccessListener { capabilityInfo ->
+                            isWatchConnected = capabilityInfo.nodes.isNotEmpty()
                         }
                         .addOnFailureListener {
                             isWatchConnected = false
                         }
                 }
 
-                // Root layout using Scaffold for basic material design structure
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    snackbarHost = { SnackbarHost(snackbarHostState) }
+                ) { innerPadding ->
                     Box(
                         modifier = Modifier
                             .padding(innerPadding)
                             .fillMaxSize()
-                            .background(BackgroundBeige) // Using our custom theme color
+                            .background(BackgroundBeige)
                     ) {
-                        // NATIVE NAVIGATION LOGIC
                         when (currentScreen) {
                             AppScreen.Home -> {
                                 HomeScreen(
-                                    isConnected = isWatchConnected,
-                                    onNewGameClick = { currentScreen = AppScreen.Setup },
+                                    isConnected = isWatchConnected, // Real status
+                                    onNewGameClick = { checkWatchAndOpenSetup() }, // Real check
                                     onHistoryClick = { currentScreen = AppScreen.History }
                                 )
                             }
@@ -74,34 +140,57 @@ class MainActivity : ComponentActivity() {
                             AppScreen.Setup -> {
                                 MatchSetupScreen(
                                     onBackClick = { currentScreen = AppScreen.Home },
-                                    onSendToWatch = { config ->
-                                        // 1. Capture the configuration from the setup screen
-                                        activeMatchConfig = config
-                                        // 2. Navigate to the live scoring screen
-                                        currentScreen = AppScreen.LiveMatch
+                                    onSendToWatch = { setup ->
+                                        // Επαναφορά της αποστολής στο ρολόι
+                                        matchSetupSender.sendMatchSetup(
+                                            setup = setup,
+                                            onSuccess = {
+                                                activeMatchSetup = setup
+                                                currentScreen = AppScreen.LiveMatch
+                                                scope.launch {
+                                                    snackbarHostState.showSnackbar("Match setup sent to watch")
+                                                }
+                                            },
+                                            onFailure = {
+                                                scope.launch {
+                                                    snackbarHostState.showSnackbar("Unable to send setup to watch")
+                                                }
+                                            }
+                                        )
                                     }
                                 )
                             }
 
                             AppScreen.LiveMatch -> {
-                                // Safety Check: Only show LiveScoreScreen if we have a valid configuration
-                                activeMatchConfig?.let { config ->
+                                activeMatchSetup?.let { setup ->
                                     LiveScoreScreen(
-                                        config = config,
+                                        setup = setup,
                                         onFinish = {
-                                            // After saving the match, go straight to History
-                                            currentScreen = AppScreen.History
+                                            currentScreen = AppScreen.Analysis
                                         }
                                     )
-                                } ?: run {
-                                    // Fallback: If config is null, return to Home
-                                    currentScreen = AppScreen.Home
-                                }
+                                } ?: run { currentScreen = AppScreen.Home }
+                            }
+
+                            AppScreen.Analysis -> {
+                                GameAnalysisScreen(
+                                    record = selectedMatchForAnalysis,
+                                    setup = activeMatchSetup,
+                                    onGoHome = {
+                                        selectedMatchForAnalysis = null
+                                        currentScreen = AppScreen.Home
+                                    }
+                                )
                             }
 
                             AppScreen.History -> {
                                 HistoryScreen(
-                                    onBackClick = { currentScreen = AppScreen.Home }
+                                    matches = matchHistory,
+                                    onBackClick = { currentScreen = AppScreen.Home },
+                                    onMatchClick = { match ->
+                                        selectedMatchForAnalysis = match
+                                        currentScreen = AppScreen.Analysis
+                                    }
                                 )
                             }
                         }

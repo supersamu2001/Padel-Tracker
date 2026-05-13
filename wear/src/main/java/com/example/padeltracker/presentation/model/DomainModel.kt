@@ -9,7 +9,7 @@ enum class GameType {
 }
 
 enum class MatchStatus {
-    NOT_STARTED, SELECTING_SERVER, IN_PROGRESS, FINISHED
+    WAITING_FOR_SETUP, NOT_STARTED, SELECTING_SERVER, IN_PROGRESS, FINISHED
 }
 
 data class Player(
@@ -57,7 +57,8 @@ data class MatchState(
     val teamANextServerIndex: Int = 0,
     val teamBNextServerIndex: Int = 0,
     val tieBreakStartingTeam: TeamId? = null,
-    val tieBreakStartingPlayerIndex: Int? = null
+    val tieBreakStartingPlayerIndex: Int? = null,
+    val endedEarly: Boolean = false
 )
 
 data class ScoreTrackerState(
@@ -65,3 +66,4 @@ data class ScoreTrackerState(
     val currentMatch: MatchState,
     val pointHistory: List<TeamId> = emptyList()
 )
+

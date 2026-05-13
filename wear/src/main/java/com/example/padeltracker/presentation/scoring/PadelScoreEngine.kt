@@ -22,7 +22,11 @@ class PadelScoreEngine {
             name = "Team B",
             players = listOf(Player("3", "Player 3"), Player("4", "Player 4"))
         )
-        val match = MatchState(teamA = teamA, teamB = teamB)
+        val match = MatchState(
+            teamA = teamA,
+            teamB = teamB,
+            status = MatchStatus.WAITING_FOR_SETUP
+        )
         return ScoreTrackerState(
             initialMatch = match,
             currentMatch = match,
@@ -82,25 +86,50 @@ class PadelScoreEngine {
     }
 
     /**
-     * Undoes the last point by replaying the history minus the last item.
+     * Undoes the last action.
+     *
+     * Behavior:
+     * - if the match was ended early, Undo reopens the match without changing the score;
+     * - otherwise, if there is point history, Undo removes the last point;
+     * - if no points were played and the match is in progress, Undo goes back to server selection.
      */
     fun undo(state: ScoreTrackerState): ScoreTrackerState {
+        // Case 1: the match was manually ended early.
+        // Reopen it without changing score, sets, games, serving team, or point history.
+        if (state.currentMatch.status == MatchStatus.FINISHED && state.currentMatch.endedEarly) {
+            val reopenedMatch = state.currentMatch.copy(
+                status = MatchStatus.IN_PROGRESS,
+                winner = null,
+                endedEarly = false
+            )
+
+            return state.copy(
+                currentMatch = reopenedMatch
+            )
+        }
+
+        // Case 2: if at least one point was played, remove the last point
+        // and rebuild the match from the initial match state.
         if (state.pointHistory.isNotEmpty()) {
             val newHistory = state.pointHistory.dropLast(1)
             val recalculatedMatch = replayHistory(state.initialMatch, newHistory)
-            
+
             return state.copy(
                 currentMatch = recalculatedMatch,
                 pointHistory = newHistory
             )
-        } else if (state.currentMatch.status == MatchStatus.IN_PROGRESS) {
-            // If no points played, return to server selection
+        }
+
+        // Case 3: if the match is in progress but no point was played,
+        // go back to the initial server selection screen.
+        if (state.currentMatch.status == MatchStatus.IN_PROGRESS) {
             val updatedMatch = state.currentMatch.copy(
                 status = MatchStatus.SELECTING_SERVER,
                 servingTeam = null,
                 initialServingTeam = null,
                 servingPlayerIndex = null
             )
+
             return state.copy(
                 initialMatch = updatedMatch,
                 currentMatch = updatedMatch,
@@ -108,10 +137,10 @@ class PadelScoreEngine {
             )
         }
 
-        // default case if the fun is called in a not IN_PROGRESS match
+        // Default case: if Undo is called in a state where it should not do anything,
+        // return the state unchanged.
         return state
     }
-
     /**
      * Replays a history of points starting from an initial match state.
      */
@@ -124,8 +153,22 @@ class PadelScoreEngine {
     }
 
     /**
+     * Ends the match early before a natural winner is reached.
+     */
+    fun endMatchEarly(state: ScoreTrackerState): ScoreTrackerState {
+        if (state.currentMatch.status != MatchStatus.IN_PROGRESS) return state
+
+        val updatedMatch = state.currentMatch.copy(
+            status = MatchStatus.FINISHED,
+            winner = null,
+            endedEarly = true
+        )
+        return state.copy(currentMatch = updatedMatch)
+    }
+
+    /**
      * Internal logic to apply a single point to a MatchState.
-     * it manages what happen after a point e.g. game won/set won
+     * It manages what happen after a point e.g. game won/set won
      */
     private fun applyPoint(match: MatchState, winnerId: TeamId): MatchState {
         if (match.status == MatchStatus.FINISHED) return match

@@ -63,4 +63,8 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    // heartbeat
+    implementation("androidx.health:health-services-client:1.0.0-rc02")
+    implementation("com.google.guava:guava:31.1-android")
 }
