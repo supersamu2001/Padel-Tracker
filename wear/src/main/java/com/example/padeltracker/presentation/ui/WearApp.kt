@@ -32,6 +32,7 @@ private const val BorderAlpha = 0.1f
 @Composable
 fun WearApp(viewModel: MatchViewModel) {
     val state = viewModel.state.value
+    val heartRate by viewModel.heartRate //heartbeat
     
     PadelTrackerTheme {
         AppScaffold {
@@ -41,6 +42,7 @@ fun WearApp(viewModel: MatchViewModel) {
                 MatchStatus.SELECTING_SERVER -> SelectServerScreen(onSelect = { viewModel.selectInitialServer(it) })
                 MatchStatus.IN_PROGRESS -> MatchScoreScreen(
                     state = state,
+                    heartRate = heartRate, //pernaw palmous
                     onAddPoint = { viewModel.addPoint(it) },
                     onUndo = { viewModel.undo() },
                     onEndMatch = { viewModel.endMatchEarly() }
@@ -206,6 +208,7 @@ fun ScoreHeader(
     teamBSets: Int,
     teamAGames: Int,
     teamBGames: Int,
+    heartRate: Double, //accept the heartbeat
     onMenuClick: () -> Unit
 ) {
     Column(
@@ -225,6 +228,17 @@ fun ScoreHeader(
                 fontSize = 16.sp,
                 color = Color.Gray,
                 textAlign = TextAlign.Center
+            )
+        }
+
+        // show heart if heartbeat>0
+        if (heartRate > 0) {
+            Text(
+                text = "❤️ ${heartRate.toInt()} BPM",
+                style = MaterialTheme.typography.labelSmall,
+                color = Color(0xFFFF5252),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold
             )
         }
 
@@ -335,6 +349,7 @@ fun UndoArea(onUndo: () -> Unit) {
 @Composable
 fun MatchScoreScreen(
     state: ScoreTrackerState,
+    heartRate: Double, //heartbeat
     onAddPoint: (TeamId) -> Unit,
     onUndo: () -> Unit,
     onEndMatch: () -> Unit
@@ -363,6 +378,7 @@ fun MatchScoreScreen(
                     teamBSets = teamBSets,
                     teamAGames = match.currentSet.teamAGames,
                     teamBGames = match.currentSet.teamBGames,
+                    heartRate = heartRate,
                     onMenuClick = { showEndMatchAction = true }
                 )
 
