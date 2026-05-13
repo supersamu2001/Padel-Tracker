@@ -16,11 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.padeltracker.R
 import com.example.padeltracker.shared.MatchSetup
+import com.example.padeltracker.data.MatchRecord // Βάλε αυτό ψηλά στα imports αν δεν υπάρχει
 
 @Composable
 fun LiveScoreScreen(
     setup: MatchSetup,
-    onFinish: () -> Unit
+    onFinish: (MatchRecord) -> Unit // <-- Η ΑΛΛΑΓΗ ΕΙΝΑΙ ΕΔΩ! Προσθέσαμε το MatchRecord
 ) {
     // NOTE FOR THE FUTURE:
     // The score and timer will be updated dynamically from the ViewModel
@@ -125,8 +126,28 @@ fun LiveScoreScreen(
             // --- DEV HACK: Fake Watch Signal Button ---
             // KEEP THIS ONLY for UI development to navigate to the next screen.
             // It simulates the "Match Finished" signal from the watch.
+            // --- DEV HACK: Fake Watch Signal Button ---
             OutlinedButton(
-                onClick = { onFinish() },
+                onClick = {
+                    // Φτιάχνουμε έναν εικονικό αγώνα με τα ονόματα των ομάδων από το setup!
+                    val dummyMatch = MatchRecord(
+                        date = "13/05/2026",
+                        duration = "1h 30m",
+                        score = "6-4, 4-6, 10-8",
+                        avgHeartRate = 142,
+                        forehands = 45,
+                        backhands = 30,
+                        forehandLobs = 12,
+                        backhandLobs = 8,
+                        smashes = 18,
+                        services = 50,
+                        teamAPlayers = setup.teamA.players.joinToString(" & ") { it.name },
+                        teamBPlayers = setup.teamB.players.joinToString(" & ") { it.name },
+                        winner = "Team A" // Ας πούμε ότι κέρδισε η ομάδα Α για το τεστ
+                    )
+                    // Τον στέλνουμε πίσω για αποθήκευση!
+                    onFinish(dummyMatch)
+                },
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red),
                 border = null
             ) {
