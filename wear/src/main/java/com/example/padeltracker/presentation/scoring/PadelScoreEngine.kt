@@ -22,7 +22,11 @@ class PadelScoreEngine {
             name = "Team B",
             players = listOf(Player("3", "Player 3"), Player("4", "Player 4"))
         )
-        val match = MatchState(teamA = teamA, teamB = teamB)
+        val match = MatchState(
+            teamA = teamA,
+            teamB = teamB,
+            status = MatchStatus.WAITING_FOR_SETUP
+        )
         return ScoreTrackerState(
             initialMatch = match,
             currentMatch = match,

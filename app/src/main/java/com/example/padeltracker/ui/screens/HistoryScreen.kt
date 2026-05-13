@@ -1,5 +1,6 @@
 package com.example.padeltracker.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,6 +30,11 @@ fun HistoryScreen(
     onBackClick: () -> Unit,
     onMatchClick: (MatchRecord) -> Unit
 ) {
+    // Intercept system back button to go back to Home
+    BackHandler {
+        onBackClick()
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             // ΔΙΟΡΘΩΣΗ: Αλλάξαμε το historyscreen_jpg σε historyscreen

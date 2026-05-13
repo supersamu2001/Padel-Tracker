@@ -107,7 +107,7 @@ class MatchViewModel @JvmOverloads constructor(
     private fun applyPendingSetupIfAvailable() {
         val currentState = _state.value
 
-        if (currentState.currentMatch.status != MatchStatus.NOT_STARTED ||
+        if ((currentState.currentMatch.status != MatchStatus.NOT_STARTED && currentState.currentMatch.status != MatchStatus.WAITING_FOR_SETUP) ||
             currentState.pointHistory.isNotEmpty()
         ) {
             Log.d(TAG, "Pending setup not applied because a match is already active.")

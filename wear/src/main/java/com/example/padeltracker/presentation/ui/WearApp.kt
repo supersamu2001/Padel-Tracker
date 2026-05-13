@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,6 +36,7 @@ fun WearApp(viewModel: MatchViewModel) {
     PadelTrackerTheme {
         AppScaffold {
             when (state.currentMatch.status) {
+                MatchStatus.WAITING_FOR_SETUP -> WaitingForSetupScreen()
                 MatchStatus.NOT_STARTED -> StartMatchScreen(state, onStart = { viewModel.startMatch() })
                 MatchStatus.SELECTING_SERVER -> SelectServerScreen(onSelect = { viewModel.selectInitialServer(it) })
                 MatchStatus.IN_PROGRESS -> MatchScoreScreen(
@@ -47,6 +49,47 @@ fun WearApp(viewModel: MatchViewModel) {
                     state = state,
                     onEndMatch = { viewModel.confirmEndMatch() },
                     onUndo = { viewModel.undo() }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun WaitingForSetupScreen() {
+    ScreenScaffold { contentPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Padel Tracker",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 10.dp)
+            )
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    painter = painterResource(id = android.R.drawable.stat_notify_sync),
+                    contentDescription = null,
+                    modifier = Modifier.size(48.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Start a match by setting up teams on your phone!",
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Medium
                 )
             }
         }
