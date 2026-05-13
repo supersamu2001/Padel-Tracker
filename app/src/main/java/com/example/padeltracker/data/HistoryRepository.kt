@@ -7,7 +7,7 @@ class HistoryRepository(private val matchDao: MatchDao) {
     fun getAllMatches(): Flow<List<MatchRecord>> = matchDao.getAllMatches()
 
     // Αποθηκεύει έναν νέο αγώνα
-    fun insertMatch(match: MatchRecord) {
+    suspend fun insertMatch(match: MatchRecord) {
         matchDao.insertMatch(match)
     }
 
