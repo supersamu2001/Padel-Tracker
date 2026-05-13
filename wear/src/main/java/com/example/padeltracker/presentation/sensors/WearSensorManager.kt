@@ -54,7 +54,7 @@ class WearSensorManager(
     private val mainHandler = Handler(Looper.getMainLooper())
 
     // Recognition Thresholds
-    private val ACC_THRESHOLD = 3 * 9.81f   // ~29.43 m/s^2
+    private val ACC_THRESHOLD = 2 * 9.81f   // ~29.43 m/s^2
     private val GYRO_THRESHOLD = 5.0f       // rad/s
     // test on emulator
     //private val ACC_THRESHOLD = 0.8f
