@@ -56,6 +56,9 @@ class WearSensorManager(
     // Recognition Thresholds
     private val ACC_THRESHOLD = 3 * 9.81f   // ~29.43 m/s^2
     private val GYRO_THRESHOLD = 5.0f       // rad/s
+    // test on emulator
+    //private val ACC_THRESHOLD = 0.8f
+    //private val GYRO_THRESHOLD = 0.4f
     private val WINDOW_SIZE = 20            // Number of samples before and after the trigger
 
     // Buffers for recognition
@@ -76,6 +79,20 @@ class WearSensorManager(
     private val SENSOR_DELAY_25HZ = 40000
 
     private var targetNodeId: String? = null
+
+    // adding score to  simplify labeling
+    @Volatile
+    private var currentTeamASets: Int = 0
+
+    @Volatile
+    private var currentTeamBSets: Int = 0
+
+    @Volatile
+    private var currentTeamAGames: Int = 0
+
+    @Volatile
+    private var currentTeamBGames: Int = 0
+
     
     // Variables to track sampling intervals
     private var lastAccTime: Long = 0
@@ -123,6 +140,24 @@ class WearSensorManager(
         }
     }
 
+    // simplify labeling
+    fun updateScoreMarker(
+        teamASets: Int,
+        teamBSets: Int,
+        teamAGames: Int,
+        teamBGames: Int
+    ) {
+        currentTeamASets = teamASets
+        currentTeamBSets = teamBSets
+        currentTeamAGames = teamAGames
+        currentTeamBGames = teamBGames
+
+        Log.d(
+            TAG,
+            "Score marker updated: S$teamASets-$teamBSets" +
+                    "_G$teamAGames-$teamBGames"
+        )
+    }
     fun startTracking() {
         Log.d(TAG, "Start tracking sensors (25Hz)...")
         
@@ -280,10 +315,27 @@ class WearSensorManager(
 
     // SEND THE 41 SAMPLES RELATED TO THE SHOT
     private fun sendShotBatch() {
-        val numSamples = shotAccData.size.coerceAtMost(shotGyroData.size)
+        // simplify labeling
+        /*val numSamples = shotAccData.size.coerceAtMost(shotGyroData.size)
         // Each sample is 3 floats (12 bytes) * 2 sensors
         val buffer = ByteBuffer.allocate(numSamples * 2 * 12)
+        buffer.order(ByteOrder.LITTLE_ENDIAN)*/
+        val numSamples = shotAccData.size.coerceAtMost(shotGyroData.size)
+
+        // Header: 4 Int values for score marker
+        // teamASets, teamBSets, teamAGames, teamBGames
+        val scoreHeaderBytes = 4 * 4
+
+        // Each sample is 3 floats (12 bytes) * 2 sensors
+        val buffer = ByteBuffer.allocate(scoreHeaderBytes + numSamples * 2 * 12)
         buffer.order(ByteOrder.LITTLE_ENDIAN)
+
+        buffer.putInt(currentTeamASets)
+        buffer.putInt(currentTeamBSets)
+        buffer.putInt(currentTeamAGames)
+        buffer.putInt(currentTeamBGames)
+        // end simplify labeling (delete new block and uncomment old one)
+
 
         // Accelerometer data block
         for (i in 0 until numSamples) {

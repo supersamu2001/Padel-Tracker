@@ -11,7 +11,9 @@ import java.util.Locale
 
 class ShotLogger(private val context: Context) {
     private val TAG = "ShotLogger"
-    private val fileName = "padel_shots_dataset.csv"
+    //private val fileName = "padel_shots_dataset.csv"
+    // simplify labeling
+    private val fileName = "padel_shots_dataset_score_marker.csv"
 
     init {
         createFileIfNotExists()
@@ -22,7 +24,9 @@ class ShotLogger(private val context: Context) {
         if (!file.exists()) {
             try {
                 val writer = FileWriter(file)
-                writer.append("shot_id,timestamp,sample_index,acc_x,acc_y,acc_z,gyro_x,gyro_y,gyro_z\n")
+                //simplify labeling
+                //writer.append("shot_id,timestamp,sample_index,acc_x,acc_y,acc_z,gyro_x,gyro_y,gyro_z\n")
+                writer.append("shot_id,timestamp,score_marker,sample_index,acc_x,acc_y,acc_z,gyro_x,gyro_y,gyro_z\n")
                 writer.flush()
                 writer.close()
                 Log.d(TAG, "CSV file created at: ${file.absolutePath}")
@@ -41,7 +45,13 @@ class ShotLogger(private val context: Context) {
      * acc_x, acc_y, acc_z => accelerometer values
      * gyro_x, gyro_y, gyro_z => gyroscope values
      */
-    fun logShot(accSamples: List<FloatArray>, gyroSamples: List<FloatArray>) {
+    //simplify labeling
+    //fun logShot(accSamples: List<FloatArray>, gyroSamples: List<FloatArray>) {
+    fun logShot(
+        accSamples: List<FloatArray>,
+        gyroSamples: List<FloatArray>,
+        scoreMarker: String
+    ) {
         val file = File(context.getExternalFilesDir(null), fileName)
         val shotId = System.currentTimeMillis()
         val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(Date(shotId))
@@ -59,6 +69,8 @@ class ShotLogger(private val context: Context) {
                 
                 writer.append("$shotId,")
                 writer.append("$timestamp,")
+                // simplify labeling
+                writer.append("$scoreMarker,")
                 writer.append("$i,")
                 writer.append("${acc[0]},${acc[1]},${acc[2]},")
                 writer.append("${gyro[0]},${gyro[1]},${gyro[2]}\n")

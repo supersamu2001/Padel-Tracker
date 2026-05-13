@@ -90,6 +90,20 @@ class MatchViewModel @JvmOverloads constructor(
         }
     }
 
+    //simplify labeling
+    private fun updateSensorScoreMarker() {
+        val match = _state.value.currentMatch
+
+        val teamASets = match.completedSets.count { it.teamAGames > it.teamBGames }
+        val teamBSets = match.completedSets.count { it.teamBGames > it.teamAGames }
+
+        sensorManager.updateScoreMarker(
+            teamASets = teamASets,
+            teamBSets = teamBSets,
+            teamAGames = match.currentSet.teamAGames,
+            teamBGames = match.currentSet.teamBGames
+        )
+    }
     private fun applyPendingSetupIfAvailable() {
         val currentState = _state.value
 
@@ -129,6 +143,8 @@ class MatchViewModel @JvmOverloads constructor(
         matchEndedMessageSent = false
         _state.value = engine.startMatch(_state.value)
 
+        //simplify labeling
+        updateSensorScoreMarker()
         // start the collection of data from sensors
         sensorManager.startTracking()
     }
@@ -138,6 +154,8 @@ class MatchViewModel @JvmOverloads constructor(
      */
     fun selectInitialServer(teamId: TeamId) {
         _state.value = engine.selectInitialServer(_state.value, teamId)
+        //simplify labeling
+        updateSensorScoreMarker()
     }
 
     /**
@@ -145,6 +163,8 @@ class MatchViewModel @JvmOverloads constructor(
      */
     fun addPoint(teamId: TeamId) {
         _state.value = engine.addPoint(_state.value, teamId)
+        //simplify labeling
+        updateSensorScoreMarker()
     }
 
     /**
@@ -152,6 +172,8 @@ class MatchViewModel @JvmOverloads constructor(
      */
     fun undo() {
         _state.value = engine.undo(_state.value)
+        //simplify labeling
+        updateSensorScoreMarker()
     }
 
     /**
@@ -160,6 +182,9 @@ class MatchViewModel @JvmOverloads constructor(
     fun resetMatch() {
         matchEndedMessageSent = false
         _state.value = createInitialState()
+
+        //simplify labeling
+        updateSensorScoreMarker()
 
         // stops the collection of data from sensors
         sensorManager.stopTracking()
@@ -170,6 +195,9 @@ class MatchViewModel @JvmOverloads constructor(
      */
     fun endMatchEarly() {
         _state.value = engine.endMatchEarly(_state.value)
+
+        //simplify labeling
+        updateSensorScoreMarker()
     }
 
     /**
