@@ -11,6 +11,7 @@ data class MatchRecord(
     val duration: String,      // Example: "1h 15m"
     val score: String,         // Example: "6-4, 6-2"
     val avgHeartRate: Int,     // Average BPM from Watch
+    val heartRateHistory: String = "", //Beats as string
     val forehands: Int,        // Total forehand shots
     val backhands: Int,        // Total backhand shots
     val forehandLobs: Int,     // Total forehand lobs
