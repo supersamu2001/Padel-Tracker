@@ -59,7 +59,7 @@ class WearSensorManager(
     // test on emulator
     //private val ACC_THRESHOLD = 0.8f
     //private val GYRO_THRESHOLD = 0.4f
-    private val WINDOW_SIZE = 20            // Number of samples before and after the trigger
+    private val WINDOW_SIZE = 25            // Number of samples before and after the trigger,
 
     // Buffers for recognition
     private val accHistory = ArrayDeque<FloatArray>()
