@@ -27,6 +27,7 @@ class MatchViewModel @JvmOverloads constructor(
     private val pendingSetupStore = PendingMatchSetupStore(application)
     private var matchEndedMessageSent = false
     private var currentMatchUsesPhoneSetup = false
+    private var matchStartTimeMs: Long = 0L
     private val _state = mutableStateOf(createInitialState())
     val state: State<ScoreTrackerState> = _state
 
@@ -236,9 +237,42 @@ class MatchViewModel @JvmOverloads constructor(
 
         Log.d(TAG, "User confirmed end match. Sending match ended message.")
 
-        // Send the history to the sender
+        // 1. Ονόματα
+        val teamA = match.teamA.players.joinToString(" & ") { it.name }
+        val teamB = match.teamB.players.joinToString(" & ") { it.name }
+
+        // 2. Σκορ
+        val scoreBuilder = java.lang.StringBuilder()
+        match.completedSets.forEach { set ->
+            scoreBuilder.append("${set.teamAGames}-${set.teamBGames} ")
+        }
+        scoreBuilder.append("${match.currentSet.teamAGames}-${match.currentSet.teamBGames}")
+        val finalScore = scoreBuilder.toString().trim()
+
+        // 3. Νικητής
+        val teamASets = match.completedSets.count { it.teamAGames > it.teamBGames }
+        val teamBSets = match.completedSets.count { it.teamBGames > it.teamAGames }
+        val winnerName = if (teamASets > teamBSets) "Team A" else if (teamBSets > teamASets) "Team B" else "Draw"
+
+        // 4. Μέσος όρος παλμών
         val historyString = hrHistoryBuilder.toString()
-        matchEndedSender.sendMatchEnded(historyString)
+        val hrList = historyString.split(",").filter { it.isNotEmpty() }.mapNotNull { it.toIntOrNull() }
+        val avgHr = if (hrList.isNotEmpty()) hrList.average().toInt() else 0
+
+        // 🟢 ΝΕΟ: Υπολογισμός διάρκειας αγώνα
+        val durationMs = if (matchStartTimeMs > 0) System.currentTimeMillis() - matchStartTimeMs else 0L
+        val minutes = (durationMs / 1000) / 60
+        val seconds = (durationMs / 1000) % 60
+        val finalDuration = String.format(java.util.Locale.getDefault(), "%02d:%02d", minutes, seconds)
+
+        // Send the history to the sender
+        matchEndedSender.sendMatchEnded(heartRateHistory = historyString,
+            avgHeartRate = avgHr,
+            teamAPlayers = teamA,
+            teamBPlayers = teamB,
+            score = finalScore,
+            winner = winnerName,
+            duration = finalDuration)
 
 
         resetMatch()

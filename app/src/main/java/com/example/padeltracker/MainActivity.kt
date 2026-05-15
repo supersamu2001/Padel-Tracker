@@ -19,7 +19,11 @@ import com.example.padeltracker.wear.PhoneMatchEndedEventBus
 import com.example.padeltracker.wear.WearMatchSetupSender
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.Wearable
+import com.google.android.gms.wearable.DataClient
+import com.google.android.gms.wearable.DataEvent
+import com.google.android.gms.wearable.DataMapItem
 import kotlinx.coroutines.launch
+
 
 // Navigation Enum
 enum class AppScreen { Home, Setup, History, LiveMatch, Analysis }
@@ -52,22 +56,66 @@ class MainActivity : ComponentActivity() {
                     WearMatchSetupSender(this@MainActivity)
                 }
 
-                // 1. Listen for match-ended messages from Wear
+                // NEW,1. Starts DataClient
+                val dataClient = Wearable.getDataClient(this@MainActivity)
+
+                // always "listen" data from the game
+                DisposableEffect(Unit) {
+                    val dataListener = DataClient.OnDataChangedListener { dataEvents ->
+                        dataEvents.forEach { event ->
+                            if (event.type == DataEvent.TYPE_CHANGED &&
+                                event.dataItem.uri.path == "/match_result"
+                            ) {
+                                val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
+
+                                val match = MatchRecord(
+                                    date = dataMap.getString("date") ?: "",
+                                    duration = dataMap.getString("duration") ?: "",
+                                    score = dataMap.getString("score") ?: "",
+                                    avgHeartRate = dataMap.getInt("avgHeartRate"),
+                                    heartRateHistory = dataMap.getString("heartRateHistory") ?: "",
+                                    forehands = dataMap.getInt("forehands"),
+                                    backhands = dataMap.getInt("backhands"),
+                                    forehandLobs = dataMap.getInt("forehandLobs"),
+                                    backhandLobs = dataMap.getInt("backhandLobs"),
+                                    smashes = dataMap.getInt("smashes"),
+                                    services = dataMap.getInt("services"),
+                                    teamAPlayers = dataMap.getString("teamAPlayers") ?: "",
+                                    teamBPlayers = dataMap.getString("teamBPlayers") ?: "",
+                                    winner = dataMap.getString("winner") ?: ""
+                                )
+
+                                Log.d("DATA_SYNC", "Match received! HeartRate History: ${match.heartRateHistory}")
+
+                                // put data in the screen and history
+                                selectedMatchForAnalysis = match
+                                matchHistory.add(0, match)
+                                currentScreen = AppScreen.Analysis
+                            }
+                        }
+                    }
+                    dataClient.addListener(dataListener)
+                    onDispose {
+                        dataClient.removeListener(dataListener)
+                    }
+                }
+
+                // 2. Listen for match-ended messages from Wear
                 LaunchedEffect(Unit) {
                     PhoneMatchEndedEventBus.events.collect { endedAt ->
                         Log.d("PHONE_MATCH_ENDED", "Match ended event received: $endedAt")
 
                         if (currentScreen == AppScreen.LiveMatch) {
-                            selectedMatchForAnalysis = null
+
                             currentScreen = AppScreen.Analysis
                             scope.launch {
-                                snackbarHostState.showSnackbar("Match ended from watch")
+                                snackbarHostState.showSnackbar("Match ended from watch! Loading data...")
                             }
                         }
                     }
                 }
 
-                // 2. WATCH CHECK FUNCTION (Επαναφορά ελέγχου)
+                // 3. WATCH CHECK FUNCTION
                 fun checkWatchAndOpenSetup() {
                     if (isCheckingWatch) return
                     isCheckingWatch = true
@@ -103,7 +151,7 @@ class MainActivity : ComponentActivity() {
                         }
                 }
 
-                // 3. INITIAL CHECK WHEN APP STARTS
+                // 4. INITIAL CHECK WHEN APP STARTS
                 LaunchedEffect(Unit) {
                     Wearable.getCapabilityClient(this@MainActivity)
                         .getCapability(
