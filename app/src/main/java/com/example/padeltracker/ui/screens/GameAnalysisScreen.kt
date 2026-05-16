@@ -83,10 +83,11 @@ fun GameAnalysisScreen(
 
             // PHYSICAL STATS - All mock values removed
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                val avgHr = if (record?.avgHeartRate != null && record.avgHeartRate > 0) record.avgHeartRate.toString() else "0"
                 StatCard(
                     modifier = Modifier.weight(1f),
                     label = "AVG HEART RATE",
-                    value = record?.avgHeartRate?.toString() ?: "0",
+                    value = avgHr,
                     unit = "BPM",
                     icon = "❤️"
                 )
@@ -100,7 +101,7 @@ fun GameAnalysisScreen(
             }
 
             // heartbeat graph
-            if (record != null && record.heartRateHistory.isNotEmpty()) {
+           // if (record != null && record.heartRateHistory.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -110,10 +111,11 @@ fun GameAnalysisScreen(
                     Column(modifier = Modifier.padding(20.dp)) {
                         Text("HEART RATE ZONES", color = activeRed, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                         Spacer(modifier = Modifier.height(16.dp))
-                        HeartRateGraph(historyStr = record.heartRateHistory, color = activeRed)
-                    }
+
+                        val actualHistory = record?.heartRateHistory ?: ""
+                        HeartRateGraph(historyStr = actualHistory, color = activeRed)
                 }
-            }
+          }
 
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -153,49 +155,62 @@ fun GameAnalysisScreen(
 // heartbeat graphs
 @Composable
 fun HeartRateGraph(historyStr: String, color: Color) {
-    // 1. Μετατροπή του "110,120,135" σε λίστα με νούμερα [110, 120, 135]
+    // Convert the comma-separated string into a list of floats
     val points = historyStr.split(",").mapNotNull { it.trim().toFloatOrNull() }
 
-    if (points.size < 2) {
-        Text("Not enough data to draw graph", color = Color.Gray, fontSize = 12.sp)
-        return
-    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        if (points.size < 2) {
+            // Clean placeholder overlay that keeps the Card open and structured
+            Text(
+                text = "No heart rate data recorded for this match",
+                color = Color.White.copy(alpha = 0.4f),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium
+            )
+        } else {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val width = size.width
+                val height = size.height
 
-    val maxBpm = points.maxOrNull() ?: 180f
-    val minBpm = (points.minOrNull() ?: 60f) - 10f // Λίγος αέρας από κάτω
+                // Horizontal spacing is directly tied to the timeline (number of data samples)
+                val pointSpacing = width / (points.size - 1)
 
-    Canvas(modifier = Modifier.fillMaxWidth().height(120.dp)) {
-        val width = size.width
-        val height = size.height
-        val pointSpacing = width / (points.size - 1)
+                val maxBpm = points.maxOrNull() ?: 180f
+                val minBpm = (points.minOrNull() ?: 60f) - 10f
 
-        val path = Path()
+                val path = Path()
 
-        points.forEachIndexed { index, bpm ->
-            val x = index * pointSpacing
-            // Υπολογισμός του Y ώστε να ταιριάζει στο ύψος (τα μεγάλα νούμερα πάνε πάνω)
-            val normalizedY = 1f - ((bpm - minBpm) / (maxBpm - minBpm))
-            val y = normalizedY * height
+                points.forEachIndexed { index, bpm ->
+                    val x = index * pointSpacing
+                    // Vertical mapping is explicitly proportional to the heart rate value
+                    val normalizedY = 1f - ((bpm - minBpm) / (maxBpm - minBpm))
+                    val y = normalizedY * height
 
-            if (index == 0) {
-                path.moveTo(x, y)
-            } else {
-                path.lineTo(x, y)
+                    if (index == 0) {
+                        path.moveTo(x, y)
+                    } else {
+                        path.lineTo(x, y)
+                    }
+                }
+
+                drawPath(
+                    path = path,
+                    color = color,
+                    style = Stroke(
+                        width = 4.dp.toPx(),
+                        cap = StrokeCap.Round,
+                        join = StrokeJoin.Round
+                    )
+                )
             }
         }
-
-        drawPath(
-            path = path,
-            color = color,
-            style = Stroke(
-                width = 4.dp.toPx(),
-                cap = StrokeCap.Round,
-                join = StrokeJoin.Round
-            )
-        )
     }
 }
-// end heartbeat
 
 // ... helper composables (StatCard, ShotRow) same as before ...
 @Composable
