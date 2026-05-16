@@ -14,25 +14,73 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import com.example.padeltracker.R
 import com.example.padeltracker.shared.MatchSetup
-import com.example.padeltracker.data.MatchRecord // Βάλε αυτό ψηλά στα imports αν δεν υπάρχει
+import com.google.android.gms.wearable.MessageClient
+import com.google.android.gms.wearable.MessageEvent
+import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.delay
+import java.util.Locale
+import com.example.padeltracker.data.MatchRecord
 
 @Composable
 fun LiveScoreScreen(
     setup: MatchSetup,
-    onFinish: (MatchRecord) -> Unit // <-- Η ΑΛΛΑΓΗ ΕΙΝΑΙ ΕΔΩ! Προσθέσαμε το MatchRecord
+    onFinish: () -> Unit
 ) {
-    // NOTE FOR THE FUTURE:
-    // The score and timer will be updated dynamically from the ViewModel
-    // which communicates with the Wear OS watch.
-    // For now (UI Design phase), we use static placeholder values.
-    val scoreTeamA = "0"
-    val scoreTeamB = "0"
-    val timeString = "00:00"
 
-    // Match status (waiting for the watch to initiate the match)
-    val matchStatusText = "Waiting for watch to start..."
+    val context = LocalContext.current
+
+    var elapsedSeconds by remember { mutableLongStateOf(0L) }
+
+    var liveScoreString by remember { mutableStateOf("0-0") }
+    var matchStatusText by remember { mutableStateOf("Waiting for watch to start...") }
+
+    // NEW: State to control whether the timer should tick or stay frozen
+    var isMatchStarted by remember { mutableStateOf(false) }
+
+    // The timer now only ticks IF isMatchStarted is true
+    LaunchedEffect(isMatchStarted) {
+        if (isMatchStarted) {
+            while (true) {
+                delay(1000L)
+                elapsedSeconds++
+            }
+        }
+    }
+
+    // Format the timer
+    val minutes = elapsedSeconds / 60
+    val seconds = elapsedSeconds % 60
+    val timeString = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+
+    // Listen for live score updates from the watch via MessageClient
+    DisposableEffect(Unit) {
+        val messageClient = Wearable.getMessageClient(context)
+        val messageListener = MessageClient.OnMessageReceivedListener { messageEvent: MessageEvent ->
+            when (messageEvent.path) {
+                // Listen for the match start signal from the watch
+                "/match_started" -> {
+                    isMatchStarted = true
+                    matchStatusText = "Match in progress..."
+                }
+                // Listen for score updates
+                "/live_score" -> {
+                    val newScore = String(messageEvent.data)
+                    liveScoreString = newScore
+                }
+            }
+        }
+        messageClient.addListener(messageListener)
+
+        onDispose {
+            messageClient.removeListener(messageListener)
+        }
+    }
+
+    val teamAName = setup.teamA.players.joinToString(" & ") { it.name }
+    val teamBName = setup.teamB.players.joinToString(" & ") { it.name }
 
     // Main container
     Box(modifier = Modifier.fillMaxSize()) {
@@ -49,7 +97,7 @@ fun LiveScoreScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.6f))
+                .background(Color.Black.copy(alpha = 0.7f))
         )
 
         // 3. Dashboard UI Content (Centered)
@@ -80,79 +128,102 @@ fun LiveScoreScreen(
             Text(
                 text = timeString,
                 color = Color.White,
-                fontSize = 56.sp,
+                fontSize = 64.sp,
                 fontWeight = FontWeight.Black
             )
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            // --- Team A Section ---
-            Text(
-                text = setup.teamA.players.joinToString(" & ") { it.name },
-                color = Color.White.copy(alpha = 0.8f),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = scoreTeamA,
-                color = Color.White,
-                fontSize = 80.sp, // Enlarged font since buttons were removed
-                fontWeight = FontWeight.Black
+            //new
+            PadelScoreboard(
+                teamAName = teamAName,
+                teamBName = teamBName,
+                scoreString = liveScoreString
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(50.dp))
 
-            // "VS" Divider
-            Text("VS", color = Color.Gray, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        }
+    }
+}
 
-            Spacer(modifier = Modifier.height(20.dp))
+// 🟢 NEW: Custom UI Components for the professional Scoreboard look
 
-            // --- Team B Section ---
-            Text(
-                text = setup.teamB.players.joinToString(" & ") { it.name },
-                color = Color.White.copy(alpha = 0.8f),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = scoreTeamB,
-                color = Color.White,
-                fontSize = 80.sp,
-                fontWeight = FontWeight.Black
-            )
+@Composable
+fun PadelScoreboard(teamAName: String, teamBName: String, scoreString: String) {
+    // Split the incoming string like "6-4   1-0" into separate sets
+    val sets = scoreString.split(Regex("\\s+")).filter { it.isNotBlank() }
 
-            Spacer(modifier = Modifier.height(50.dp)) // Fixed spacing instead of pushing to the bottom
+    // Extract scores for Team A (left of the dash) and Team B (right of the dash)
+    val teamAScores = sets.map { it.split("-").getOrNull(0) ?: "0" }
+    val teamBScores = sets.map { it.split("-").getOrNull(1) ?: "0" }
 
-            // --- DEV HACK: Fake Watch Signal Button ---
-            // KEEP THIS ONLY for UI development to navigate to the next screen.
-            // It simulates the "Match Finished" signal from the watch.
-            // --- DEV HACK: Fake Watch Signal Button ---
-            OutlinedButton(
-                onClick = {
-                    // Φτιάχνουμε έναν εικονικό αγώνα με τα ονόματα των ομάδων από το setup!
-                    val dummyMatch = MatchRecord(
-                        date = "13/05/2026",
-                        duration = "1h 30m",
-                        score = "6-4, 4-6, 10-8",
-                        avgHeartRate = 142,
-                        forehands = 45,
-                        backhands = 30,
-                        forehandLobs = 12,
-                        backhandLobs = 8,
-                        smashes = 18,
-                        services = 50,
-                        teamAPlayers = setup.teamA.players.joinToString(" & ") { it.name },
-                        teamBPlayers = setup.teamB.players.joinToString(" & ") { it.name },
-                        winner = "Team A" // Ας πούμε ότι κέρδισε η ομάδα Α για το τεστ
-                    )
-                    // Τον στέλνουμε πίσω για αποθήκευση!
-                    onFinish(dummyMatch)
-                },
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red),
-                border = null
+    Card(
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E).copy(alpha = 0.85f)),
+        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+    ) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            // TEAM A ROW
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("DEV MODE: Simulate Watch Finish ->")
+                Text(
+                    text = teamAName,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(1f) // Pushes the score boxes to the right
+                )
+                teamAScores.forEachIndexed { index, score ->
+                    ScoreBox(score = score, isActive = index == teamAScores.lastIndex)
+                }
+            }
+
+            HorizontalDivider(
+                color = Color.White.copy(alpha = 0.2f),
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+
+            // TEAM B ROW
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = teamBName,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(1f)
+                )
+                teamBScores.forEachIndexed { index, score ->
+                    ScoreBox(score = score, isActive = index == teamBScores.lastIndex)
+                }
             }
         }
+    }
+}
+
+@Composable
+fun ScoreBox(score: String, isActive: Boolean) {
+    Box(
+        modifier = Modifier
+            .padding(start = 8.dp)
+            .size(42.dp)
+            .background(
+                // Active set is Red, finished sets are semi-transparent white
+                color = if (isActive) Color(0xFFD32F2F) else Color.White.copy(alpha = 0.1f),
+                shape = RoundedCornerShape(10.dp)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = score,
+            color = Color.White,
+            fontWeight = FontWeight.Black,
+            fontSize = 20.sp
+        )
     }
 }

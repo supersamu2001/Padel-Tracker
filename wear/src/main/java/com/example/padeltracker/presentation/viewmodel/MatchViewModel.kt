@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableDoubleStateOf
+import com.google.android.gms.wearable.Wearable
 import androidx.lifecycle.AndroidViewModel
 import com.example.padeltracker.presentation.communication.MatchEndedSender
 import com.example.padeltracker.presentation.data.PendingMatchSetupStore
@@ -28,6 +29,12 @@ class MatchViewModel @JvmOverloads constructor(
     private var matchEndedMessageSent = false
     private var currentMatchUsesPhoneSetup = false
     private var matchStartTimeMs: Long = 0L
+    private var forehandsCount = 0
+    private var backhandsCount = 0
+    private var smashesCount = 0
+    private var servicesCount = 0
+    private var forehandLobsCount = 0
+    private var backhandLobsCount = 0
     private val _state = mutableStateOf(createInitialState())
     val state: State<ScoreTrackerState> = _state
 
@@ -39,11 +46,11 @@ class MatchViewModel @JvmOverloads constructor(
     private var lastSavedTimestamp = 0L
     //private val sensorManager = WearSensorManager(application)
 
-    // 2. Εδώ συνδέσαμε τον Manager με τον παλμό του ViewModel
+    // 2. Connect manager with heartbeat of ViewModel
     private val sensorManager = WearSensorManager(application) { newRate ->
         _heartRate.value = newRate
 
-        // 👇 ΝΕΑ ΠΡΟΣΘΗΚΗ: Σιωπηλή καταγραφή κάθε 5 δευτερόλεπτα
+        // silent counting every 5 sec
         val currentTime = System.currentTimeMillis()
         if (currentTime - lastSavedTimestamp >= 5000 && newRate > 0) {
             if (hrHistoryBuilder.isNotEmpty()) hrHistoryBuilder.append(",")
@@ -147,17 +154,56 @@ class MatchViewModel @JvmOverloads constructor(
         )
     }
 
+    // Broadcasts the live score to the phone whenever a point is scored
+    private fun broadcastLiveScore() {
+        val match = _state.value.currentMatch
+
+        val scoreBuilder = java.lang.StringBuilder()
+        match.completedSets.forEach { set ->
+            scoreBuilder.append("${set.teamAGames}-${set.teamBGames}   ")
+        }
+        scoreBuilder.append("${match.currentSet.teamAGames}-${match.currentSet.teamBGames}")
+        val currentScore = scoreBuilder.toString().trim()
+
+        val payload = currentScore.toByteArray()
+        val context = getApplication<Application>()
+
+        Wearable.getNodeClient(context).connectedNodes.addOnSuccessListener { nodes ->
+            nodes.forEach { node ->
+                Wearable.getMessageClient(context).sendMessage(node.id, "/live_score", payload)
+            }
+        }
+    }
+
     /**
      * Moves the match status to server selection.
      */
     fun startMatch() {
         matchEndedMessageSent = false
+
+        matchStartTimeMs = System.currentTimeMillis()
+
+        // new, zero for the start of the game
+        forehandsCount = 0
+        backhandsCount = 0
+        smashesCount = 0
+        servicesCount = 0
+        forehandLobsCount = 0
+        backhandLobsCount = 0
+
         _state.value = engine.startMatch(_state.value)
 
-        //simplify labeling
         updateSensorScoreMarker()
         // start the collection of data from sensors
         sensorManager.startTracking()
+
+        // Sends a message to the phone stating that the match has officially started
+        val context = getApplication<Application>()
+        Wearable.getNodeClient(context).connectedNodes.addOnSuccessListener { nodes ->
+            nodes.forEach { node ->
+                Wearable.getMessageClient(context).sendMessage(node.id, "/match_started", ByteArray(0))
+            }
+        }
     }
 
     /**
@@ -174,8 +220,10 @@ class MatchViewModel @JvmOverloads constructor(
      */
     fun addPoint(teamId: TeamId) {
         _state.value = engine.addPoint(_state.value, teamId)
-        //simplify labeling
+
         updateSensorScoreMarker()
+
+        broadcastLiveScore()
     }
 
     /**
@@ -185,6 +233,7 @@ class MatchViewModel @JvmOverloads constructor(
         _state.value = engine.undo(_state.value)
         //simplify labeling
         updateSensorScoreMarker()
+        broadcastLiveScore()
     }
 
     /**
@@ -206,9 +255,21 @@ class MatchViewModel @JvmOverloads constructor(
      */
     fun endMatchEarly() {
         _state.value = engine.endMatchEarly(_state.value)
-
-        //simplify labeling
         updateSensorScoreMarker()
+    }
+
+    // NEW: A helper template function for future use.
+    // Once the team implements shot recognition, this function should be called
+    // passing the shot type in order to increment the correct counter.
+    fun logDetectedShot(shotType: String) {
+        when (shotType.lowercase()) {
+            "forehand" -> forehandsCount++
+            "backhand" -> backhandsCount++
+            "smash" -> smashesCount++
+            "service" -> servicesCount++
+            "forehand_lob" -> forehandLobsCount++
+            "backhand_lob" -> backhandLobsCount++
+        }
     }
 
     /**
@@ -237,11 +298,11 @@ class MatchViewModel @JvmOverloads constructor(
 
         Log.d(TAG, "User confirmed end match. Sending match ended message.")
 
-        // 1. Ονόματα
+        // 1. Names
         val teamA = match.teamA.players.joinToString(" & ") { it.name }
         val teamB = match.teamB.players.joinToString(" & ") { it.name }
 
-        // 2. Σκορ
+        // 2. Score
         val scoreBuilder = java.lang.StringBuilder()
         match.completedSets.forEach { set ->
             scoreBuilder.append("${set.teamAGames}-${set.teamBGames} ")
@@ -249,21 +310,22 @@ class MatchViewModel @JvmOverloads constructor(
         scoreBuilder.append("${match.currentSet.teamAGames}-${match.currentSet.teamBGames}")
         val finalScore = scoreBuilder.toString().trim()
 
-        // 3. Νικητής
+        // 3. Winner
         val teamASets = match.completedSets.count { it.teamAGames > it.teamBGames }
         val teamBSets = match.completedSets.count { it.teamBGames > it.teamAGames }
         val winnerName = if (teamASets > teamBSets) "Team A" else if (teamBSets > teamASets) "Team B" else "Draw"
 
-        // 4. Μέσος όρος παλμών
+        // 4. Av heartbeat
         val historyString = hrHistoryBuilder.toString()
         val hrList = historyString.split(",").filter { it.isNotEmpty() }.mapNotNull { it.toIntOrNull() }
         val avgHr = if (hrList.isNotEmpty()) hrList.average().toInt() else 0
 
-        // 🟢 ΝΕΟ: Υπολογισμός διάρκειας αγώνα
+        // 5. timer for game
         val durationMs = if (matchStartTimeMs > 0) System.currentTimeMillis() - matchStartTimeMs else 0L
         val minutes = (durationMs / 1000) / 60
         val seconds = (durationMs / 1000) % 60
         val finalDuration = String.format(java.util.Locale.getDefault(), "%02d:%02d", minutes, seconds)
+
 
         // Send the history to the sender
         matchEndedSender.sendMatchEnded(heartRateHistory = historyString,
@@ -272,7 +334,13 @@ class MatchViewModel @JvmOverloads constructor(
             teamBPlayers = teamB,
             score = finalScore,
             winner = winnerName,
-            duration = finalDuration)
+            duration = finalDuration,
+            forehands = forehandsCount,
+            backhands = backhandsCount,
+            smashes = smashesCount,
+            services = servicesCount,
+            forehandLobs = forehandLobsCount,
+            backhandLobs = backhandLobsCount)
 
 
         resetMatch()
