@@ -1,74 +1,76 @@
 # Padel-Tracker 🎾
 
-Padel-Tracker è un'applicazione Android completa (Smartphone + Wear OS) progettata per tracciare le partite di Padel e analizzare le performance del giocatore in tempo reale utilizzando il Machine Learning.
+Padel-Tracker is a complete Android application (Smartphone + Wear OS) designed to track Padel matches and analyze player performance in real-time using Machine Learning.
 
-## 🏗️ Architettura del Progetto
+## 🏗️ Project Architecture
 
-Il progetto segue un'architettura distribuita per ottimizzare i consumi energetici e le prestazioni:
-- **Smartwatch (Wear OS)**: Si occupa esclusivamente della raccolta dati dai sensori (frequenza 20Hz) e della gestione del punteggio rapida al polso.
-- **Smartphone**: Riceve i dati grezzi tramite Bluetooth (Wearable Data Layer), esegue l'inferenza tramite un modello TensorFlow Lite e salva le statistiche nel database locale.
+The project follows a distributed architecture to optimize energy consumption and performance:
+- **Smartwatch (Wear OS)**: Exclusively handles sensor data collection (20Hz frequency) and quick score management on the wrist.
+- **Smartphone**: Receives raw data via Bluetooth (Wearable Data Layer), performs inference using a TensorFlow Lite model, and saves statistics in the local database.
 
 ---
 
-## 📂 Struttura delle Cartelle e File
+## 📂 Folder and File Structure
 
-### 📱 Modulo `:app` (Smartphone)
-Contiene la logica di analisi, la gestione dei dati e l'interfaccia utente principale.
+### 📱 `:app` Module (Smartphone)
+Contains the analysis logic, data management, and the main user interface.
 
 - **`src/main/java/com/example/padeltracker/`**
-    - `MainActivity.kt`: Punto di ingresso dell'app, gestisce la navigazione principale tra le schermate.
-    - **`data/`**: Gestione del database locale (Room).
-        - `AppDatabase.kt`: Configurazione del database SQLite.
-        - `MatchDao.kt`: Interfaccia per le query (inserimento e lettura partite).
-        - `MatchRecord.kt`: Modello della tabella che salva i dettagli di ogni match (punteggio, durata, colpi).
-    - **`ml/`**: Cuore dell'intelligenza artificiale.
-        - `ShotClassifier.kt`: Carica il modello `.tflite` ed esegue l'inferenza sui dati dei sensori.
-        - `ShotDetectionState.kt`: Singleton che mantiene il conteggio live dei colpi rilevati (Forehand, Backhand, etc.).
+    - `MainActivity.kt`: Entry point of the app, manages the main navigation between screens.
+    - **`data/`**: Local database management (Room).
+        - `AppDatabase.kt`: SQLite database configuration.
+        - `MatchDao.kt`: Interface for queries (inserting and reading matches).
+        - `MatchRecord.kt`: Table model that saves the details of each match (score, duration, shots).
+    - **`ml/`**: The heart of the artificial intelligence.
+        - `ShotClassifier.kt`: Loads the `.tflite` model and performs inference on sensor data.
+        - `ShotDetectionState.kt`: Singleton that maintains the live count of detected shots (Forehand, Backhand, etc.).
     - **`service/`**:
-        - `SensorDataListenerService.kt`: Servizio in background che riceve i pacchetti dati dallo smartwatch anche se l'app è chiusa.
-    - **`ui/`**: Interfaccia grafica in Jetpack Compose.
-        - `screens/`: Contiene le schermate principali (`HomeScreen`, `SetupScreen`, `LiveScoreScreen`, `HistoryScreen`).
+        - `SensorDataListenerService.kt`: Background service that receives data packets from the smartwatch even if the app is closed.
+    - **`ui/`**: Graphical interface in Jetpack Compose.
+        - `screens/`: Contains the main screens (`HomeScreen`, `SetupScreen`, `LiveScoreScreen`, `HistoryScreen`).
 - **`src/main/assets/`**
-    - `padel_shot_classifier.tflite`: Il modello di Machine Learning addestrato per riconoscere i colpi.
+    - `padel_shot_classifier.tflite`: The trained Machine Learning model to recognize shots.
 
-### ⌚ Modulo `:wear` (Smartwatch)
-Ottimizzato per l'uso durante l'attività sportiva.
+### ⌚ `:wear` Module (Smartwatch)
+Optimized for use during sports activities.
 
 - **`src/main/java/com/example/padeltracker/presentation/`**
-    - `MainActivity.kt`: Activity principale per Wear OS.
+    - `MainActivity.kt`: Main activity for Wear OS.
     - **`sensors/`**
-        - `WearSensorManager.kt`: Gestisce l'attivazione di Accelerometro e Giroscopio a 20Hz e invia i dati allo smartphone.
+        - `WearSensorManager.kt`: Manages the activation of Accelerometer and Gyroscope at 20Hz and sends data to the smartphone.
     - **`viewmodel/`**
-        - `MatchViewModel.kt`: Gestisce lo stato della partita corrente sull'orologio.
+        - `MatchViewModel.kt`: Manages the state of the current match on the watch.
     - **`scoring/`**
-        - `PadelScoreEngine.kt`: Logica per il calcolo dei punteggi specifici del Padel.
+        - `PadelScoreEngine.kt`: Logic for calculating Padel-specific scores.
 
-### 🤝 Modulo `:shared` (Codice Condiviso)
-Contiene classi e costanti utilizzate sia dall'app che dal wear.
+### 🤝 `:shared` Module (Shared Code)
+Contains classes and constants used by both the app and the wear module.
 
 - **`src/main/java/com/example/padeltracker/shared/`**
-    - `MatchSetup.kt`: Modello dati per le impostazioni della partita (nomi dei giocatori, regole del match) e costanti di comunicazione Wear OS.
-    - `SensorConstants.kt`: Definisce i percorsi di comunicazione (Path) per il Bluetooth.
+    - `MatchSetup.kt`: Data model for match settings (player names, match rules) and Wear OS communication constants.
+    - `SensorConstants.kt`: Defines the communication paths for Bluetooth.
 
 ---
 
-## 🚀 Funzionalità Principali
-1. **Tracciamento Live**: Visualizzazione in tempo reale dei colpi effettuati direttamente sullo schermo dello smartphone durante il match.
-2. **AI Integration**: Riconoscimento automatico di:
-    - Dritto (Forehand)
-    - Rovescio (Backhand)
+## 🚀 Main Features
+1. **Live Tracking**: Real-time visualization of shots made directly on the smartphone screen during the match.
+2. **Live Match Dashboard**: Real-time scoreboard and isolated match timer running symmetrically between devices.
+3. **Heart Rate Monitoring**: Tracks BPM during the match and visualizes heart rate zones in the post-game analysis screen.
+4. **AI Integration**: Automatic recognition of:
+    - Forehand
+    - Backhand
     - Smash
-    - Lob (Pallonetti)
-    - Servizi
-3. **Cronologia Match**: Database locale per rivedere i risultati e le statistiche di tutte le partite passate.
-4. **Sincronizzazione Wear OS**: Configurazione della partita sul telefono e gestione del punteggio tramite l'orologio.
+    - Lob
+    - Serves
+5. **Match History**: Local database to review the results and statistics of all past matches.
+6. **Wear OS Synchronization**: Match configuration on the phone and score management via the watch.
 
 ---
 
-## 🛠️ Tecnologie Utilizzate
-- **Lingua**: Kotlin
+## 🛠️ Technologies Used
+- **Language**: Kotlin
 - **UI**: Jetpack Compose (Mobile & Wear)
 - **Database**: Room Persistence Library
 - **ML**: TensorFlow Lite
-- **Connettività**: Google Play Services Wearable API (Data Layer)
+- **Connectivity**: Google Play Services Wearable API (DataLayer for large payloads & MessageClient for low-latency live events)
 - **Dependency Management**: Gradle (Kotlin DSL)
