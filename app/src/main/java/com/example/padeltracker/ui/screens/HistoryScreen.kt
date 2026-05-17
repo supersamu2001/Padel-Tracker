@@ -72,7 +72,7 @@ fun HistoryScreen(
                         MatchHistoryCard(
                             match = match,
                             onClick = { onMatchClick(match) },
-                            onDelete = { /* θα συνδέσουμε αργότερα */ }
+                            onDelete = { onDeleteMatch(match) }
                         )                    }
                 }
             }

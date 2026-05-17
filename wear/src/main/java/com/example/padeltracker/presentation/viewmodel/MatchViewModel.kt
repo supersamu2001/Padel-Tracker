@@ -342,6 +342,38 @@ class MatchViewModel @JvmOverloads constructor(
             forehandLobs = forehandLobsCount,
             backhandLobs = backhandLobsCount)
 
+        // ... (όλα τα προηγούμενα της συνάρτησης) ...
+
+        // Αυτό το έχει ήδη γράψει η άλλη κοπέλα:
+        matchEndedSender.sendMatchEnded(
+            heartRateHistory = historyString,
+            avgHeartRate = avgHr,
+            teamAPlayers = teamA,
+            teamBPlayers = teamB,
+            score = finalScore,
+            winner = winnerName,
+            duration = finalDuration,
+            forehands = forehandsCount,
+            backhands = backhandsCount,
+            smashes = smashesCount,
+            services = servicesCount,
+            forehandLobs = forehandLobsCount,
+            backhandLobs = backhandLobsCount
+        )
+
+
+        val info = "$finalScore|$avgHr|$forehandsCount|$backhandsCount|$smashesCount|$servicesCount|$forehandLobsCount|$backhandLobsCount|$teamA|$teamB|$winnerName|$finalDuration|$historyString"
+        val wearContext = getApplication<Application>()
+
+        Wearable.getNodeClient(wearContext).connectedNodes.addOnSuccessListener { nodes ->
+            nodes.forEach { node ->
+                Wearable.getMessageClient(wearContext).sendMessage(
+                    node.id,
+                    "/match_stats",
+                    info.toByteArray(Charsets.UTF_8)
+                )
+            }
+        }
 
         resetMatch()
     }
