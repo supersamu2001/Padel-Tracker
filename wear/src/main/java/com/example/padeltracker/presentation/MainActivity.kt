@@ -12,13 +12,16 @@ import com.example.padeltracker.shared.WearCommunicationConstants
 import com.google.android.gms.wearable.Wearable
 import android.Manifest // heartbeat
 import android.content.pm.PackageManager
+//new
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.padeltracker.presentation.ui.WearApp
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        checkAndRequestPermissions()
 
         registerWatchCapability()
         logPendingMatchSetup()
@@ -29,14 +32,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun checkAndRequestPermissions() {
-        if (checkSelfPermission(Manifest.permission.BODY_SENSORS) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("PERMISSIONS", "Requesting BODY_SENSORS permission")
-            requestPermissions(arrayOf(Manifest.permission.BODY_SENSORS), 100)
-        } else {
-            Log.d("PERMISSIONS", "BODY_SENSORS permission already granted")
-        }
-    }
 
     private fun registerWatchCapability() {
         Wearable.getCapabilityClient(this)
