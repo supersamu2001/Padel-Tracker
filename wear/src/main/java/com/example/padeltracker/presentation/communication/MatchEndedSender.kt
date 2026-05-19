@@ -2,7 +2,7 @@ package com.example.padeltracker.presentation.communication
 
 import android.content.Context
 import android.util.Log
-import com.example.padeltracker.shared.WearCommunicationConstants
+import com.example.padeltracker.shared.communication.WearPaths
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import java.text.SimpleDateFormat
@@ -40,7 +40,7 @@ class MatchEndedSender(
         val currentDate = dateFormat.format(Date())
 
         // send the heartbeat history to the phone (for the graph)
-        val putDataReq = PutDataMapRequest.create("/match_result").apply {
+        val putDataReq = PutDataMapRequest.create(WearPaths.MATCH_RESULT).apply {
             dataMap.putString("heartRateHistory", heartRateHistory)
             dataMap.putLong("timestamp", System.currentTimeMillis())
 
@@ -85,7 +85,7 @@ class MatchEndedSender(
                     Wearable.getMessageClient(context)
                         .sendMessage(
                             node.id,
-                            WearCommunicationConstants.MATCH_ENDED_PATH,
+                            WearPaths.MATCH_ENDED,
                             payload
                         )
                         .addOnSuccessListener {

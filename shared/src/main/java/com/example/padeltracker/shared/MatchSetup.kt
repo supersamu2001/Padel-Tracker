@@ -30,15 +30,6 @@ data class MatchRules(
     val minimumAdvantage: Int = 2
 )
 
-/**
- * Constants for Wear OS communication.
- */
-object WearCommunicationConstants {
-    const val WATCH_CAPABILITY = "padel_tracker_watch"
-    const val MATCH_SETUP_PATH = "/match/setup"
-    const val MATCH_ENDED_PATH = "/match/ended"
-}
-
 object MatchSetupDataKeys {
     const val MATCH_ID = "match_id"
     const val CREATED_AT = "created_at"

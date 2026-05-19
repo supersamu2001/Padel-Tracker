@@ -6,13 +6,11 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
-import androidx.compose.ui.geometry.isEmpty
-import com.example.padeltracker.shared.SensorConstants
+import com.example.padeltracker.shared.communication.WearPaths
 import com.google.android.gms.wearable.Wearable
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.util.ArrayDeque
-import kotlin.math.abs
+
 
 //toast debug
 import android.os.Handler
@@ -31,6 +29,13 @@ import androidx.health.services.client.unregisterMeasureCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
+import com.example.padeltracker.shared.experiment.ExperimentConfig
+import com.example.padeltracker.shared.sensors.ImuVector
+import com.example.padeltracker.shared.shotrecognition.ShotWindow
+import com.example.padeltracker.shared.communication.SensorPacketSerializer
+import com.example.padeltracker.shared.shotrecognition.ShotFeatureVector
+
 class WearSensorManager(
     private val context: Context,
     private val onHeartRateChanged: (Double) -> Unit // <--- ΠΡΟΣΘΕΣΕ ΑΥΤΟ
@@ -49,34 +54,34 @@ class WearSensorManager(
 
     private val TAG = "WearSensorManager"
 
-    //toast debug
-    private val DEBUG_SHOW_SHOT_TOAST = true
+    private val experimentConfig = ExperimentConfig()
+
+    private val experimentPipeline = WearExperimentPipeline(
+        config = experimentConfig,
+        onRawSample = { sensorType, timestampNanos, value ->
+            sendRawSample(
+                sensorType = sensorType,
+                timestampNanos = timestampNanos,
+                value = value
+            )
+        },
+        onShotWindow = { shotWindow, purpose ->
+            when (purpose) {
+                ShotWindowPurpose.DATA_COLLECTION -> {
+                    sendShotWindowForDataCollection(shotWindow)
+                }
+
+                ShotWindowPurpose.CLASSIFICATION -> {
+                    sendShotWindowForClassification(shotWindow)
+                }
+            }
+        },
+        onFeatureVector = { features ->
+            sendFeatureVector(features)
+        }
+    )
+
     private val mainHandler = Handler(Looper.getMainLooper())
-
-    // Recognition Thresholds
-    private val ACC_THRESHOLD = 2 * 9.81f   // ~29.43 m/s^2
-    private val GYRO_THRESHOLD = 5.0f       // rad/s
-    // test on emulator
-    //private val ACC_THRESHOLD = 0.8f
-    //private val GYRO_THRESHOLD = 0.4f
-    private val WINDOW_SIZE = 25            // Number of samples before and after the trigger,
-
-    // Buffers for recognition
-    private val accHistory = ArrayDeque<FloatArray>()
-    private val gyroHistory = ArrayDeque<FloatArray>()
-    private var lastAccValues: FloatArray? = null
-    private var lastGyroValues: FloatArray? = null
-
-    // State for shot recording
-    private var isRecordingShot = false     // tell us if a shot has been detected
-    private var postShotAccCount = 0        // number of acceleration samples after the detection
-    private var postShotGyroCount = 0       // number of gyroscope samples after the detection
-    private val shotAccData = mutableListOf<FloatArray>()
-    private val shotGyroData = mutableListOf<FloatArray>()
-
-    // 25Hz means 1 sample each 40ms.
-    // The parameter of the periodic listener must be in microseconds
-    private val SENSOR_DELAY_25HZ = 40000
 
     private var targetNodeId: String? = null
 
@@ -93,10 +98,6 @@ class WearSensorManager(
     @Volatile
     private var currentTeamBGames: Int = 0
 
-    
-    // Variables to track sampling intervals
-    private var lastAccTime: Long = 0
-    private var lastGyroTime: Long = 0
 
     // ---> NEW ADDITION FOR HEART RATE: Callback <---
     // This listens for new heart rate values from the sensor
@@ -121,7 +122,7 @@ class WearSensorManager(
                     buffer.order(ByteOrder.LITTLE_ENDIAN)
                     buffer.putDouble(latestHeartRate)
 
-                    messageClient.sendMessage(nodeId, SensorConstants.HEART_RATE_PATH, buffer.array())
+                    messageClient.sendMessage(nodeId, WearPaths.HEART_RATE, buffer.array())
                         .addOnFailureListener { Log.e(TAG, "FAILED TO SEND HEART RATE") }
                 }
             }
@@ -159,16 +160,18 @@ class WearSensorManager(
         )
     }
     fun startTracking() {
-        Log.d(TAG, "Start tracking sensors (25Hz)...")
-        
+        Log.d(TAG, "Start tracking sensors (${experimentConfig.samplingHz}Hz)...")
+
+        experimentPipeline.reset()
+
         accelerometer?.let {
-            sensorManager.registerListener(this, it, SENSOR_DELAY_25HZ)
-            Log.d(TAG, "Accelerometer registered at 25Hz")
+            sensorManager.registerListener(this, it, experimentConfig.sensorDelayMicros)
+            Log.d(TAG, "Accelerometer registered at ${experimentConfig.samplingHz}Hz")
         } ?: Log.e(TAG, "Accelerometer not found!")
 
         gyroscope?.let {
-            sensorManager.registerListener(this, it, SENSOR_DELAY_25HZ)
-            Log.d(TAG, "Gyroscope registered at 25Hz")
+            sensorManager.registerListener(this, it, experimentConfig.sensorDelayMicros)
+            Log.d(TAG, "Gyroscope registered at ${experimentConfig.samplingHz}Hz")
         } ?: Log.e(TAG, "Gyroscope not found!")
 
         //heartbeat
@@ -188,6 +191,8 @@ class WearSensorManager(
         Log.d(TAG, "Interruption tracking sensors")
         sensorManager.unregisterListener(this)
 
+        experimentPipeline.reset()
+
         //measureClientHR.unregisterMeasureCallback(heartRateCallback) //heartbeat
 
         scope.launch {
@@ -203,7 +208,7 @@ class WearSensorManager(
 
     //toast debug
     private fun showShotDetectedToast() {
-        if (!DEBUG_SHOW_SHOT_TOAST) return
+        if (!experimentConfig.showShotDetectionToast) return
 
         mainHandler.post {
             Toast.makeText(
@@ -216,153 +221,66 @@ class WearSensorManager(
 
     // called each time a sensor registers a new value
     override fun onSensorChanged(event: SensorEvent) {
-        // values => values obtained by the sensor
         val values = event.values.copyOf()
+        val imuVector = ImuVector.from(values)
 
-        // 1. Update buffers for history and tracking
-        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-            lastAccValues = values
-            accHistory.addLast(values)
-
-            // each time we only keep the 20 most recent samples (plus the actual one)
-            if (accHistory.size > WINDOW_SIZE + 1) accHistory.removeFirst()
-
-            if (isRecordingShot) {
-                shotAccData.add(values)
-                postShotAccCount++
-            }
-        } else if (event.sensor.type == Sensor.TYPE_GYROSCOPE) {
-            lastGyroValues = values
-            gyroHistory.addLast(values)
-            if (gyroHistory.size > WINDOW_SIZE + 1) gyroHistory.removeFirst()
-
-            if (isRecordingShot) {
-                shotGyroData.add(values)
-                postShotGyroCount++
-            }
-        }
-
-        // 2. Check for trigger (if not already recording)
-        if (!isRecordingShot && lastAccValues != null && lastGyroValues != null) {
-            val accTrigger = lastAccValues!!.any { abs(it) > ACC_THRESHOLD }
-            val gyroTrigger = lastGyroValues!!.any { abs(it) > GYRO_THRESHOLD }
-
-            if (accTrigger && gyroTrigger) {
-                isRecordingShot = true
-                postShotAccCount = 0
-                postShotGyroCount = 0
-                shotAccData.clear()
-                shotGyroData.clear()
-
-                // Capture history: 20 previous samples + the trigger sample (which is last in history)
-                shotAccData.addAll(accHistory)
-                shotGyroData.addAll(gyroHistory)
-
-                Log.d(TAG, "!!! SHOT DETECTED !!! Collecting post-shot data...")
-                // toast debug
-                showShotDetectedToast()
-            }
-        }
-
-        // 3. Check if recording is complete (trigger + 20 samples after)
-        if (isRecordingShot && postShotAccCount >= WINDOW_SIZE && postShotGyroCount >= WINDOW_SIZE) {
-            sendShotBatch()
-            isRecordingShot = false
-        }
-
-        // TO SEND ALL THE SAMPLES TO THE PHONE
-        // Existing streaming logic (optional: can be removed if only shot detection is needed)
-        /**
-        val streamBuffer = ByteBuffer.allocate(16)
-        streamBuffer.order(ByteOrder.LITTLE_ENDIAN)
-        streamBuffer.putInt(event.sensor.type)
-        streamBuffer.putFloat(event.values[0])
-        streamBuffer.putFloat(event.values[1])
-        streamBuffer.putFloat(event.values[2])
-
-        val streamData = streamBuffer.array()
-
-        targetNodeId?.let { nodeId ->
-            messageClient.sendMessage(nodeId, SensorConstants.SENSOR_DATA_PATH, streamData)
-                .addOnFailureListener { e ->
-                    Log.e(TAG, "FAILED TO SEND STREAM: ${e.message}")
-                }
-        }
-        */
-
-        /**
-        // ... logging code ...
-        // Keep local logging for verification
-        when (event.sensor.type) {
-            Sensor.TYPE_ACCELEROMETER -> {
-                val currentNano = event.timestamp
-                val diffMs = if (lastAccTime != 0L) (currentNano - lastAccTime) / 1_000_000 else 0
-                lastAccTime = currentNano
-                
-                // Log.d(TAG, "ACC -> x: ${event.values[0]}, y: ${event.values[1]}, z: ${event.values[2]}, interval: ${diffMs}ms")
-            }
-
-            Sensor.TYPE_GYROSCOPE -> {
-                val currentNano = event.timestamp
-                val diffMs = if (lastGyroTime != 0L) (currentNano - lastGyroTime) / 1_000_000 else 0
-                lastGyroTime = currentNano
-                
-                // Log.d(TAG, "GYRO -> x: ${event.values[0]}, y: ${event.values[1]}, z: ${event.values[2]}, interval: ${diffMs}ms")
-            }
-        }
-        */
+        experimentPipeline.onSensorSample(
+            sensorType = event.sensor.type,
+            timestampNanos = event.timestamp,
+            value = imuVector
+        )
     }
 
-    // SEND THE 41 SAMPLES RELATED TO THE SHOT
-    private fun sendShotBatch() {
-        // simplify labeling
-        /*val numSamples = shotAccData.size.coerceAtMost(shotGyroData.size)
-        // Each sample is 3 floats (12 bytes) * 2 sensors
-        val buffer = ByteBuffer.allocate(numSamples * 2 * 12)
-        buffer.order(ByteOrder.LITTLE_ENDIAN)*/
-        val numSamples = shotAccData.size.coerceAtMost(shotGyroData.size)
+    private fun sendRawSample(
+        sensorType: Int,
+        timestampNanos: Long,
+        value: ImuVector
+    ) {
+        // RAW_TO_PHONE mode will be implemented in a later step.
+        Log.d(
+            TAG,
+            "Raw sample ready for sending. sensorType=$sensorType, timestamp=$timestampNanos, value=$value"
+        )
+    }
 
-        // Header: 4 Int values for score marker
-        // teamASets, teamBSets, teamAGames, teamBGames
-        val scoreHeaderBytes = 4 * 4
+    private fun sendShotWindowForDataCollection(shotWindow: ShotWindow) {
+        val data = SensorPacketSerializer.serializeShotWindow(
+            shotWindow = shotWindow,
+            teamASets = currentTeamASets,
+            teamBSets = currentTeamBSets,
+            teamAGames = currentTeamAGames,
+            teamBGames = currentTeamBGames
+        )
 
-        // Each sample is 3 floats (12 bytes) * 2 sensors
-        val buffer = ByteBuffer.allocate(scoreHeaderBytes + numSamples * 2 * 12)
-        buffer.order(ByteOrder.LITTLE_ENDIAN)
-
-        buffer.putInt(currentTeamASets)
-        buffer.putInt(currentTeamBSets)
-        buffer.putInt(currentTeamAGames)
-        buffer.putInt(currentTeamBGames)
-        // end simplify labeling (delete new block and uncomment old one)
-
-
-        // Accelerometer data block
-        for (i in 0 until numSamples) {
-            val vals = shotAccData[i]
-            buffer.putFloat(vals[0])
-            buffer.putFloat(vals[1])
-            buffer.putFloat(vals[2])
-        }
-
-        // Gyroscope data block
-        for (i in 0 until numSamples) {
-            val vals = shotGyroData[i]
-            buffer.putFloat(vals[0])
-            buffer.putFloat(vals[1])
-            buffer.putFloat(vals[2])
-        }
-
-        val data = buffer.array()
         targetNodeId?.let { nodeId ->
-            messageClient.sendMessage(nodeId, SensorConstants.SHOT_DATA_PATH, data)
+            messageClient.sendMessage(nodeId, WearPaths.SENSOR_SHOT, data)
                 .addOnSuccessListener {
-                    Log.d(TAG, "Shot batch sent successfully! ($numSamples samples)")
+                    Log.d(
+                        TAG,
+                        "Data collection shot sent successfully! (${shotWindow.totalSamples} samples)"
+                    )
+                    showShotDetectedToast()
                 }
                 .addOnFailureListener { e ->
-                    Log.e(TAG, "FAILED TO SEND SHOT BATCH: ${e.message}")
+                    Log.e(TAG, "FAILED TO SEND DATA COLLECTION SHOT: ${e.message}")
                 }
         }
+    }
+
+    private fun sendShotWindowForClassification(shotWindow: ShotWindow) {
+        // SHOT_TO_PHONE mode will be implemented in a later step.
+        Log.d(
+            TAG,
+            "Classification shot ready for sending. samples=${shotWindow.totalSamples}"
+        )
+    }
+
+    private fun sendFeatureVector(features: ShotFeatureVector) {
+        // FEATURES_TO_PHONE mode will be implemented in a later step.
+        Log.d(
+            TAG,
+            "Feature vector ready for sending. features=${features.values.size}"
+        )
     }
 
     // called when the accuracy of a sensor changes. It's not essential for our purpose

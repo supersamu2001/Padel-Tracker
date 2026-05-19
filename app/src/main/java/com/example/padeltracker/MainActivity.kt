@@ -12,7 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.example.padeltracker.data.MatchRecord
 import com.example.padeltracker.shared.MatchSetup
-import com.example.padeltracker.shared.WearCommunicationConstants
+import com.example.padeltracker.shared.communication.WearPaths
 import com.example.padeltracker.ui.screens.*
 import com.example.padeltracker.ui.theme.*
 import com.example.padeltracker.wear.PhoneMatchEndedEventBus
@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
                     val dataListener = DataClient.OnDataChangedListener { dataEvents ->
                         dataEvents.forEach { event ->
                             if (event.type == DataEvent.TYPE_CHANGED &&
-                                event.dataItem.uri.path == "/match_result"
+                                event.dataItem.uri.path == WearPaths.MATCH_RESULT
                             ) {
                                 val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
 
@@ -124,7 +124,7 @@ class MainActivity : ComponentActivity() {
 
                     Wearable.getCapabilityClient(this@MainActivity)
                         .getCapability(
-                            WearCommunicationConstants.WATCH_CAPABILITY,
+                            WearPaths.WATCH_CAPABILITY,
                             CapabilityClient.FILTER_REACHABLE
                         )
                         .addOnSuccessListener { capabilityInfo ->
@@ -155,7 +155,7 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(Unit) {
                     Wearable.getCapabilityClient(this@MainActivity)
                         .getCapability(
-                            WearCommunicationConstants.WATCH_CAPABILITY,
+                            WearPaths.WATCH_CAPABILITY,
                             CapabilityClient.FILTER_REACHABLE
                         )
                         .addOnSuccessListener { capabilityInfo ->

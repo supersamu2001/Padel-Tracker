@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.example.padeltracker.shared.MatchSetup
 import com.example.padeltracker.shared.MatchSetupDataKeys
-import com.example.padeltracker.shared.WearCommunicationConstants
+import com.example.padeltracker.shared.communication.WearPaths
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 
@@ -17,7 +17,7 @@ class WearMatchSetupSender(private val context: Context) {
     ) {
         try {
             val request = PutDataMapRequest.create(
-                WearCommunicationConstants.MATCH_SETUP_PATH
+                WearPaths.MATCH_SETUP
             ).apply {
                 dataMap.putString(MatchSetupDataKeys.MATCH_ID, setup.matchId)
                 dataMap.putLong(MatchSetupDataKeys.CREATED_AT, setup.createdAt)

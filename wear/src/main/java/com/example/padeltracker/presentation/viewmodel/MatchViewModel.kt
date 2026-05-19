@@ -16,6 +16,7 @@ import com.example.padeltracker.presentation.model.TeamId
 import com.example.padeltracker.presentation.model.toDomain
 import com.example.padeltracker.presentation.scoring.PadelScoreEngine
 import com.example.padeltracker.presentation.sensors.WearSensorManager
+import com.example.padeltracker.shared.communication.WearPaths
 
 /**
  * ViewModel that manages the padel match state and delegates logic to the PadelScoreEngine.
@@ -170,7 +171,7 @@ class MatchViewModel @JvmOverloads constructor(
 
         Wearable.getNodeClient(context).connectedNodes.addOnSuccessListener { nodes ->
             nodes.forEach { node ->
-                Wearable.getMessageClient(context).sendMessage(node.id, "/live_score", payload)
+                Wearable.getMessageClient(context).sendMessage(node.id, WearPaths.LIVE_SCORE, payload)
             }
         }
     }
@@ -201,7 +202,7 @@ class MatchViewModel @JvmOverloads constructor(
         val context = getApplication<Application>()
         Wearable.getNodeClient(context).connectedNodes.addOnSuccessListener { nodes ->
             nodes.forEach { node ->
-                Wearable.getMessageClient(context).sendMessage(node.id, "/match_started", ByteArray(0))
+                Wearable.getMessageClient(context).sendMessage(node.id, WearPaths.MATCH_STARTED, ByteArray(0))
             }
         }
     }
@@ -369,7 +370,7 @@ class MatchViewModel @JvmOverloads constructor(
             nodes.forEach { node ->
                 Wearable.getMessageClient(wearContext).sendMessage(
                     node.id,
-                    "/match_stats",
+                    WearPaths.MATCH_STATS,
                     info.toByteArray(Charsets.UTF_8)
                 )
             }

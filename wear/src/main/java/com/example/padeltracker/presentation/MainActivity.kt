@@ -8,7 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.padeltracker.presentation.ui.WearApp
 import com.example.padeltracker.presentation.viewmodel.MatchViewModel
 import com.example.padeltracker.presentation.data.PendingMatchSetupStore
-import com.example.padeltracker.shared.WearCommunicationConstants
+import com.example.padeltracker.shared.communication.WearPaths
 import com.google.android.gms.wearable.Wearable
 import android.Manifest // heartbeat
 import android.content.pm.PackageManager
@@ -35,11 +35,11 @@ class MainActivity : ComponentActivity() {
 
     private fun registerWatchCapability() {
         Wearable.getCapabilityClient(this)
-            .addLocalCapability(WearCommunicationConstants.WATCH_CAPABILITY)
+            .addLocalCapability(WearPaths.WATCH_CAPABILITY)
             .addOnSuccessListener {
                 Log.d(
                     "WATCH_CAPABILITY",
-                    "Local capability registered: ${WearCommunicationConstants.WATCH_CAPABILITY}"
+                    "Local capability registered: ${WearPaths.WATCH_CAPABILITY}"
                 )
             }
             .addOnFailureListener { error ->

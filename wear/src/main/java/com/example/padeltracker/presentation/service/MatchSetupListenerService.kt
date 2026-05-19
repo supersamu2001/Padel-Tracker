@@ -6,7 +6,7 @@ import com.example.padeltracker.shared.MatchSetup
 import com.example.padeltracker.shared.MatchSetupDataKeys
 import com.example.padeltracker.shared.PlayerSetup
 import com.example.padeltracker.shared.TeamSetup
-import com.example.padeltracker.shared.WearCommunicationConstants
+import com.example.padeltracker.shared.communication.WearPaths
 import com.example.padeltracker.presentation.data.PendingMatchSetupStore
 import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
@@ -31,7 +31,7 @@ class MatchSetupListenerService : WearableListenerService() {
             Log.d(TAG, "Data event received. type=${event.type}, path=$path")
 
             if (event.type == DataEvent.TYPE_CHANGED &&
-                path == WearCommunicationConstants.MATCH_SETUP_PATH
+                path == WearPaths.MATCH_SETUP
             ) {
                 val dataMap = DataMapItem.fromDataItem(dataItem).dataMap
                 val setup = dataMap.toMatchSetup()
