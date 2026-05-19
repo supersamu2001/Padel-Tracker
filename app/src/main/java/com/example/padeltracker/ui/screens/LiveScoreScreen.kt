@@ -147,7 +147,6 @@ fun LiveScoreScreen(
     }
 }
 
-// 🟢 NEW: Custom UI Components for the professional Scoreboard look
 
 @Composable
 fun PadelScoreboard(teamAName: String, teamBName: String, scoreString: String) {

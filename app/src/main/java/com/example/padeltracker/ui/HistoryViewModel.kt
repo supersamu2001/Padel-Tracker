@@ -13,7 +13,7 @@ class HistoryViewModel(
     private val repository: HistoryRepository
 ) : ViewModel() {
 
-    // Λίστα αγώνων που ανανεώνεται αυτόματα
+    // match list
     val matches: StateFlow<List<MatchRecord>> = repository
         .getAllMatches()
         .stateIn(
@@ -22,7 +22,7 @@ class HistoryViewModel(
             initialValue = emptyList()
         )
 
-    // Διαγραφή αγώνα
+    // Delete game
     fun deleteMatch(match: MatchRecord) {
         viewModelScope.launch {
             repository.deleteMatch(match)

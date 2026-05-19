@@ -22,7 +22,6 @@ class MatchEndedListenerService : WearableListenerService() {
 
     override fun onCreate() {
         super.onCreate()
-        // Αρχιποιούμε τη δική σου βάση δεδομένων
         val database = AppDatabase.getDatabase(this)
         repository = HistoryRepository(database.matchDao())
     }
@@ -32,19 +31,16 @@ class MatchEndedListenerService : WearableListenerService() {
 
         Log.d("PHONE_MATCH_ENDED", "Message received. path=${messageEvent.path}")
 
-        // Εδώ το κινητό ακούει τον "τίτλο" που στείλαμε από το ρολόι
         if (messageEvent.path == "/match_stats") {
             val rawData = messageEvent.data?.toString(Charsets.UTF_8) ?: ""
             Log.d("PHONE_MATCH_ENDED", "Received payload from wear: $rawData")
 
             try {
-                // Σπάμε το κείμενο με βάση την κάθετη γραμμή (|) για να πάρουμε τα 13 στατιστικά
                 val tokens = rawData.split("|")
                 val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
-                // Φτιάχνουμε το MatchRecord με τα πραγματικά δεδομένα που ήρθαν live από το ρολόι
                 val completedMatch = MatchRecord(
-                    id = 0, // Το Room θα δώσει αυτόματο ID
+                    id = 0,
                     date = currentDate,
                     score = tokens.getOrNull(0) ?: "0-0",
                     avgHeartRate = tokens.getOrNull(1)?.toIntOrNull() ?: 0,
@@ -61,12 +57,12 @@ class MatchEndedListenerService : WearableListenerService() {
                     heartRateHistory = tokens.getOrNull(12) ?: ""
                 )
 
-                // ΚΑΛΟΥΜΕ ΤΟΝ ΚΩΔΙΚΑ ΣΟΥ: Αποθήκευση στη βάση δεδομένων του κινητού!
+                // save in data base of the phone
                 serviceScope.launch {
                     repository.insertMatch(completedMatch)
                     Log.d("PHONE_MATCH_ENDED", "Match saved to Room database successfully!")
 
-                    // Ενημερώνουμε το σύστημα ότι ο αγώνας έληξε για να γίνει η αλλαγή οθονών
+                    // end match
                     PhoneMatchEndedEventBus.notifyMatchEnded(System.currentTimeMillis())
                 }
 

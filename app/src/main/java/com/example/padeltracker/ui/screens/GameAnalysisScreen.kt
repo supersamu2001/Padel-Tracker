@@ -26,6 +26,10 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
+import android.graphics.Paint
+import android.graphics.Typeface
 
 @Composable
 fun GameAnalysisScreen(
@@ -100,23 +104,27 @@ fun GameAnalysisScreen(
                 )
             }
 
-            // heartbeat graph
-           // if (record != null && record.heartRateHistory.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(20.dp))
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
-                    shape = RoundedCornerShape(24.dp)
-                ) {
-                    Column(modifier = Modifier.padding(20.dp)) {
-                        Text("HEART RATE ZONES", color = activeRed, fontWeight = FontWeight.Bold, fontSize = 12.sp)
-                        Spacer(modifier = Modifier.height(16.dp))
+            // HEART RATE GRAPH
+            Spacer(modifier = Modifier.height(20.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
+                shape = RoundedCornerShape(24.dp)
+            ) {
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Text("HEART RATE ZONES", color = activeRed, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                        val actualHistory = record?.heartRateHistory ?: ""
-                        HeartRateGraph(historyStr = actualHistory, color = activeRed)
+                    val actualHistory = record?.heartRateHistory ?: ""
+
+                    // MODIFIED: Passed the duration down to the graph for the X axis
+                    HeartRateGraph(
+                        historyStr = actualHistory,
+                        durationStr = record?.duration,
+                        color = activeRed
+                    )
                 }
-          }
-
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -154,18 +162,17 @@ fun GameAnalysisScreen(
 
 // heartbeat graphs
 @Composable
-fun HeartRateGraph(historyStr: String, color: Color) {
-    // Convert the comma-separated string into a list of floats
+fun HeartRateGraph(historyStr: String, durationStr: String?, color: Color) {
     val points = historyStr.split(",").mapNotNull { it.trim().toFloatOrNull() }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp),
+            // MODIFIED: Increased height slightly to accommodate the text axes
+            .height(150.dp),
         contentAlignment = Alignment.Center
     ) {
         if (points.size < 2) {
-            // Clean placeholder overlay that keeps the Card open and structured
             Text(
                 text = "No heart rate data recorded for this match",
                 color = Color.White.copy(alpha = 0.4f),
@@ -177,19 +184,30 @@ fun HeartRateGraph(historyStr: String, color: Color) {
                 val width = size.width
                 val height = size.height
 
-                // Horizontal spacing is directly tied to the timeline (number of data samples)
-                val pointSpacing = width / (points.size - 1)
+                // ADDED: Padding to ensure text doesn't overlap with the edges
+                val paddingLeft = 35.dp.toPx()
+                val paddingBottom = 20.dp.toPx()
+                val paddingTop = 10.dp.toPx()
+                val paddingRight = 15.dp.toPx()
+
+                val graphWidth = width - paddingLeft - paddingRight
+                val graphHeight = height - paddingTop - paddingBottom
 
                 val maxBpm = points.maxOrNull() ?: 180f
-                val minBpm = (points.minOrNull() ?: 60f) - 10f
+                val minBpm = points.minOrNull() ?: 60f
 
+                // ADDED: Calculate range with a small buffer so lines don't hit the absolute ceiling/floor
+                val bpmRange = if (maxBpm == minBpm) 1f else (maxBpm - minBpm) * 1.2f
+                val baseMinBpm = minBpm - (bpmRange * 0.1f)
+
+                // 1. DRAWING THE GRAPH LINE
                 val path = Path()
+                val pointSpacing = graphWidth / (points.size - 1)
 
                 points.forEachIndexed { index, bpm ->
-                    val x = index * pointSpacing
-                    // Vertical mapping is explicitly proportional to the heart rate value
-                    val normalizedY = 1f - ((bpm - minBpm) / (maxBpm - minBpm))
-                    val y = normalizedY * height
+                    val x = paddingLeft + (index * pointSpacing)
+                    val normalizedY = 1f - ((bpm - baseMinBpm) / bpmRange)
+                    val y = paddingTop + (normalizedY * graphHeight)
 
                     if (index == 0) {
                         path.moveTo(x, y)
@@ -202,11 +220,37 @@ fun HeartRateGraph(historyStr: String, color: Color) {
                     path = path,
                     color = color,
                     style = Stroke(
-                        width = 4.dp.toPx(),
+                        width = 3.dp.toPx(),
                         cap = StrokeCap.Round,
                         join = StrokeJoin.Round
                     )
                 )
+
+                // 2. DRAWING THE AXIS TEXT (Numbers only)
+                val textPaint = Paint().apply {
+                    this.color = android.graphics.Color.WHITE
+                    alpha = (255 * 0.5f).toInt() // Semi-transparent white
+                    textSize = 10.dp.toPx()
+                    typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                    textAlign = Paint.Align.RIGHT
+                }
+
+                drawIntoCanvas { canvas ->
+                    val nativeCanvas = canvas.nativeCanvas
+
+                    // ADDED: Y-Axis (Top, Middle, Bottom values - Numbers ONLY)
+                    nativeCanvas.drawText("${maxBpm.toInt()}", paddingLeft - 8.dp.toPx(), paddingTop + 4.dp.toPx(), textPaint)
+                    nativeCanvas.drawText("${((maxBpm + minBpm) / 2).toInt()}", paddingLeft - 8.dp.toPx(), paddingTop + (graphHeight / 2) + 4.dp.toPx(), textPaint)
+                    nativeCanvas.drawText("${minBpm.toInt()}", paddingLeft - 8.dp.toPx(), paddingTop + graphHeight + 4.dp.toPx(), textPaint)
+
+                    // ADDED: X-Axis (Time from 0 to Match Duration)
+                    textPaint.textAlign = Paint.Align.LEFT
+                    nativeCanvas.drawText("0", paddingLeft, height - 2.dp.toPx(), textPaint)
+
+                    val duration = durationStr ?: "0"
+                    textPaint.textAlign = Paint.Align.RIGHT
+                    nativeCanvas.drawText("$duration min", width - paddingRight, height - 2.dp.toPx(), textPaint)
+                }
             }
         }
     }
