@@ -39,7 +39,6 @@ fun HistoryScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            // ΔΙΟΡΘΩΣΗ: Αλλάξαμε το historyscreen_jpg σε historyscreen
             painter = painterResource(id = R.drawable.historyscreen),
             contentDescription = null,
             contentScale = ContentScale.Crop,

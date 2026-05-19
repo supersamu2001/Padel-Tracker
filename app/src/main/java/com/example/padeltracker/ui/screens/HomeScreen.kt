@@ -74,9 +74,9 @@ fun HomeScreen(
             Text(
                 text = "Padel Tracker",
                 fontSize = 42.sp,
-                fontWeight = FontWeight.Black,
+                fontWeight = FontWeight.ExtraBold,
                 color = Color.White,
-                letterSpacing = 2.sp
+
             )
 
             Spacer(modifier = Modifier.height(20.dp))
