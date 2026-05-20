@@ -6,7 +6,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
-import com.example.padeltracker.shared.communication.WearPaths
 import com.google.android.gms.wearable.Wearable
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -35,6 +34,10 @@ import com.example.padeltracker.shared.sensors.ImuVector
 import com.example.padeltracker.shared.shotrecognition.ShotWindow
 import com.example.padeltracker.shared.communication.SensorPacketSerializer
 import com.example.padeltracker.shared.shotrecognition.ShotFeatureVector
+import com.example.padeltracker.shared.communication.WearPaths
+import com.example.padeltracker.shared.communication.ScoreHeader
+import com.example.padeltracker.shared.communication.SensorPacket
+import com.example.padeltracker.shared.experiment.ExperimentMode
 
 class WearSensorManager(
     private val context: Context,
@@ -236,24 +239,39 @@ class WearSensorManager(
         timestampNanos: Long,
         value: ImuVector
     ) {
-        // RAW_TO_PHONE mode will be implemented in a later step.
-        Log.d(
-            TAG,
-            "Raw sample ready for sending. sensorType=$sensorType, timestamp=$timestampNanos, value=$value"
-        )
-    }
-
-    private fun sendShotWindowForDataCollection(shotWindow: ShotWindow) {
-        val data = SensorPacketSerializer.serializeShotWindow(
-            shotWindow = shotWindow,
-            teamASets = currentTeamASets,
-            teamBSets = currentTeamBSets,
-            teamAGames = currentTeamAGames,
-            teamBGames = currentTeamBGames
+        val data = SensorPacketSerializer.serialize(
+            mode = ExperimentMode.RAW_TO_PHONE,
+            packet = SensorPacket.RawSensorSample(
+                sensorType = sensorType,
+                timestampNanos = timestampNanos,
+                value = value
+            )
         )
 
         targetNodeId?.let { nodeId ->
-            messageClient.sendMessage(nodeId, WearPaths.SENSOR_SHOT, data)
+            messageClient.sendMessage(nodeId, WearPaths.SENSOR_RAW, data)
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "FAILED TO SEND RAW SAMPLE: ${e.message}")
+                }
+        }
+    }
+
+    private fun sendShotWindowForDataCollection(shotWindow: ShotWindow) {
+        val data = SensorPacketSerializer.serialize(
+            mode = ExperimentMode.DATA_COLLECTION,
+            packet = SensorPacket.DataCollectionShotWindow(
+                shotWindow = shotWindow,
+                scoreHeader = ScoreHeader(
+                    teamASets = currentTeamASets,
+                    teamBSets = currentTeamBSets,
+                    teamAGames = currentTeamAGames,
+                    teamBGames = currentTeamBGames
+                )
+            )
+        )
+
+        targetNodeId?.let { nodeId ->
+            messageClient.sendMessage(nodeId, WearPaths.SENSOR_SHOT_DATA_COLLECTION, data)
                 .addOnSuccessListener {
                     Log.d(
                         TAG,
@@ -268,19 +286,45 @@ class WearSensorManager(
     }
 
     private fun sendShotWindowForClassification(shotWindow: ShotWindow) {
-        // SHOT_TO_PHONE mode will be implemented in a later step.
-        Log.d(
-            TAG,
-            "Classification shot ready for sending. samples=${shotWindow.totalSamples}"
+        val data = SensorPacketSerializer.serialize(
+            mode = ExperimentMode.SHOT_TO_PHONE,
+            packet = SensorPacket.ShotWindowPacket(
+                shotWindow = shotWindow
+            )
         )
+
+        targetNodeId?.let { nodeId ->
+            messageClient.sendMessage(nodeId, WearPaths.SENSOR_SHOT_WINDOW, data)
+                .addOnSuccessListener {
+                    Log.d(
+                        TAG,
+                        "Classification shot sent successfully! (${shotWindow.totalSamples} samples)"
+                    )
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "FAILED TO SEND CLASSIFICATION SHOT: ${e.message}")
+                }
+        }
     }
 
     private fun sendFeatureVector(features: ShotFeatureVector) {
-        // FEATURES_TO_PHONE mode will be implemented in a later step.
-        Log.d(
-            TAG,
-            "Feature vector ready for sending. features=${features.values.size}"
+        val data = SensorPacketSerializer.serialize(
+            mode = ExperimentMode.FEATURES_TO_PHONE,
+            packet = SensorPacket.FeatureVector(features)
         )
+
+        targetNodeId?.let { nodeId ->
+            messageClient.sendMessage(nodeId, WearPaths.SENSOR_FEATURES, data)
+                .addOnSuccessListener {
+                    Log.d(
+                        TAG,
+                        "Feature vector sent successfully! (${features.values.size} features)"
+                    )
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "FAILED TO SEND FEATURE VECTOR: ${e.message}")
+                }
+        }
     }
 
     // called when the accuracy of a sensor changes. It's not essential for our purpose

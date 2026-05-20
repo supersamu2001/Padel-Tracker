@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.mutableDoubleStateOf
 import com.google.android.gms.wearable.Wearable
 import androidx.lifecycle.AndroidViewModel
 import com.example.padeltracker.presentation.communication.MatchEndedSender
@@ -257,20 +256,6 @@ class MatchViewModel @JvmOverloads constructor(
     fun endMatchEarly() {
         _state.value = engine.endMatchEarly(_state.value)
         updateSensorScoreMarker()
-    }
-
-    // NEW: A helper template function for future use.
-    // Once the team implements shot recognition, this function should be called
-    // passing the shot type in order to increment the correct counter.
-    fun logDetectedShot(shotType: String) {
-        when (shotType.lowercase()) {
-            "forehand" -> forehandsCount++
-            "backhand" -> backhandsCount++
-            "smash" -> smashesCount++
-            "service" -> servicesCount++
-            "forehand_lob" -> forehandLobsCount++
-            "backhand_lob" -> backhandLobsCount++
-        }
     }
 
     /**

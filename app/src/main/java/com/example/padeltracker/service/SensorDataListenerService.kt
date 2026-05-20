@@ -6,20 +6,21 @@ import com.example.padeltracker.ml.ShotClassifier
 import com.example.padeltracker.ml.ShotDetectionState
 import com.example.padeltracker.shared.communication.WearPaths
 import com.example.padeltracker.shared.communication.SensorPacketSerializer
+import com.example.padeltracker.shared.communication.SensorPacket
+import com.example.padeltracker.shared.experiment.ExperimentMode
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.WearableListenerService
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
+import com.example.padeltracker.shared.shotrecognition.ShotFeatureExtractor
+import com.example.padeltracker.shared.experiment.ExperimentConfig
+import com.example.padeltracker.shared.shotrecognition.ShotDetector
 
 class SensorDataListenerService : WearableListenerService() {
 
     private var classifier: ShotClassifier? = null
     private var shotLogger: ShotLogger? = null
     private val TAG = "SensorDataListener"
-
-    // Buffers for data accumulation
-    private val accBuffer = mutableListOf<FloatArray>()
-    private val gyroBuffer = mutableListOf<FloatArray>()
+    private val experimentConfig = ExperimentConfig()
+    private val phoneShotDetector = ShotDetector(experimentConfig)
 
     override fun onCreate() {
         super.onCreate()
@@ -35,109 +36,174 @@ class SensorDataListenerService : WearableListenerService() {
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
-        // Log verbose to inspect every message received by the phone
-        // Log.v(TAG, "Received message on path: ${messageEvent.path}")
+        val data = messageEvent.data
 
-        // RECEPTION OF ALL THE SENSOR SAMPLES
-        if (messageEvent.path == WearPaths.SENSOR_RAW) {
-            val data = messageEvent.data ?: return
+        when (messageEvent.path) {
+            WearPaths.SENSOR_RAW -> {
+                handleRawSensorPacket(data)
+            }
 
-            try {
-                val buffer = ByteBuffer.wrap(data)
-                buffer.order(ByteOrder.LITTLE_ENDIAN)
+            WearPaths.SENSOR_SHOT_DATA_COLLECTION -> {
+                handleDataCollectionShotPacket(data)
+            }
 
-                val sensorType = buffer.int
-                val x = buffer.float
-                val y = buffer.float
-                val z = buffer.float
+            WearPaths.SENSOR_SHOT_WINDOW -> {
+                handleShotWindowPacket(data)
+            }
 
-                // Update global state for the UI
-                SensorStatusState.updateData(sensorType, x, y, z)
+            WearPaths.SENSOR_FEATURES -> {
+                handleFeatureVectorPacket(data)
+            }
 
-                when (sensorType) {
-                    Sensor.TYPE_ACCELEROMETER -> accBuffer.add(floatArrayOf(x, y, z))
-                    Sensor.TYPE_GYROSCOPE -> gyroBuffer.add(floatArrayOf(x, y, z))
-                }
-
-                /**
-                if (accBuffer.size >= WINDOW_SIZE && gyroBuffer.size >= WINDOW_SIZE) {
-                processInference()
-                }
-                 */
-            } catch (e: Exception) {
-                Log.e(TAG, "Parsing error: ${e.message}")
+            else -> {
+                Log.d(TAG, "Ignored message on path: ${messageEvent.path}")
             }
         }
+    }
 
-        // RECEPTION OF THE SHOT SAMPLES BATCH
-        if (messageEvent.path == WearPaths.SENSOR_SHOT) {
-            val data = messageEvent.data ?: return
+    private fun handleRawSensorPacket(data: ByteArray) {
+        try {
+            val packet = SensorPacketSerializer.deserialize(
+                mode = ExperimentMode.RAW_TO_PHONE,
+                data = data
+            ) as SensorPacket.RawSensorSample
 
-            try {
-                val packet = SensorPacketSerializer.deserializeShotWindow(data)
-                val shotWindow = packet.shotWindow
+            val value = packet.value
 
-                val accBatch = shotWindow.samples.map { sample ->
-                    floatArrayOf(
-                        sample.accelerometer.x,
-                        sample.accelerometer.y,
-                        sample.accelerometer.z
+            SensorStatusState.updateData(
+                type = packet.sensorType,
+                x = value.x,
+                y = value.y,
+                z = value.z
+            )
+
+            val shotWindow = when (packet.sensorType) {
+                Sensor.TYPE_ACCELEROMETER -> {
+                    phoneShotDetector.addAccelerometerSample(
+                        timestampNanos = packet.timestampNanos,
+                        value = value
                     )
                 }
 
-                val gyroBatch = shotWindow.samples.map { sample ->
-                    floatArrayOf(
-                        sample.gyroscope.x,
-                        sample.gyroscope.y,
-                        sample.gyroscope.z
+                Sensor.TYPE_GYROSCOPE -> {
+                    phoneShotDetector.addGyroscopeSample(
+                        timestampNanos = packet.timestampNanos,
+                        value = value
                     )
                 }
+
+                else -> null
+            }
+
+            if (shotWindow != null) {
+                val features = ShotFeatureExtractor.extract(shotWindow)
 
                 Log.d(
                     TAG,
-                    "Received shot: ${shotWindow.totalSamples} samples, scoreMarker=${packet.scoreMarker}"
+                    "Raw pipeline detected shot. samples=${shotWindow.totalSamples}, features=${features.values.size}"
                 )
 
-                // Save in the CSV file with score marker
-                shotLogger?.logShot(accBatch, gyroBatch, packet.scoreMarker)
+                // TODO:
+                // When the final classifier is ready, pass features.toFloatArray()
+                // to the model here.
 
-                // Update the UI state
                 SensorStatusState.recordShot(shotWindow.totalSamples)
-
-            } catch (e: Exception) {
-                Log.e(TAG, "Error parsing shot batch: ${e.message}", e)
             }
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error parsing raw sensor packet: ${e.message}", e)
         }
     }
 
-    /**
-    private fun processInference() {
-    val currentClassifier = classifier ?: return
+    private fun handleDataCollectionShotPacket(data: ByteArray) {
+        try {
+            val packet = SensorPacketSerializer.deserialize(
+                mode = ExperimentMode.DATA_COLLECTION,
+                data = data
+            ) as SensorPacket.DataCollectionShotWindow
 
-    val input = FloatArray(WINDOW_SIZE * 6)
-    for (i in 0 until WINDOW_SIZE) {
-    val acc = accBuffer[i]
-    val gyro = gyroBuffer[i]
-    input[i * 6 + 0] = acc[0]
-    input[i * 6 + 1] = acc[1]
-    input[i * 6 + 2] = acc[2]
-    input[i * 6 + 3] = gyro[0]
-    input[i * 6 + 4] = gyro[1]
-    input[i * 6 + 5] = gyro[2]
+            val shotWindow = packet.shotWindow
+            val scoreMarker = packet.scoreHeader.scoreMarker
+
+            val accBatch = shotWindow.samples.map { sample ->
+                floatArrayOf(
+                    sample.accelerometer.x,
+                    sample.accelerometer.y,
+                    sample.accelerometer.z
+                )
+            }
+
+            val gyroBatch = shotWindow.samples.map { sample ->
+                floatArrayOf(
+                    sample.gyroscope.x,
+                    sample.gyroscope.y,
+                    sample.gyroscope.z
+                )
+            }
+
+            Log.d(
+                TAG,
+                "Received data collection shot: ${shotWindow.totalSamples} samples, scoreMarker=$scoreMarker"
+            )
+
+            shotLogger?.logShot(accBatch, gyroBatch, scoreMarker)
+
+            SensorStatusState.recordShot(shotWindow.totalSamples)
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error parsing data collection shot packet: ${e.message}", e)
+        }
     }
 
-    val result = currentClassifier.classify(input)
-    if (result != com.example.padeltracker.ml.ShotType.UNKNOWN) {
-    Log.d(TAG, "Colpo rilevato: $result")
-    ShotDetectionState.recordShot(result)
+    private fun handleShotWindowPacket(data: ByteArray) {
+        try {
+            val packet = SensorPacketSerializer.deserialize(
+                mode = ExperimentMode.SHOT_TO_PHONE,
+                data = data
+            ) as SensorPacket.ShotWindowPacket
+
+            val shotWindow = packet.shotWindow
+            val features = ShotFeatureExtractor.extract(shotWindow)
+
+            Log.d(
+                TAG,
+                "Shot window received. samples=${shotWindow.totalSamples}, features=${features.values.size}"
+            )
+
+            // TODO:
+            // When the final classifier is ready, pass features.toFloatArray()
+            // to the model here.
+
+            SensorStatusState.recordShot(shotWindow.totalSamples)
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error parsing classification shot packet: ${e.message}", e)
+        }
     }
 
-    accBuffer.clear()
-    gyroBuffer.clear()
+    private fun handleFeatureVectorPacket(data: ByteArray) {
+        try {
+            val packet = SensorPacketSerializer.deserialize(
+                mode = ExperimentMode.FEATURES_TO_PHONE,
+                data = data
+            ) as SensorPacket.FeatureVector
+
+            Log.d(
+                TAG,
+                "Feature vector received. features=${packet.values.size}"
+            )
+
+            // TODO:
+            // When the final classifier is ready, pass packet.toFloatArray()
+            // to the model here.
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error parsing feature vector packet: ${e.message}", e)
+        }
     }
-     **/
 
     override fun onDestroy() {
+        phoneShotDetector.reset()
         classifier?.close()
         Log.d(TAG, "Service destroyed")
         super.onDestroy()
