@@ -189,7 +189,7 @@ class MainActivity : ComponentActivity() {
                                     setup = activeMatchSetup,
                                     onGoHome = {
                                         selectedMatchForAnalysis = null
-                                        currentScreen = AppScreen.Home
+                                        currentScreen = AppScreen.History
                                     }
                                 )
                             }

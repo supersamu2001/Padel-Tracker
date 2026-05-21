@@ -22,6 +22,7 @@ import com.example.padeltracker.R
 import com.example.padeltracker.data.MatchRecord
 import com.example.padeltracker.shared.MatchSetup
 import androidx.compose.foundation.Canvas
+import androidx.activity.compose.BackHandler
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
@@ -43,6 +44,10 @@ fun GameAnalysisScreen(
     val teamANames = record?.teamAPlayers ?: setup?.teamA?.players?.joinToString(" & ") { it.name } ?: "Team A"
     val teamBNames = record?.teamBPlayers ?: setup?.teamB?.players?.joinToString(" & ") { it.name } ?: "Team B"
     val displayScore = record?.score ?: "Match Data"
+
+    BackHandler {
+        onGoHome()
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
