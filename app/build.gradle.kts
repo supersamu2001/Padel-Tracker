@@ -70,10 +70,9 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Room Database with KSP for match history
-    val roomVersion = "2.8.4"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
     // TensorFlow Lite
     implementation("org.tensorflow:tensorflow-lite:2.16.1")

@@ -9,7 +9,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.padeltracker.data.AppDatabase
+import com.example.padeltracker.data.HistoryRepository
 import com.example.padeltracker.data.MatchRecord
 import com.example.padeltracker.shared.MatchSetup
 import com.example.padeltracker.shared.communication.WearPaths
@@ -19,11 +23,9 @@ import com.example.padeltracker.wear.PhoneMatchEndedEventBus
 import com.example.padeltracker.wear.WearMatchSetupSender
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.Wearable
-import com.google.android.gms.wearable.DataClient
-import com.google.android.gms.wearable.DataEvent
-import com.google.android.gms.wearable.DataMapItem
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-
 
 // Navigation Enum
 enum class AppScreen { Home, Setup, History, LiveMatch, Analysis }
@@ -46,8 +48,12 @@ class MainActivity : ComponentActivity() {
                 var activeMatchSetup by remember { mutableStateOf<MatchSetup?>(null) }
                 var selectedMatchForAnalysis by remember { mutableStateOf<MatchRecord?>(null) }
 
-                // Temporary list for History
-                val matchHistory = remember { mutableStateListOf<MatchRecord>() }
+                // Database and Repository
+                val database = remember { AppDatabase.getDatabase(this@MainActivity) }
+                val repository = remember { HistoryRepository(database.matchDao()) }
+
+                // Persistent list from Room
+                val matchHistory by repository.getAllMatches().collectAsState(initial = emptyList())
 
                 val snackbarHostState = remember { SnackbarHostState() }
                 val scope = rememberCoroutineScope()
@@ -56,60 +62,22 @@ class MainActivity : ComponentActivity() {
                     WearMatchSetupSender(this@MainActivity)
                 }
 
-                // NEW,1. Starts DataClient
-                val dataClient = Wearable.getDataClient(this@MainActivity)
-
-                // always "listen" data from the game
-                DisposableEffect(Unit) {
-                    val dataListener = DataClient.OnDataChangedListener { dataEvents ->
-                        dataEvents.forEach { event ->
-                            if (event.type == DataEvent.TYPE_CHANGED &&
-                                event.dataItem.uri.path == WearPaths.MATCH_RESULT
-                            ) {
-                                val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
-
-                                val match = MatchRecord(
-                                    date = dataMap.getString("date") ?: "",
-                                    duration = dataMap.getString("duration") ?: "",
-                                    score = dataMap.getString("score") ?: "",
-                                    avgHeartRate = dataMap.getInt("avgHeartRate"),
-                                    heartRateHistory = dataMap.getString("heartRateHistory") ?: "",
-                                    forehands = dataMap.getInt("forehands"),
-                                    backhands = dataMap.getInt("backhands"),
-                                    forehandLobs = dataMap.getInt("forehandLobs"),
-                                    backhandLobs = dataMap.getInt("backhandLobs"),
-                                    smashes = dataMap.getInt("smashes"),
-                                    services = dataMap.getInt("services"),
-                                    teamAPlayers = dataMap.getString("teamAPlayers") ?: "",
-                                    teamBPlayers = dataMap.getString("teamBPlayers") ?: "",
-                                    winner = dataMap.getString("winner") ?: ""
-                                )
-
-                                Log.d("DATA_SYNC", "Match received! HeartRate History: ${match.heartRateHistory}")
-
-                                // put data in the screen and history
-                                selectedMatchForAnalysis = match
-                                matchHistory.add(0, match)
-                                currentScreen = AppScreen.Analysis
-                            }
-                        }
-                    }
-                    dataClient.addListener(dataListener)
-                    onDispose {
-                        dataClient.removeListener(dataListener)
-                    }
-                }
-
-                // 2. Listen for match-ended messages from Wear
+                // 2. Listen for match-ended messages from Wear (via EventBus from Service)
                 LaunchedEffect(Unit) {
                     PhoneMatchEndedEventBus.events.collect { endedAt ->
                         Log.d("PHONE_MATCH_ENDED", "Match ended event received: $endedAt")
 
-                        if (currentScreen == AppScreen.LiveMatch) {
-
+                        // Wait a bit for the DB to be written by the Service
+                        delay(700)
+                        
+                        // Get the latest match from DB
+                        val latestMatch = repository.getAllMatches().first().firstOrNull()
+                        
+                        if (currentScreen == AppScreen.LiveMatch || currentScreen == AppScreen.Home) {
+                            selectedMatchForAnalysis = latestMatch
                             currentScreen = AppScreen.Analysis
                             scope.launch {
-                                snackbarHostState.showSnackbar("Match ended from watch! Loading data...")
+                                snackbarHostState.showSnackbar("Match ended! Data saved.")
                             }
                         }
                     }
@@ -120,8 +88,6 @@ class MainActivity : ComponentActivity() {
                     if (isCheckingWatch) return
                     isCheckingWatch = true
 
-                    Log.d("WATCH_DEBUG", "Starting watch capability check...")
-
                     Wearable.getCapabilityClient(this@MainActivity)
                         .getCapability(
                             WearPaths.WATCH_CAPABILITY,
@@ -130,11 +96,9 @@ class MainActivity : ComponentActivity() {
                         .addOnSuccessListener { capabilityInfo ->
                             isCheckingWatch = false
                             if (capabilityInfo.nodes.isNotEmpty()) {
-                                Log.d("WATCH_DEBUG", "Watch found. Opening setup.")
                                 isWatchConnected = true
                                 currentScreen = AppScreen.Setup
                             } else {
-                                Log.d("WATCH_DEBUG", "No watch found.")
                                 isWatchConnected = false
                                 scope.launch {
                                     snackbarHostState.showSnackbar("No Padel Tracker watch connected")
@@ -144,7 +108,6 @@ class MainActivity : ComponentActivity() {
                         .addOnFailureListener { error ->
                             isCheckingWatch = false
                             isWatchConnected = false
-                            Log.e("WATCH_DEBUG", "Connection check failed", error)
                             scope.launch {
                                 snackbarHostState.showSnackbar("Unable to check watch connection")
                             }
@@ -179,8 +142,8 @@ class MainActivity : ComponentActivity() {
                         when (currentScreen) {
                             AppScreen.Home -> {
                                 HomeScreen(
-                                    isConnected = isWatchConnected, // Real status
-                                    onNewGameClick = { checkWatchAndOpenSetup() }, // Real check
+                                    isConnected = isWatchConnected,
+                                    onNewGameClick = { checkWatchAndOpenSetup() },
                                     onHistoryClick = { currentScreen = AppScreen.History }
                                 )
                             }
@@ -189,7 +152,6 @@ class MainActivity : ComponentActivity() {
                                 MatchSetupScreen(
                                     onBackClick = { currentScreen = AppScreen.Home },
                                     onSendToWatch = { setup ->
-                                        // Επαναφορά της αποστολής στο ρολόι
                                         matchSetupSender.sendMatchSetup(
                                             setup = setup,
                                             onSuccess = {
@@ -214,6 +176,7 @@ class MainActivity : ComponentActivity() {
                                     LiveScoreScreen(
                                         setup = setup,
                                         onFinish = {
+                                            // Optional: Local finish if watch doesn't send event
                                             currentScreen = AppScreen.Analysis
                                         }
                                     )
@@ -240,7 +203,10 @@ class MainActivity : ComponentActivity() {
                                         currentScreen = AppScreen.Analysis
                                     },
                                     onDeleteMatch = { match ->
-                                        matchHistory.removeIf { it.id == match.id }                                    }
+                                        scope.launch {
+                                            repository.deleteMatch(match)
+                                        }
+                                    }
                                 )
                             }
                         }
