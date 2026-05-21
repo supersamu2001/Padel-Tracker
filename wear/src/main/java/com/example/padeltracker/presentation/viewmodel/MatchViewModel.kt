@@ -348,7 +348,7 @@ class MatchViewModel @JvmOverloads constructor(
         )
 
 
-        val info = "$finalScore|$avgHr|$forehandsCount|$backhandsCount|$smashesCount|$servicesCount|$forehandLobsCount|$backhandLobsCount|$teamA|$teamB|$winnerName|$finalDuration|$historyString"
+        val info = "$finalScore|$avgHr|$teamA|$teamB|$winnerName|$finalDuration|$historyString"
         val wearContext = getApplication<Application>()
 
         Wearable.getNodeClient(wearContext).connectedNodes.addOnSuccessListener { nodes ->

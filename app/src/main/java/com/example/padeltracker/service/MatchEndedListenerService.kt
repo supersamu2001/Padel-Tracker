@@ -1,6 +1,7 @@
 package com.example.padeltracker.service
 
 import android.util.Log
+import com.example.padeltracker.ml.ShotDetectionState
 import com.example.padeltracker.data.AppDatabase
 import com.example.padeltracker.data.HistoryRepository
 import com.example.padeltracker.data.MatchRecord
@@ -31,6 +32,12 @@ class MatchEndedListenerService : WearableListenerService() {
 
         Log.d("PHONE_MATCH_ENDED", "Message received. path=${messageEvent.path}")
 
+        if (messageEvent.path == "/match_started") {
+            ShotDetectionState.reset()
+            Log.d("PHONE_MATCH_ENDED", "Match started: ShotDetectionState reset")
+            return
+        }
+
         if (messageEvent.path == "/match_stats") {
             val rawData = messageEvent.data?.toString(Charsets.UTF_8) ?: ""
             Log.d("PHONE_MATCH_ENDED", "Received payload from wear: $rawData")
@@ -39,22 +46,26 @@ class MatchEndedListenerService : WearableListenerService() {
                 val tokens = rawData.split("|")
                 val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
+                // Use the counts from the phone's classifier
+                val currentShots = ShotDetectionState.shotCounts.value
+
                 val completedMatch = MatchRecord(
+                    // Room generates automatically a new incremental ID
                     id = 0,
                     date = currentDate,
                     score = tokens.getOrNull(0) ?: "0-0",
                     avgHeartRate = tokens.getOrNull(1)?.toIntOrNull() ?: 0,
-                    forehands = tokens.getOrNull(2)?.toIntOrNull() ?: 0,
-                    backhands = tokens.getOrNull(3)?.toIntOrNull() ?: 0,
-                    smashes = tokens.getOrNull(4)?.toIntOrNull() ?: 0,
-                    services = tokens.getOrNull(5)?.toIntOrNull() ?: 0,
-                    forehandLobs = tokens.getOrNull(6)?.toIntOrNull() ?: 0,
-                    backhandLobs = tokens.getOrNull(7)?.toIntOrNull() ?: 0,
-                    teamAPlayers = tokens.getOrNull(8) ?: "Team A",
-                    teamBPlayers = tokens.getOrNull(9) ?: "Team B",
-                    winner = tokens.getOrNull(10) ?: "Draw",
-                    duration = tokens.getOrNull(11) ?: "00:00",
-                    heartRateHistory = tokens.getOrNull(12) ?: ""
+                    forehands = currentShots.forehands,
+                    backhands = currentShots.backhands,
+                    smashes = currentShots.smashes,
+                    services = currentShots.services,
+                    forehandLobs = currentShots.forehandLobs,
+                    backhandLobs = currentShots.backhandLobs,
+                    teamAPlayers = tokens.getOrNull(2) ?: "Team A",
+                    teamBPlayers = tokens.getOrNull(3) ?: "Team B",
+                    winner = tokens.getOrNull(4) ?: "Draw",
+                    duration = tokens.getOrNull(5) ?: "00:00",
+                    heartRateHistory = tokens.getOrNull(6) ?: ""
                 )
 
                 // save in data base of the phone

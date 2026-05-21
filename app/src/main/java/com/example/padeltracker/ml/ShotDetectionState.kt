@@ -27,8 +27,8 @@ object ShotDetectionState {
             when (type) {
                 ShotType.FOREHAND -> current.copy(forehands = current.forehands + 1)
                 ShotType.BACKHAND -> current.copy(backhands = current.backhands + 1)
-                ShotType.LOB_BACKHAND -> current.copy(forehandLobs = current.forehandLobs + 1)
-                ShotType.LOB_FOREHAND -> current.copy(backhandLobs = current.backhandLobs + 1)
+                ShotType.LOB_BACKHAND -> current.copy(backhandLobs = current.backhandLobs + 1)
+                ShotType.LOB_FOREHAND -> current.copy(forehandLobs = current.forehandLobs + 1)
                 ShotType.SMASH -> current.copy(smashes = current.smashes + 1)
                 ShotType.SERVICE -> current.copy(services = current.services + 1)
                 ShotType.UNKNOWN -> current
