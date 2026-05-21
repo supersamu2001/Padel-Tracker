@@ -118,30 +118,24 @@ class ShotClassifier(private val context: Context) {
         ShotType.UNKNOWN
     )
 
-    /**
-     * @param shotWindow La finestra di campioni IMU grezzi
-     * @return Il nome del colpo previsto
-     */
+    // Called by handlers that receive raw data
     fun classify_shot(shotWindow: ShotWindow): ShotType {
-        val features = ShotFeatureExtractor.extract(shotWindow)
-        val featureGrezze = features.values.map { it.toDouble() }.toDoubleArray()
-        return classify_shot(featureGrezze)
+        val featureVector = ShotFeatureExtractor.extract(shotWindow)
+        val inputFeature = featureVector.values.map { it.toDouble() }.toDoubleArray()
+        return classify_shot(inputFeature)
     }
 
-    /**
-     * @param featureGrezze Un array con i valori estratti dai sensori (non scalati)
-     * @return Il nome del colpo previsto
-     */
-    fun classify_shot(featureGrezze: DoubleArray): ShotType {
+    // Called by the handler that receives feature vector
+    fun classify_shot(inputFeature: DoubleArray): ShotType {
         // Controllo di sicurezza
-        if (featureGrezze.size != meansPython.size) {
+        if (inputFeature.size != meansPython.size) {
             throw IllegalArgumentException("Il numero di feature non corrisponde al modello!")
         }
 
         // STEP 1: Standardizzazione (Sostituisce lo StandardScaler di Python)
-        val featureStandardizzate = DoubleArray(featureGrezze.size)
-        for (i in featureGrezze.indices) {
-            featureStandardizzate[i] = (featureGrezze[i] - meansPython[i]) / deviationsPython[i]
+        val featureStandardizzate = DoubleArray(inputFeature.size)
+        for (i in inputFeature.indices) {
+            featureStandardizzate[i] = (inputFeature[i] - meansPython[i]) / deviationsPython[i]
         }
 
         // Il modello restituisce un array di "score" (uno per ogni classe/colpo)
@@ -155,17 +149,17 @@ class ShotClassifier(private val context: Context) {
         }
 
         // STEP 3: Troviamo l'indice del colpo con lo score più alto (ArgMax)
-        var indiceMigliore = 0
-        var punteggioMassimo = scoresPrevisione[0]
+        var bestIndex = 0
+        var bestScore = scoresPrevisione[0]
 
         for (i in 1 until scoresPrevisione.size) {
-            if (scoresPrevisione[i] > punteggioMassimo) {
-                punteggioMassimo = scoresPrevisione[i]
-                indiceMigliore = i
+            if (scoresPrevisione[i] > bestScore) {
+                bestScore = scoresPrevisione[i]
+                bestIndex = i
             }
         }
 
         // Restituiamo direttamente l'Enum!
-        return indiceToShotType[indiceMigliore]
+        return indiceToShotType[bestIndex]
     }
 }

@@ -208,7 +208,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = "Track every smash, analyze your game, and own the court.",
+                    text = "Keep the score,track every shot and analyze your game.",
                     fontSize = 14.sp,
                     color = Color.White.copy(alpha = 0.8f),
                     lineHeight = 20.sp

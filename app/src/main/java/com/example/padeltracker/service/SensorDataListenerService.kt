@@ -66,6 +66,7 @@ class SensorDataListenerService : WearableListenerService() {
         }
     }
 
+    // Stream of all the raw data
     private fun handleRawSensorPacket(data: ByteArray) {
         try {
             val packet = SensorPacketSerializer.deserialize(
@@ -118,6 +119,7 @@ class SensorDataListenerService : WearableListenerService() {
         }
     }
 
+    // Window with the 51 raw samples of the detected shot with the score_marker (to populate our dataset)
     private fun handleDataCollectionShotPacket(data: ByteArray) {
         try {
             val packet = SensorPacketSerializer.deserialize(
@@ -158,6 +160,7 @@ class SensorDataListenerService : WearableListenerService() {
         }
     }
 
+    // Window with the 51 raw samples of the detected shot
     private fun handleShotWindowPacket(data: ByteArray) {
         try {
             val packet = SensorPacketSerializer.deserialize(
@@ -183,6 +186,7 @@ class SensorDataListenerService : WearableListenerService() {
         }
     }
 
+    // Feature engineering already done on the watch
     private fun handleFeatureVectorPacket(data: ByteArray) {
         try {
             val packet = SensorPacketSerializer.deserialize(
