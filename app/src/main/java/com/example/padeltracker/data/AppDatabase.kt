@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
+// CLASS THE MAKE THE ACTUAL CONNECTION WITH THE DATABASE
 @Database(entities = [MatchRecord::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 

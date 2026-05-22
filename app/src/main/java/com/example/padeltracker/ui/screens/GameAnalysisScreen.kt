@@ -57,8 +57,16 @@ fun GameAnalysisScreen(
 
     val teamANames = record?.teamAPlayers ?: setup?.teamA?.players?.joinToString(" & ") { it.name } ?: "Team A"
     val teamBNames = record?.teamBPlayers ?: setup?.teamB?.players?.joinToString(" & ") { it.name } ?: "Team B"
-    val displayScore = record?.score ?: "Match Data"
 
+    val rawScore = record?.score ?: "Match Data"
+    val displayScore = if (rawScore.endsWith(", 0-0")) {
+        rawScore.removeSuffix(", 0-0")
+    } else if (rawScore.endsWith(" 0-0")) { // Caso nel caso non ci sia la virgola
+        rawScore.removeSuffix(" 0-0")
+    } else {
+        rawScore
+    }
+    
     // Required tools for taking the screenshot and sharing it
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -93,6 +101,7 @@ fun GameAnalysisScreen(
             Text("MATCH ANALYSIS", fontSize = 32.sp, fontWeight = FontWeight.Black, color = Color.White)
 
                 // Share Button logic
+                // TODO: FIX THAT
                 IconButton(onClick = {
                     coroutineScope.launch {
                         try {

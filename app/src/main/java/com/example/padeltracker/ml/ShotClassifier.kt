@@ -10,6 +10,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.channels.FileChannel
 
+// Defines all the possible types of shot
 enum class ShotType {
     BACKHAND,
     FOREHAND,
@@ -19,82 +20,6 @@ enum class ShotType {
     SMASH,
     UNKNOWN
 }
-
-/**
-class ShotClassifier(private val context: Context) {
-    private val modelPath = "PadelModel.java"
-
-    init {
-        try {
-            val modelBuffer = loadModelFile(context.assets, modelPath)
-            val options = Interpreter.Options()
-            interpreter = Interpreter(modelBuffer, options)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun loadModelFile(assetManager: AssetManager, modelPath: String): ByteBuffer {
-        val fileDescriptor = assetManager.openFd(modelPath)
-        val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
-        val fileChannel = inputStream.channel
-        val startOffset = fileDescriptor.startOffset
-        val declaredLength = fileDescriptor.declaredLength
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
-    }
-
-    /**
-     * Classify the shot basing on the data taken from sensors
-     * @param sensorData Array of floats (ex. Accelerometer x,y,z in a temporal window)
-     * @return The predicted type of shot
-     */
-
-    fun classify(sensorData: FloatArray): ShotType {
-        if (interpreter == null) return ShotType.UNKNOWN
-
-        // TO DO: ADAPTATION (FOR INSTANCE NORMALIZATION!!)
-
-        // Esempio: il modello accetta un input di forma (1, 40, 6) float32
-        // Dobbiamo convertire il FloatArray in un ByteBuffer o un input compatibile
-
-        // Supponiamo che l'output sia un array di probabilità per ogni classe
-        val output = Array(1) { FloatArray(6) } // 6 classi: forehand, backhand, etc.
-
-        try {
-            // Se il modello accetta direttamente FloatArray multidimensionali:
-            // interpreter?.run(input, output)
-
-            // Per ora usiamo un placeholder per l'input basato sul tuo specifico modello
-            val inputBuffer = ByteBuffer.allocateDirect(sensorData.size * 4)
-            inputBuffer.order(ByteOrder.nativeOrder())
-            sensorData.forEach { inputBuffer.putFloat(it) }
-
-            interpreter?.run(inputBuffer, output)
-
-            // Trova l'indice con la probabilità più alta
-            val probabilities = output[0]
-            val maxIndex = probabilities.indices.maxByOrNull { probabilities[it] } ?: -1
-
-            return when (maxIndex) {
-                0 -> ShotType.FOREHAND
-                1 -> ShotType.BACKHAND
-                2 -> ShotType.FOREHAND_LOB
-                3 -> ShotType.BACKHAND_LOB
-                4 -> ShotType.SMASH
-                5 -> ShotType.SERVICE
-                else -> ShotType.UNKNOWN
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return ShotType.UNKNOWN
-        }
-    }
-
-    fun close() {
-        interpreter?.close()
-        interpreter = null
-    }
-}*/
 
 class ShotClassifier(private val context: Context) {
 
@@ -108,7 +33,8 @@ class ShotClassifier(private val context: Context) {
         1.89960233, 23.36507338, 0.47896065, 0.69782331, 1.00508985, 2.84259446, 5.314987, 0.65587988, 0.86148267, 1.06423845, 5.05724417, 3.21789723,
         0.49682259, 0.68346756, 0.83304647, 3.44881048, 2.03285384, 0.96556716, 0.79870687, 1.02141473, 0.38839306, 5.15482384)
 
-    private val indiceToShotType = arrayOf(
+    // Maps the ML model indices into the actual shot type
+    private val indexToShotType = arrayOf(
         ShotType.BACKHAND,
         ShotType.FOREHAND,
         ShotType.LOB_BACKHAND,
@@ -124,41 +50,40 @@ class ShotClassifier(private val context: Context) {
         return classify_shot(inputFeature)
     }
 
-    // Called by the handler that receives feature vector
+    // Called directly by the handler that receives feature vector
     fun classify_shot(inputFeature: DoubleArray): ShotType {
-        // Controllo di sicurezza
+        // Security check
         if (inputFeature.size != meansPython.size) {
-            throw IllegalArgumentException("Il numero di feature non corrisponde al modello!")
+            throw IllegalArgumentException("The number of features do not correspond to the model!")
         }
 
-        // STEP 1: Standardizzazione (Sostituisce lo StandardScaler di Python)
-        val featureStandardizzate = DoubleArray(inputFeature.size)
+        // Standardization
+        val standardizedFeatures = DoubleArray(inputFeature.size)
         for (i in inputFeature.indices) {
-            featureStandardizzate[i] = (inputFeature[i] - meansPython[i]) / deviationsPython[i]
+            standardizedFeatures[i] = (inputFeature[i] - meansPython[i]) / deviationsPython[i]
         }
 
-        // Il modello restituisce un array di "score" (uno per ogni classe/colpo)
-        val scoresPrevisione: DoubleArray = PadelModel.score(featureStandardizzate)
+        // The model returns an array of “scores” (one for each class/shot)
+        val predictedScores: DoubleArray = PadelModel.score(standardizedFeatures)
 
-        // Controllo di sicurezza sugli indici
-        if (scoresPrevisione.size != indiceToShotType.size) {
-            // Se le dimensioni non combaciano, significa che il modello è stato addestrato
-            // con un numero di classi diverso da quello che ci aspettiamo qui.
+        // Check on the indices
+        if (predictedScores.size != indexToShotType.size) {
+            // If the dimensions don't match, it means the model was trained with a different number of classes than we expect here.
             return ShotType.UNKNOWN
         }
 
-        // STEP 3: Troviamo l'indice del colpo con lo score più alto (ArgMax)
+        // Find the shot with the highest score
         var bestIndex = 0
-        var bestScore = scoresPrevisione[0]
+        var bestScore = predictedScores[0]
 
-        for (i in 1 until scoresPrevisione.size) {
-            if (scoresPrevisione[i] > bestScore) {
-                bestScore = scoresPrevisione[i]
+        for (i in 1 until predictedScores.size) {
+            if (predictedScores[i] > bestScore) {
+                bestScore = predictedScores[i]
                 bestIndex = i
             }
         }
 
-        // Restituiamo direttamente l'Enum!
-        return indiceToShotType[bestIndex]
+        // Return directly the enum
+        return indexToShotType[bestIndex]
     }
 }

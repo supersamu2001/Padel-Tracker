@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        // set variables that keep information about the system
         setContent {
             PadelTrackerTheme {
                 // NAVIGATION STATE
@@ -49,7 +50,9 @@ class MainActivity : ComponentActivity() {
 
                 // DATA STATES
                 // contains the infos about the match
+                // MatchSetup => set up to initialize the match
                 var activeMatchSetup by remember { mutableStateOf<MatchSetup?>(null) }
+                // MatchRecord => class representing a single match in the database
                 var selectedMatchForAnalysis by remember { mutableStateOf<MatchRecord?>(null) }
 
                 // Database and Repository
@@ -59,6 +62,8 @@ class MainActivity : ComponentActivity() {
                 // Persistent list from Room
                 val matchHistory by repository.getAllMatches().collectAsState(initial = emptyList())
 
+                // SnackBar: small black notification that appears at the bottom of the screen
+                // snackbarHostState manages this notifications
                 val snackbarHostState = remember { SnackbarHostState() }
                 val scope = rememberCoroutineScope()
 
@@ -66,7 +71,8 @@ class MainActivity : ComponentActivity() {
                     WearMatchSetupSender(this@MainActivity)
                 }
 
-                // 2. Listen for match-ended messages from Wear (via EventBus from Service)
+                // Listener that when receives the signal that the match is ended, retrieve data just saved from the latest match,
+                // wait a bit and then move them into the AnalysisScreen
                 LaunchedEffect(Unit) {
                     PhoneMatchEndedEventBus.events.collect { endedAt ->
                         Log.d("PHONE_MATCH_ENDED", "Match ended event received: $endedAt")
@@ -87,7 +93,8 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                // 3. WATCH CHECK FUNCTION
+                // Check if the app is installed and reachable on the watch. Called when the user
+                // wants to go to the screen where he set up the match
                 fun checkWatchAndOpenSetup() {
                     if (isCheckingWatch) return
                     isCheckingWatch = true
@@ -118,7 +125,7 @@ class MainActivity : ComponentActivity() {
                         }
                 }
 
-                // 4. INITIAL CHECK WHEN APP STARTS
+                // INITIAL CHECK WHEN APP STARTS
                 LaunchedEffect(Unit) {
                     Wearable.getCapabilityClient(this@MainActivity)
                         .getCapability(
@@ -143,6 +150,7 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                             .background(BackgroundBeige)
                     ) {
+                        // Shows the correct screen based on the value of "currentScreen"
                         when (currentScreen) {
                             AppScreen.Home -> {
                                 HomeScreen(

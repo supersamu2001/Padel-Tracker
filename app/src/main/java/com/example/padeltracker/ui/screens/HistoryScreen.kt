@@ -80,7 +80,17 @@ fun HistoryScreen(
 }
 
 @Composable
-fun MatchHistoryCard(match: MatchRecord, onClick: () -> Unit, onDelete: () -> Unit) {    Card(
+fun MatchHistoryCard(match: MatchRecord, onClick: () -> Unit, onDelete: () -> Unit) {
+    // Logic to clean the score: remove the third set if it is 0-0
+    val displayScore = if (match.score.endsWith(", 0-0")) {
+        match.score.removeSuffix(", 0-0")
+    } else if (match.score.endsWith(" 0-0")) {
+        match.score.removeSuffix(" 0-0")
+    } else {
+        match.score
+    }
+
+    Card(
         modifier = Modifier.fillMaxWidth().clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.9f))
@@ -104,7 +114,7 @@ fun MatchHistoryCard(match: MatchRecord, onClick: () -> Unit, onDelete: () -> Un
                     Text(text = "vs", fontSize = 12.sp, color = Color.Gray)
                     Text(text = match.teamBPlayers, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
-                Text(text = match.score, fontSize = 24.sp, fontWeight = FontWeight.Black, color = Color(0xFF008080))
+                Text(text = displayScore, fontSize = 24.sp, fontWeight = FontWeight.Black, color = Color(0xFF008080))
             }
         }
     }
