@@ -14,6 +14,9 @@ import com.google.android.gms.wearable.WearableListenerService
 import com.example.padeltracker.shared.experiment.ExperimentConfig
 import com.example.padeltracker.shared.shotrecognition.ShotDetector
 
+/**
+ * Handle all the messages received by the watch (regarding the data from sensors)
+ */
 class SensorDataListenerService : WearableListenerService() {
 
     private var classifier: ShotClassifier? = null
@@ -21,6 +24,8 @@ class SensorDataListenerService : WearableListenerService() {
     private val TAG = "SensorDataListener"
     private val experimentConfig = ExperimentConfig()
     private val phoneShotDetector = ShotDetector(experimentConfig)
+
+    // override: call an already existing funtion (in this case of WearableListenerService)
 
     override fun onCreate() {
         super.onCreate()
@@ -39,22 +44,22 @@ class SensorDataListenerService : WearableListenerService() {
         val data = messageEvent.data
 
         when (messageEvent.path) {
-            // Stream di tutti i dati
+            // Stream of all the data
             WearPaths.SENSOR_RAW -> {
                 handleRawSensorPacket(data)
             }
 
-            // Finestra con i 51 samples dello shot detectato con score_marker
+            // Window with the 51 raw samples of the detected shot with the score_marker (to populate our dataset)
             WearPaths.SENSOR_SHOT_DATA_COLLECTION -> {
                 handleDataCollectionShotPacket(data)
             }
 
-            // Finestra con i 51 samples dello shot detectato
+            // Window with the 51 raw samples of the detected shot
             WearPaths.SENSOR_SHOT_WINDOW -> {
                 handleShotWindowPacket(data)
             }
 
-            // Feature engineering già fatta nello smartwatch
+            // Feature engineering already done on the watch
             WearPaths.SENSOR_FEATURES -> {
                 handleFeatureVectorPacket(data)
             }
@@ -75,12 +80,14 @@ class SensorDataListenerService : WearableListenerService() {
 
             val value = packet.value
 
+            /**
             SensorStatusState.updateData(
                 type = packet.sensorType,
                 x = value.x,
                 y = value.y,
                 z = value.z
             )
+            */
 
             val shotWindow = when (packet.sensorType) {
                 Sensor.TYPE_ACCELEROMETER -> {
@@ -174,8 +181,11 @@ class SensorDataListenerService : WearableListenerService() {
                 "Shot window received. samples=${shotWindow.totalSamples}"
             )
 
+            // send raw data to the classifier for the classification
             val shotType = classifier?.classify_shot(shotWindow) ?: ShotType.UNKNOWN
             Log.d(TAG, "Shot classified: $shotType")
+
+            // record the shot for the visualization on the final AnalysisScreen
             ShotDetectionState.recordShot(shotType)
 
             SensorStatusState.recordShot(shotWindow.totalSamples)

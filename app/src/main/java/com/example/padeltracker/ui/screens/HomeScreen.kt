@@ -34,11 +34,13 @@ fun HomeScreen(
     onNewGameClick: () -> Unit,
     onHistoryClick: () -> Unit
 ) {
+    /**
     val lastDataTime by SensorStatusState.lastMessageReceived.collectAsState()
     val accValues by SensorStatusState.lastAccValues.collectAsState()
     val gyroValues by SensorStatusState.lastGyroValues.collectAsState()
     val lastShotTime by SensorStatusState.lastShotTime.collectAsState()
     val lastShotSamples by SensorStatusState.lastShotSamplesCount.collectAsState()
+    */
 
     val infiniteTransition = rememberInfiniteTransition(label = "ball_anim")
     val offsetY by infiniteTransition.animateFloat(
@@ -105,6 +107,7 @@ fun HomeScreen(
                 )
             }
 
+            /**
             // INFO: Sensor data reception status
             lastDataTime?.let { timestamp ->
                 val timeString = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
@@ -124,6 +127,7 @@ fun HomeScreen(
                     fontSize = 10.sp, color = Color.White.copy(alpha = 0.7f)
                 )
             }
+            */
 
             /**
             // Detected Shots Section
