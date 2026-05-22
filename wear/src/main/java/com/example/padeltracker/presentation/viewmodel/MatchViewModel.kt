@@ -29,12 +29,6 @@ class MatchViewModel @JvmOverloads constructor(
     private var matchEndedMessageSent = false
     private var currentMatchUsesPhoneSetup = false
     private var matchStartTimeMs: Long = 0L
-    private var forehandsCount = 0
-    private var backhandsCount = 0
-    private var smashesCount = 0
-    private var servicesCount = 0
-    private var forehandLobsCount = 0
-    private var backhandLobsCount = 0
     private val _state = mutableStateOf(createInitialState())
     val state: State<ScoreTrackerState> = _state
 
@@ -183,14 +177,6 @@ class MatchViewModel @JvmOverloads constructor(
 
         matchStartTimeMs = System.currentTimeMillis()
 
-        // new, zero for the start of the game
-        forehandsCount = 0
-        backhandsCount = 0
-        smashesCount = 0
-        servicesCount = 0
-        forehandLobsCount = 0
-        backhandLobsCount = 0
-
         _state.value = engine.startMatch(_state.value)
 
         updateSensorScoreMarker()
@@ -283,6 +269,10 @@ class MatchViewModel @JvmOverloads constructor(
         matchEndedMessageSent = true
 
         Log.d(TAG, "User confirmed end match. Sending match ended message.")
+        // Stop sensor tracking before sending match-end data.
+        // This prevents sensor packets, especially RAW_TO_PHONE packets,
+        // from delaying the match-ended communication.
+        sensorManager.stopTracking()
 
         // 1. Names
         val teamA = match.teamA.players.joinToString(" & ") { it.name }
@@ -321,13 +311,7 @@ class MatchViewModel @JvmOverloads constructor(
             teamBPlayers = teamB,
             score = finalScore,
             winner = winnerName,
-            duration = finalDuration,
-            forehands = forehandsCount,
-            backhands = backhandsCount,
-            smashes = smashesCount,
-            services = servicesCount,
-            forehandLobs = forehandLobsCount,
-            backhandLobs = backhandLobsCount
+            duration = finalDuration
         )
 
         val info = "$finalScore|$avgHr|$teamA|$teamB|$winnerName|$finalDuration|$historyString"

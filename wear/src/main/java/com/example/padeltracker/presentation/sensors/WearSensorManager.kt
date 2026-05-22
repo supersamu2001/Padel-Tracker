@@ -41,7 +41,7 @@ import com.example.padeltracker.shared.experiment.ExperimentMode
 
 class WearSensorManager(
     private val context: Context,
-    private val onHeartRateChanged: (Double) -> Unit // <--- ΠΡΟΣΘΕΣΕ ΑΥΤΟ
+    private val onHeartRateChanged: (Double) -> Unit
 ) : SensorEventListener {
 
     private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
