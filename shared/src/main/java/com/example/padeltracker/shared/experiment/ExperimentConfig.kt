@@ -9,9 +9,9 @@ package com.example.padeltracker.shared.experiment
  */
 data class ExperimentConfig(
     //val mode: ExperimentMode = ExperimentMode.DATA_COLLECTION,
-    //val mode: ExperimentMode = ExperimentMode.RAW_TO_PHONE,
+    val mode: ExperimentMode = ExperimentMode.RAW_TO_PHONE,
     //val mode: ExperimentMode = ExperimentMode.FEATURES_TO_PHONE,
-    val mode: ExperimentMode = ExperimentMode.SHOT_TO_PHONE,
+    //val mode: ExperimentMode = ExperimentMode.SHOT_TO_PHONE,
     /**
      * Sensor sampling frequency.
      *

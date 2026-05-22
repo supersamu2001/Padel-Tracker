@@ -8,7 +8,6 @@ import com.example.padeltracker.shared.shotrecognition.ShotDetector
 import com.example.padeltracker.shared.shotrecognition.ShotFeatureExtractor
 import com.example.padeltracker.shared.shotrecognition.ShotFeatureVector
 import com.example.padeltracker.shared.shotrecognition.ShotWindow
-import android.util.Log
 
 /**
  * Coordinates the sensor processing pipeline on the watch.
@@ -54,7 +53,6 @@ class WearExperimentPipeline(
             }
 
             ExperimentMode.DATA_COLLECTION -> {
-                Log.d("WEAR_PIPELINE", "DATA_COLLECTION sample received. sensorType=$sensorType")
                 val shotWindow = detectShotIfAvailable(
                     sensorType = sensorType,
                     timestampNanos = timestampNanos,
@@ -62,7 +60,6 @@ class WearExperimentPipeline(
                 )
 
                 if (shotWindow != null) {
-                    Log.d("WEAR_PIPELINE", "ShotWindow produced with ${shotWindow.totalSamples} samples")
                     onShotWindow(shotWindow, ShotWindowPurpose.DATA_COLLECTION)
                 }
             }

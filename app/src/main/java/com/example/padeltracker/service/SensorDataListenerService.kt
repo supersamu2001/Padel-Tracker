@@ -13,7 +13,6 @@ import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.WearableListenerService
 import com.example.padeltracker.shared.experiment.ExperimentConfig
 import com.example.padeltracker.shared.shotrecognition.ShotDetector
-import com.example.padeltracker.shared.shotrecognition.ShotWindow
 
 class SensorDataListenerService : WearableListenerService() {
 
@@ -182,7 +181,7 @@ class SensorDataListenerService : WearableListenerService() {
             SensorStatusState.recordShot(shotWindow.totalSamples)
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error parsing classification shot packet: ${e.message}", e)
+            Log.e(TAG, "Error parsing shot window packet: ${e.message}", e)
         }
     }
 
@@ -211,7 +210,6 @@ class SensorDataListenerService : WearableListenerService() {
 
     override fun onDestroy() {
         phoneShotDetector.reset()
-        // classifier?.close()
         Log.d(TAG, "Service destroyed")
         super.onDestroy()
     }

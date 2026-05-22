@@ -21,13 +21,7 @@ class MatchEndedSender(
                        teamBPlayers: String,
                        score: String,
                        winner: String,
-                       duration: String,
-                       forehands: Int,
-                       backhands: Int,
-                       smashes: Int,
-                       services: Int,
-                       forehandLobs: Int,
-                       backhandLobs: Int)
+                       duration: String)
 
     {
 
@@ -51,12 +45,6 @@ class MatchEndedSender(
             dataMap.putString("teamBPlayers", teamBPlayers)
             dataMap.putString("winner", winner)
             dataMap.putInt("avgHeartRate", avgHeartRate)
-            dataMap.putInt("forehands", forehands)
-            dataMap.putInt("backhands", backhands)
-            dataMap.putInt("smashes", smashes)
-            dataMap.putInt("services", services)
-            dataMap.putInt("forehandLobs", forehandLobs)
-            dataMap.putInt("backhandLobs", backhandLobs)
         }.asPutDataRequest()
 
         putDataReq.setUrgent()

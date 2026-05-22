@@ -114,8 +114,7 @@ class ShotClassifier(private val context: Context) {
         ShotType.LOB_BACKHAND,
         ShotType.LOB_FOREHAND,
         ShotType.SERVICE,
-        ShotType.SMASH,
-        ShotType.UNKNOWN
+        ShotType.SMASH
     )
 
     // Called by handlers that receive raw data
