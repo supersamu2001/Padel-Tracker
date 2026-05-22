@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.example.padeltracker.shared.communication.WearPaths
 
 class MatchEndedListenerService : WearableListenerService() {
 
@@ -32,13 +33,13 @@ class MatchEndedListenerService : WearableListenerService() {
 
         Log.d("PHONE_MATCH_ENDED", "Message received. path=${messageEvent.path}")
 
-        if (messageEvent.path == "/match_started") {
+        if (messageEvent.path == WearPaths.MATCH_STARTED) {
             ShotDetectionState.reset()
             Log.d("PHONE_MATCH_ENDED", "Match started: ShotDetectionState reset")
             return
         }
 
-        if (messageEvent.path == "/match_stats") {
+        if (messageEvent.path == WearPaths.MATCH_STATS) {
             val rawData = messageEvent.data?.toString(Charsets.UTF_8) ?: ""
             Log.d("PHONE_MATCH_ENDED", "Received payload from wear: $rawData")
 

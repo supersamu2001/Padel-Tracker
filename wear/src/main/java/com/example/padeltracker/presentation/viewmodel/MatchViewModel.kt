@@ -283,6 +283,10 @@ class MatchViewModel @JvmOverloads constructor(
         matchEndedMessageSent = true
 
         Log.d(TAG, "User confirmed end match. Sending match ended message.")
+        // Stop sensor tracking before sending match-end data.
+        // This prevents sensor packets, especially RAW_TO_PHONE packets,
+        // from delaying the match-ended communication.
+        sensorManager.stopTracking()
 
         // 1. Names
         val teamA = match.teamA.players.joinToString(" & ") { it.name }

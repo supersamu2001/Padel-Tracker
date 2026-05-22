@@ -8,8 +8,10 @@ package com.example.padeltracker.shared.experiment
  * rely on duplicated constants.
  */
 data class ExperimentConfig(
-    val mode: ExperimentMode = ExperimentMode.DATA_COLLECTION,
-
+    //val mode: ExperimentMode = ExperimentMode.DATA_COLLECTION,
+    //val mode: ExperimentMode = ExperimentMode.RAW_TO_PHONE,
+    //val mode: ExperimentMode = ExperimentMode.FEATURES_TO_PHONE,
+    val mode: ExperimentMode = ExperimentMode.SHOT_TO_PHONE,
     /**
      * Sensor sampling frequency.
      *
@@ -38,16 +40,16 @@ data class ExperimentConfig(
      *
      * 2G = 2 * 9.81 m/s² = 19.62 m/s².
      */
-    //val accelerationThresholdMps2: Float = 2f * 9.81f,
+    val accelerationThresholdMps2: Float = 2f * 9.81f,
 
     /**
      * Gyroscope threshold used for shot detection.
      */
-    //val gyroscopeThresholdRadS: Float = 5.0f,
+    val gyroscopeThresholdRadS: Float = 5.0f,
 
     // for test on emulator purpose
-    val accelerationThresholdMps2: Float = 0.8f,
-    val gyroscopeThresholdRadS: Float = 0.4f,
+    //val accelerationThresholdMps2: Float = 0.8f,
+    //val gyroscopeThresholdRadS: Float = 0.4f,
 
     /**
      * If true, both acceleration and gyroscope thresholds must be exceeded.
