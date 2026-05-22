@@ -1,5 +1,7 @@
 package com.example.padeltracker.shared
 
+// DATA CLASS: Class that exists just to store a set of data
+
 /**
  * Shared data contract for initializing a match from the phone to the watch.
  */

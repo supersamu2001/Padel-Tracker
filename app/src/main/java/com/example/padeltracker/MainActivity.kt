@@ -38,13 +38,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             PadelTrackerTheme {
                 // NAVIGATION STATE
+                // keep track of in which screen is the user
                 var currentScreen by remember { mutableStateOf(AppScreen.Home) }
 
                 // CONNECTIVITY STATE
+                // Tell if the watch is connected to the phone
                 var isWatchConnected by remember { mutableStateOf(false) }
+
                 var isCheckingWatch by remember { mutableStateOf(false) }
 
                 // DATA STATES
+                // contains the infos about the match
                 var activeMatchSetup by remember { mutableStateOf<MatchSetup?>(null) }
                 var selectedMatchForAnalysis by remember { mutableStateOf<MatchRecord?>(null) }
 
