@@ -209,6 +209,8 @@ class MatchViewModel @JvmOverloads constructor(
 
         updateSensorScoreMarker()
 
+        sensorManager.flushPendingSensorBatches()
+
         broadcastLiveScore()
     }
 

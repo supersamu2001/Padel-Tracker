@@ -87,6 +87,13 @@ class WearSensorManager(
     private val mainHandler = Handler(Looper.getMainLooper())
 
     private var targetNodeId: String? = null
+    private val pendingShotWindows = mutableListOf<ShotWindow>()
+    private val pendingFeatureVectors = mutableListOf<ShotFeatureVector>()
+    private val pendingRawSamples = mutableListOf<SensorPacket.RawSensorSample>()
+
+    private var shotWindowBatchFlushScheduled = false
+    private var featureVectorBatchFlushScheduled = false
+    private var rawBatchFlushScheduled = false
 
     // adding score to  simplify labeling
     @Volatile
@@ -162,6 +169,18 @@ class WearSensorManager(
                     "_G$teamAGames-$teamBGames"
         )
     }
+
+    /**
+     * Sends all pending sensor batches to the phone.
+     *
+     * This should be called when a point is scored and when the match ends.
+     */
+    fun flushPendingSensorBatches() {
+        flushRawSensorBatch()
+        flushShotWindowBatch()
+        flushFeatureVectorBatch()
+    }
+
     fun startTracking() {
         Log.d(TAG, "Start tracking sensors (${experimentConfig.samplingHz}Hz)...")
 
@@ -192,6 +211,7 @@ class WearSensorManager(
 
     fun stopTracking() {
         Log.d(TAG, "Interruption tracking sensors")
+        flushPendingSensorBatches()
         sensorManager.unregisterListener(this)
 
         experimentPipeline.reset()
@@ -239,19 +259,53 @@ class WearSensorManager(
         timestampNanos: Long,
         value: ImuVector
     ) {
-        val data = SensorPacketSerializer.serialize(
-            mode = ExperimentMode.RAW_TO_PHONE,
-            packet = SensorPacket.RawSensorSample(
+        pendingRawSamples.add(
+            SensorPacket.RawSensorSample(
                 sensorType = sensorType,
                 timestampNanos = timestampNanos,
                 value = value
             )
         )
 
+        scheduleRawSensorBatchFlush()
+    }
+
+    private fun scheduleRawSensorBatchFlush() {
+        if (rawBatchFlushScheduled) return
+
+        rawBatchFlushScheduled = true
+
+        mainHandler.postDelayed(
+            {
+                rawBatchFlushScheduled = false
+                flushRawSensorBatch()
+            },
+            experimentConfig.rawBatchDurationMillis
+        )
+    }
+
+    private fun flushRawSensorBatch() {
+        if (pendingRawSamples.isEmpty()) return
+
+        val batch = pendingRawSamples.toList()
+        pendingRawSamples.clear()
+        rawBatchFlushScheduled = false
+
+        val data = SensorPacketSerializer.serialize(
+            mode = ExperimentMode.RAW_TO_PHONE,
+            packet = SensorPacket.RawSensorBatch(batch)
+        )
+
         targetNodeId?.let { nodeId ->
             messageClient.sendMessage(nodeId, WearPaths.SENSOR_RAW, data)
+                .addOnSuccessListener {
+                    Log.d(
+                        TAG,
+                        "Raw sensor batch sent successfully! path=${WearPaths.SENSOR_RAW}, bytes=${data.size}, samples=${batch.size}"
+                    )
+                }
                 .addOnFailureListener { e ->
-                    Log.e(TAG, "FAILED TO SEND RAW SAMPLE: ${e.message}")
+                    Log.e(TAG, "FAILED TO SEND RAW SENSOR BATCH: ${e.message}")
                 }
         }
     }
@@ -286,11 +340,63 @@ class WearSensorManager(
     }
 
     private fun sendShotWindowForClassification(shotWindow: ShotWindow) {
+        pendingShotWindows.add(shotWindow)
+
+        if (pendingShotWindows.size >= experimentConfig.shotWindowBatchSize) {
+            flushShotWindowBatch()
+        } else {
+            scheduleShotWindowBatchFlush()
+        }
+    }
+
+    private fun sendFeatureVector(features: ShotFeatureVector) {
+        pendingFeatureVectors.add(features)
+
+        if (pendingFeatureVectors.size >= experimentConfig.featureVectorBatchSize) {
+            flushFeatureVectorBatch()
+        } else {
+            scheduleFeatureVectorBatchFlush()
+        }
+    }
+
+    private fun scheduleShotWindowBatchFlush() {
+        if (shotWindowBatchFlushScheduled) return
+
+        shotWindowBatchFlushScheduled = true
+
+        mainHandler.postDelayed(
+            {
+                shotWindowBatchFlushScheduled = false
+                flushShotWindowBatch()
+            },
+            experimentConfig.sensorBatchMaxDelayMillis
+        )
+    }
+
+    private fun scheduleFeatureVectorBatchFlush() {
+        if (featureVectorBatchFlushScheduled) return
+
+        featureVectorBatchFlushScheduled = true
+
+        mainHandler.postDelayed(
+            {
+                featureVectorBatchFlushScheduled = false
+                flushFeatureVectorBatch()
+            },
+            experimentConfig.sensorBatchMaxDelayMillis
+        )
+    }
+
+    private fun flushShotWindowBatch() {
+        if (pendingShotWindows.isEmpty()) return
+
+        val batch = pendingShotWindows.toList()
+        pendingShotWindows.clear()
+        shotWindowBatchFlushScheduled = false
+
         val data = SensorPacketSerializer.serialize(
             mode = ExperimentMode.SHOT_TO_PHONE,
-            packet = SensorPacket.ShotWindowPacket(
-                shotWindow = shotWindow
-            )
+            packet = SensorPacket.ShotWindowBatch(batch)
         )
 
         targetNodeId?.let { nodeId ->
@@ -298,19 +404,27 @@ class WearSensorManager(
                 .addOnSuccessListener {
                     Log.d(
                         TAG,
-                        "Classification shot sent successfully! (${shotWindow.totalSamples} samples)"
+                        "Shot window batch sent successfully! path=${WearPaths.SENSOR_SHOT_WINDOW}, bytes=${data.size}, windows=${batch.size}"
                     )
                 }
                 .addOnFailureListener { e ->
-                    Log.e(TAG, "FAILED TO SEND CLASSIFICATION SHOT: ${e.message}")
+                    Log.e(TAG, "FAILED TO SEND SHOT WINDOW BATCH: ${e.message}")
                 }
         }
     }
 
-    private fun sendFeatureVector(features: ShotFeatureVector) {
+    private fun flushFeatureVectorBatch() {
+        if (pendingFeatureVectors.isEmpty()) return
+
+        val batch = pendingFeatureVectors.toList()
+        pendingFeatureVectors.clear()
+        featureVectorBatchFlushScheduled = false
+
         val data = SensorPacketSerializer.serialize(
             mode = ExperimentMode.FEATURES_TO_PHONE,
-            packet = SensorPacket.FeatureVector(features)
+            packet = SensorPacket.FeatureVectorBatch(
+                featureVectors = batch.map { it.values }
+            )
         )
 
         targetNodeId?.let { nodeId ->
@@ -318,11 +432,11 @@ class WearSensorManager(
                 .addOnSuccessListener {
                     Log.d(
                         TAG,
-                        "Feature vector sent successfully! (${features.values.size} features)"
+                        "Feature vector batch sent successfully! path=${WearPaths.SENSOR_FEATURES}, bytes=${data.size}, vectors=${batch.size}"
                     )
                 }
                 .addOnFailureListener { e ->
-                    Log.e(TAG, "FAILED TO SEND FEATURE VECTOR: ${e.message}")
+                    Log.e(TAG, "FAILED TO SEND FEATURE VECTOR BATCH: ${e.message}")
                 }
         }
     }

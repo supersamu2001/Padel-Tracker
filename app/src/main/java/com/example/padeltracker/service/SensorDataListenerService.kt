@@ -14,9 +14,6 @@ import com.google.android.gms.wearable.WearableListenerService
 import com.example.padeltracker.shared.experiment.ExperimentConfig
 import com.example.padeltracker.shared.shotrecognition.ShotDetector
 
-/**
- * Handle all the messages received by the watch (regarding the data from sensors)
- */
 class SensorDataListenerService : WearableListenerService() {
 
     private var classifier: ShotClassifier? = null
@@ -24,8 +21,6 @@ class SensorDataListenerService : WearableListenerService() {
     private val TAG = "SensorDataListener"
     private val experimentConfig = ExperimentConfig()
     private val phoneShotDetector = ShotDetector(experimentConfig)
-
-    // override: call an already existing funtion (in this case of WearableListenerService)
 
     override fun onCreate() {
         super.onCreate()
@@ -43,23 +38,28 @@ class SensorDataListenerService : WearableListenerService() {
     override fun onMessageReceived(messageEvent: MessageEvent) {
         val data = messageEvent.data
 
+        Log.d(
+            TAG,
+            "Message received. path=${messageEvent.path}, bytes=${data.size}"
+        )
+
         when (messageEvent.path) {
-            // Stream of all the data
+            // Stream di tutti i dati
             WearPaths.SENSOR_RAW -> {
                 handleRawSensorPacket(data)
             }
 
-            // Window with the 51 raw samples of the detected shot with the score_marker (to populate our dataset)
+            // Finestra con i 51 samples dello shot detectato con score_marker
             WearPaths.SENSOR_SHOT_DATA_COLLECTION -> {
                 handleDataCollectionShotPacket(data)
             }
 
-            // Window with the 51 raw samples of the detected shot
+            // Finestra con i 51 samples dello shot detectato
             WearPaths.SENSOR_SHOT_WINDOW -> {
                 handleShotWindowPacket(data)
             }
 
-            // Feature engineering already done on the watch
+            // Feature engineering già fatta nello smartwatch
             WearPaths.SENSOR_FEATURES -> {
                 handleFeatureVectorPacket(data)
             }
@@ -76,52 +76,62 @@ class SensorDataListenerService : WearableListenerService() {
             val packet = SensorPacketSerializer.deserialize(
                 mode = ExperimentMode.RAW_TO_PHONE,
                 data = data
-            ) as SensorPacket.RawSensorSample
+            ) as SensorPacket.RawSensorBatch
 
-            val value = packet.value
-
-            /**
-            SensorStatusState.updateData(
-                type = packet.sensorType,
-                x = value.x,
-                y = value.y,
-                z = value.z
+            Log.d(
+                TAG,
+                "Raw sensor batch received. samples=${packet.samples.size}"
             )
-            */
 
-            val shotWindow = when (packet.sensorType) {
-                Sensor.TYPE_ACCELEROMETER -> {
-                    phoneShotDetector.addAccelerometerSample(
-                        timestampNanos = packet.timestampNanos,
-                        value = value
-                    )
-                }
-
-                Sensor.TYPE_GYROSCOPE -> {
-                    phoneShotDetector.addGyroscopeSample(
-                        timestampNanos = packet.timestampNanos,
-                        value = value
-                    )
-                }
-
-                else -> null
-            }
-
-            if (shotWindow != null) {
-                Log.d(
-                    TAG,
-                    "Raw pipeline detected shot. samples=${shotWindow.totalSamples}"
-                )
-
-                val shotType = classifier?.classify_shot(shotWindow) ?: ShotType.UNKNOWN
-                Log.d(TAG, "Raw pipeline shot classified: $shotType")
-                ShotDetectionState.recordShot(shotType)
-
-                SensorStatusState.recordShot(shotWindow.totalSamples)
+            packet.samples.forEach { sample ->
+                processRawSensorSample(sample)
             }
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error parsing raw sensor packet: ${e.message}", e)
+            Log.e(TAG, "Error parsing raw sensor batch packet: ${e.message}", e)
+        }
+    }
+
+    private fun processRawSensorSample(packet: SensorPacket.RawSensorSample) {
+        val value = packet.value
+
+        SensorStatusState.updateData(
+            type = packet.sensorType,
+            x = value.x,
+            y = value.y,
+            z = value.z
+        )
+
+        val shotWindow = when (packet.sensorType) {
+            Sensor.TYPE_ACCELEROMETER -> {
+                phoneShotDetector.addAccelerometerSample(
+                    timestampNanos = packet.timestampNanos,
+                    value = value
+                )
+            }
+
+            Sensor.TYPE_GYROSCOPE -> {
+                phoneShotDetector.addGyroscopeSample(
+                    timestampNanos = packet.timestampNanos,
+                    value = value
+                )
+            }
+
+            else -> null
+        }
+
+        if (shotWindow != null) {
+            Log.d(
+                TAG,
+                "Raw pipeline detected shot. samples=${shotWindow.totalSamples}"
+            )
+
+            val shotType = classifier?.classify_shot(shotWindow) ?: ShotType.UNKNOWN
+            Log.d(TAG, "Raw pipeline shot classified: $shotType")
+
+            ShotDetectionState.recordShot(shotType)
+
+            SensorStatusState.recordShot(shotWindow.totalSamples)
         }
     }
 
@@ -172,26 +182,23 @@ class SensorDataListenerService : WearableListenerService() {
             val packet = SensorPacketSerializer.deserialize(
                 mode = ExperimentMode.SHOT_TO_PHONE,
                 data = data
-            ) as SensorPacket.ShotWindowPacket
-
-            val shotWindow = packet.shotWindow
+            ) as SensorPacket.ShotWindowBatch
 
             Log.d(
                 TAG,
-                "Shot window received. samples=${shotWindow.totalSamples}"
+                "Shot window batch received. windows=${packet.shotWindows.size}"
             )
 
-            // send raw data to the classifier for the classification
-            val shotType = classifier?.classify_shot(shotWindow) ?: ShotType.UNKNOWN
-            Log.d(TAG, "Shot classified: $shotType")
+            packet.shotWindows.forEach { shotWindow ->
+                val shotType = classifier?.classify_shot(shotWindow) ?: ShotType.UNKNOWN
+                Log.d(TAG, "Shot classified: $shotType")
+                ShotDetectionState.recordShot(shotType)
 
-            // record the shot for the visualization on the final AnalysisScreen
-            ShotDetectionState.recordShot(shotType)
-
-            SensorStatusState.recordShot(shotWindow.totalSamples)
+                SensorStatusState.recordShot(shotWindow.totalSamples)
+            }
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error parsing shot window packet: ${e.message}", e)
+            Log.e(TAG, "Error parsing shot window batch packet: ${e.message}", e)
         }
     }
 
@@ -201,20 +208,23 @@ class SensorDataListenerService : WearableListenerService() {
             val packet = SensorPacketSerializer.deserialize(
                 mode = ExperimentMode.FEATURES_TO_PHONE,
                 data = data
-            ) as SensorPacket.FeatureVector
+            ) as SensorPacket.FeatureVectorBatch
 
             Log.d(
                 TAG,
-                "Feature vector received. features=${packet.values.size}"
+                "Feature vector batch received. vectors=${packet.featureVectors.size}"
             )
 
-            val doubleFeatures = packet.values.map { it.toDouble() }.toDoubleArray()
-            val shotType = classifier?.classify_shot(doubleFeatures) ?: ShotType.UNKNOWN
-            Log.d(TAG, "Feature vector classified: $shotType")
-            ShotDetectionState.recordShot(shotType)
+            packet.featureVectors.forEach { values: List<Float> ->
+                val doubleFeatures = values.map { it.toDouble() }.toDoubleArray()
+                val shotType = classifier?.classify_shot(doubleFeatures) ?: ShotType.UNKNOWN
+
+                Log.d(TAG, "Feature vector classified: $shotType")
+                ShotDetectionState.recordShot(shotType)
+            }
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error parsing feature vector packet: ${e.message}", e)
+            Log.e(TAG, "Error parsing feature vector batch packet: ${e.message}", e)
         }
     }
 

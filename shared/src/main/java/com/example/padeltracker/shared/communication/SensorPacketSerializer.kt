@@ -44,7 +44,7 @@ object SensorPacketSerializer {
     ): ByteArray {
         return when (mode) {
             ExperimentMode.RAW_TO_PHONE -> {
-                serializeRawSensorSample(packet.requireType<SensorPacket.RawSensorSample>())
+                serializeRawSensorBatch(packet.requireType<SensorPacket.RawSensorBatch>())
             }
 
             ExperimentMode.DATA_COLLECTION -> {
@@ -52,11 +52,11 @@ object SensorPacketSerializer {
             }
 
             ExperimentMode.SHOT_TO_PHONE -> {
-                serializeShotWindowForClassification(packet.requireType<SensorPacket.ShotWindowPacket>())
+                serializeShotWindowBatch(packet.requireType<SensorPacket.ShotWindowBatch>())
             }
 
             ExperimentMode.FEATURES_TO_PHONE -> {
-                serializeFeatureVector(packet.requireType<SensorPacket.FeatureVector>())
+                serializeFeatureVectorBatch(packet.requireType<SensorPacket.FeatureVectorBatch>())
             }
         }
     }
@@ -71,10 +71,10 @@ object SensorPacketSerializer {
         data: ByteArray
     ): SensorPacket {
         return when (mode) {
-            ExperimentMode.RAW_TO_PHONE -> deserializeRawSensorSample(data)
+            ExperimentMode.RAW_TO_PHONE -> deserializeRawSensorBatch(data)
             ExperimentMode.DATA_COLLECTION -> deserializeShotWindowForDataCollection(data)
-            ExperimentMode.SHOT_TO_PHONE -> deserializeShotWindowForClassification(data)
-            ExperimentMode.FEATURES_TO_PHONE -> deserializeFeatureVector(data)
+            ExperimentMode.SHOT_TO_PHONE -> deserializeShotWindowBatch(data)
+            ExperimentMode.FEATURES_TO_PHONE -> deserializeFeatureVectorBatch(data)
         }
     }
 
@@ -114,6 +114,74 @@ object SensorPacketSerializer {
             timestampNanos = buffer.long,
             value = buffer.readImuVector()
         )
+    }
+
+    /**
+     * Serializes a batch of raw IMU samples.
+     *
+     * Packet format:
+     * - sample count: Int
+     * - for each sample:
+     *   - sensorType: Int
+     *   - timestampNanos: Long
+     *   - x: Float
+     *   - y: Float
+     *   - z: Float
+     */
+    fun serializeRawSensorBatch(
+        packet: SensorPacket.RawSensorBatch
+    ): ByteArray {
+        val samples = packet.samples
+
+        require(samples.isNotEmpty()) {
+            "Cannot serialize an empty raw sensor batch."
+        }
+
+        val buffer = ByteBuffer.allocate(
+            INT_BYTES + samples.size * RAW_SAMPLE_BYTES
+        )
+        buffer.order(ByteOrder.LITTLE_ENDIAN)
+
+        buffer.putInt(samples.size)
+
+        samples.forEach { sample ->
+            buffer.putInt(sample.sensorType)
+            buffer.putLong(sample.timestampNanos)
+            buffer.putImuVector(sample.value)
+        }
+
+        return buffer.array()
+    }
+
+    fun deserializeRawSensorBatch(data: ByteArray): SensorPacket.RawSensorBatch {
+        require(data.size >= INT_BYTES) {
+            "Raw sensor batch packet is too small: ${data.size} bytes."
+        }
+
+        val buffer = ByteBuffer.wrap(data)
+        buffer.order(ByteOrder.LITTLE_ENDIAN)
+
+        val sampleCount = buffer.int
+
+        require(sampleCount > 0) {
+            "Raw sensor batch must contain at least one sample."
+        }
+
+        val expectedSize = INT_BYTES + sampleCount * RAW_SAMPLE_BYTES
+
+        require(data.size == expectedSize) {
+            "Invalid raw sensor batch size: ${data.size} bytes. Expected $expectedSize bytes."
+        }
+
+        val samples = List(sampleCount) {
+            SensorPacket.RawSensorSample(
+                sensorType = buffer.int,
+                timestampNanos = buffer.long,
+                value = buffer.readImuVector()
+            )
+        }
+
+        return SensorPacket.RawSensorBatch(samples)
     }
 
     /**
@@ -193,6 +261,76 @@ object SensorPacketSerializer {
     }
 
     /**
+     * Serializes a batch of shot windows.
+     *
+     * Packet format:
+     * - window count: Int
+     * - for each window:
+     *   - sample count: Int
+     *   - accelerometer samples
+     *   - gyroscope samples
+     */
+    fun serializeShotWindowBatch(
+        packet: SensorPacket.ShotWindowBatch
+    ): ByteArray {
+        val shotWindows = packet.shotWindows
+
+        require(shotWindows.isNotEmpty()) {
+            "Cannot serialize an empty shot window batch."
+        }
+
+        val totalBytes = INT_BYTES + shotWindows.sumOf { shotWindow ->
+            INT_BYTES + shotWindow.totalSamples * BYTES_PER_PAIRED_SAMPLE
+        }
+
+        val buffer = ByteBuffer.allocate(totalBytes)
+        buffer.order(ByteOrder.LITTLE_ENDIAN)
+
+        buffer.putInt(shotWindows.size)
+
+        shotWindows.forEach { shotWindow ->
+            buffer.putInt(shotWindow.totalSamples)
+            writeShotSamples(buffer, shotWindow)
+        }
+
+        return buffer.array()
+    }
+
+    fun deserializeShotWindowBatch(data: ByteArray): SensorPacket.ShotWindowBatch {
+        require(data.size >= INT_BYTES) {
+            "Shot window batch packet is too small: ${data.size} bytes."
+        }
+
+        val buffer = ByteBuffer.wrap(data)
+        buffer.order(ByteOrder.LITTLE_ENDIAN)
+
+        val windowCount = buffer.int
+
+        require(windowCount > 0) {
+            "Shot window batch must contain at least one window."
+        }
+
+        val shotWindows = List(windowCount) {
+            val sampleCount = buffer.int
+
+            require(sampleCount > 0) {
+                "Shot window in batch must contain at least one sample."
+            }
+
+            readShotWindow(
+                buffer = buffer,
+                numSamples = sampleCount
+            )
+        }
+
+        require(!buffer.hasRemaining()) {
+            "Invalid shot window batch packet size: ${buffer.remaining()} unread bytes."
+        }
+
+        return SensorPacket.ShotWindowBatch(shotWindows)
+    }
+
+    /**
      * Serializes a feature vector.
      *
      * Packet format:
@@ -234,6 +372,76 @@ object SensorPacketSerializer {
         }
 
         return SensorPacket.FeatureVector(values = values)
+    }
+
+    /**
+     * Serializes a batch of feature vectors.
+     *
+     * Packet format:
+     * - vector count: Int
+     * - for each vector:
+     *   - feature count: Int
+     *   - feature values: FloatArray
+     */
+    fun serializeFeatureVectorBatch(
+        packet: SensorPacket.FeatureVectorBatch
+    ): ByteArray {
+        val featureVectors = packet.featureVectors
+
+        require(featureVectors.isNotEmpty()) {
+            "Cannot serialize an empty feature vector batch."
+        }
+
+        val totalBytes = INT_BYTES + featureVectors.sumOf { values ->
+            INT_BYTES + values.size * FLOAT_BYTES
+        }
+
+        val buffer = ByteBuffer.allocate(totalBytes)
+        buffer.order(ByteOrder.LITTLE_ENDIAN)
+
+        buffer.putInt(featureVectors.size)
+
+        featureVectors.forEach { values ->
+            buffer.putInt(values.size)
+            values.forEach { value ->
+                buffer.putFloat(value)
+            }
+        }
+
+        return buffer.array()
+    }
+
+    fun deserializeFeatureVectorBatch(data: ByteArray): SensorPacket.FeatureVectorBatch {
+        require(data.size >= INT_BYTES) {
+            "Feature vector batch packet is too small: ${data.size} bytes."
+        }
+
+        val buffer = ByteBuffer.wrap(data)
+        buffer.order(ByteOrder.LITTLE_ENDIAN)
+
+        val vectorCount = buffer.int
+
+        require(vectorCount > 0) {
+            "Feature vector batch must contain at least one vector."
+        }
+
+        val featureVectors = List(vectorCount) {
+            val featureCount = buffer.int
+
+            require(featureCount > 0) {
+                "Feature vector must contain at least one feature."
+            }
+
+            List(featureCount) {
+                buffer.float
+            }
+        }
+
+        require(!buffer.hasRemaining()) {
+            "Invalid feature vector batch packet size: ${buffer.remaining()} unread bytes."
+        }
+
+        return SensorPacket.FeatureVectorBatch(featureVectors)
     }
 
     /**
@@ -418,6 +626,10 @@ sealed class SensorPacket {
         val value: ImuVector
     ) : SensorPacket()
 
+    data class RawSensorBatch(
+        val samples: List<RawSensorSample>
+    ) : SensorPacket()
+
     data class DataCollectionShotWindow(
         val shotWindow: ShotWindow,
         val scoreHeader: ScoreHeader
@@ -425,6 +637,10 @@ sealed class SensorPacket {
 
     data class ShotWindowPacket(
         val shotWindow: ShotWindow
+    ) : SensorPacket()
+
+    data class ShotWindowBatch(
+        val shotWindows: List<ShotWindow>
     ) : SensorPacket()
 
     data class FeatureVector(
@@ -438,4 +654,8 @@ sealed class SensorPacket {
             return values.toFloatArray()
         }
     }
+
+    data class FeatureVectorBatch(
+        val featureVectors: List<List<Float>>
+    ) : SensorPacket()
 }

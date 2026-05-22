@@ -9,8 +9,8 @@ package com.example.padeltracker.shared.experiment
  */
 data class ExperimentConfig(
     //val mode: ExperimentMode = ExperimentMode.DATA_COLLECTION,
-    val mode: ExperimentMode = ExperimentMode.RAW_TO_PHONE,
-    //val mode: ExperimentMode = ExperimentMode.FEATURES_TO_PHONE,
+    //val mode: ExperimentMode = ExperimentMode.RAW_TO_PHONE,
+    val mode: ExperimentMode = ExperimentMode.FEATURES_TO_PHONE,
     //val mode: ExperimentMode = ExperimentMode.SHOT_TO_PHONE,
     /**
      * Sensor sampling frequency.
@@ -61,7 +61,34 @@ data class ExperimentConfig(
      * Shows a toast when a shot is detected.
      * Mainly useful during debugging or dataset collection.
      */
-    val showShotDetectionToast: Boolean = true
+    val showShotDetectionToast: Boolean = true,
+
+    /**
+     * Number of shot windows accumulated before sending them to the phone.
+     *
+     * Used only in SHOT_TO_PHONE mode.
+     */
+    val shotWindowBatchSize: Int = 10,
+
+    /**
+     * Number of feature vectors accumulated before sending them to the phone.
+     *
+     * Used only in FEATURES_TO_PHONE mode.
+     */
+    val featureVectorBatchSize: Int = 10,
+
+    /**
+     * Maximum time a shot/feature batch can remain pending before being sent.
+     *
+     * This prevents data from staying buffered for too long if the score does not change.
+     */
+    val sensorBatchMaxDelayMillis: Long = 30_000L,
+    /**
+     * Time window used to batch raw sensor samples before sending them to the phone.
+     *
+     * Used only in RAW_TO_PHONE mode.
+     */
+    val rawBatchDurationMillis: Long = 1_000L
 ) {
     /**
      * Android SensorManager sampling period in microseconds.
