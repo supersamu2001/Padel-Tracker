@@ -18,6 +18,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.padeltracker.presentation.ui.WearApp
 
+/**
+ * Launch the app and manage the initial permissions
+ */
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +35,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
+    // To let the smartphone identify the watch as the PadelTracker device
     private fun registerWatchCapability() {
         Wearable.getCapabilityClient(this)
             .addLocalCapability(WearPaths.WATCH_CAPABILITY)

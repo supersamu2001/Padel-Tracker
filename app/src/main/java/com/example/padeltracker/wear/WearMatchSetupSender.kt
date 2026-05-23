@@ -8,6 +8,9 @@ import com.example.padeltracker.shared.communication.WearPaths
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 
+/**
+ * Send the match set up to the phone
+ */
 class WearMatchSetupSender(private val context: Context) {
 
     fun sendMatchSetup(

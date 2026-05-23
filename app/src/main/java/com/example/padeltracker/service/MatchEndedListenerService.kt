@@ -17,8 +17,12 @@ import java.util.Date
 import java.util.Locale
 import com.example.padeltracker.shared.communication.WearPaths
 
+/**
+ * Save the match infos into the Room database (with a coroutine) when the match is ended
+ */
 class MatchEndedListenerService : WearableListenerService() {
 
+    // Dispatchers.IO => coroutine optimized for I/O jobs
     private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private lateinit var repository: HistoryRepository
 
@@ -69,7 +73,7 @@ class MatchEndedListenerService : WearableListenerService() {
                     heartRateHistory = tokens.getOrNull(6) ?: ""
                 )
 
-                // save in data base of the phone
+                // save in database of the phone
                 serviceScope.launch {
                     repository.insertMatch(completedMatch)
                     Log.d("PHONE_MATCH_ENDED", "Match saved to Room database successfully!")

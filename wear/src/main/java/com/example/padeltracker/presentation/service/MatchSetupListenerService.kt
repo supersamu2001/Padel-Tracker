@@ -15,7 +15,7 @@ import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.WearableListenerService
 
 /**
- * Receives match setup data sent from the phone through the Wear OS Data Layer.
+ * Receives match setup data sent from the phone (teams and players)
  */
 class MatchSetupListenerService : WearableListenerService() {
 

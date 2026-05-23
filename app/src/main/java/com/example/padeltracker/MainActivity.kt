@@ -30,6 +30,9 @@ import kotlinx.coroutines.launch
 // Navigation Enum
 enum class AppScreen { Home, Setup, History, LiveMatch, Analysis }
 
+/**
+ * Manage all the UI and the navigation among all the screens
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

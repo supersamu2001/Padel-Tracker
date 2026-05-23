@@ -40,7 +40,7 @@ class MatchViewModel @JvmOverloads constructor(
     private var lastSavedTimestamp = 0L
     //private val sensorManager = WearSensorManager(application)
 
-    // 2. Connect manager with heartbeat of ViewModel
+    // Connect manager with heartbeat of ViewModel
     private val sensorManager = WearSensorManager(application) { newRate ->
         _heartRate.value = newRate
 
@@ -52,7 +52,7 @@ class MatchViewModel @JvmOverloads constructor(
             lastSavedTimestamp = currentTime
             Log.d("VIEW_MODEL_TEST", "Saved HR point: ${newRate.toInt()}")
         }
-        // TESTTTTTTTTTT
+        // TEST
         Log.d("VIEW_MODEL_TEST", "🚀 EXOUME ViewModel NEOS PALMOS: $newRate")
     }
     private val matchEndedSender = MatchEndedSender(application)

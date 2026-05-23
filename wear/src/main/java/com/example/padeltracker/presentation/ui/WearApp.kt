@@ -40,7 +40,7 @@ private const val BorderAlpha = 0.1f
 @Composable
 fun WearApp(viewModel: MatchViewModel) {
     val state = viewModel.state.value
-    val heartRate by viewModel.heartRate //heartbeat
+    val heartRate by viewModel.heartRate
 
     // NEW PERMISSION REQUEST BLOCK
     val context = LocalContext.current

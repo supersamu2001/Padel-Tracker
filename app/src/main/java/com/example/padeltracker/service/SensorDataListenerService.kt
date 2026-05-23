@@ -16,10 +16,19 @@ import com.example.padeltracker.shared.shotrecognition.ShotDetector
 
 class SensorDataListenerService : WearableListenerService() {
 
+    // Shot classifier
     private var classifier: ShotClassifier? = null
+
+    // Create the dataset for the training of the model
     private var shotLogger: ShotLogger? = null
+
     private val TAG = "SensorDataListener"
+
+    // To set the method of data collection:
+    // 1) All raw data, 2) Raw data of the shot with score_marker, 3) Raw data of the shot, 4) Feature vector
     private val experimentConfig = ExperimentConfig()
+
+    // Detect the shot basing on acceleration and gyroscope
     private val phoneShotDetector = ShotDetector(experimentConfig)
 
     override fun onCreate() {
@@ -44,22 +53,22 @@ class SensorDataListenerService : WearableListenerService() {
         )
 
         when (messageEvent.path) {
-            // Stream di tutti i dati
+            // Stream of all the raw data
             WearPaths.SENSOR_RAW -> {
                 handleRawSensorPacket(data)
             }
 
-            // Finestra con i 51 samples dello shot detectato con score_marker
+            // Window with the 51 raw samples of the detected shot with the score_marker (to populate our dataset)
             WearPaths.SENSOR_SHOT_DATA_COLLECTION -> {
                 handleDataCollectionShotPacket(data)
             }
 
-            // Finestra con i 51 samples dello shot detectato
+            // Window with the 51 raw samples of the detected shot
             WearPaths.SENSOR_SHOT_WINDOW -> {
                 handleShotWindowPacket(data)
             }
 
-            // Feature engineering già fatta nello smartwatch
+            // Feature engineering already done on the watch
             WearPaths.SENSOR_FEATURES -> {
                 handleFeatureVectorPacket(data)
             }
@@ -129,8 +138,10 @@ class SensorDataListenerService : WearableListenerService() {
             val shotType = classifier?.classify_shot(shotWindow) ?: ShotType.UNKNOWN
             Log.d(TAG, "Raw pipeline shot classified: $shotType")
 
+            // Record the shot in order to show all of them in the final AnalysisScreen
             ShotDetectionState.recordShot(shotType)
 
+            // Record the shot in order to show it in the HomeScreen as debug
             SensorStatusState.recordShot(shotWindow.totalSamples)
         }
     }
@@ -192,6 +203,8 @@ class SensorDataListenerService : WearableListenerService() {
             packet.shotWindows.forEach { shotWindow ->
                 val shotType = classifier?.classify_shot(shotWindow) ?: ShotType.UNKNOWN
                 Log.d(TAG, "Shot classified: $shotType")
+
+                //
                 ShotDetectionState.recordShot(shotType)
 
                 SensorStatusState.recordShot(shotWindow.totalSamples)

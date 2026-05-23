@@ -11,13 +11,22 @@ import com.example.padeltracker.shared.TeamSetup
 import org.json.JSONArray
 import org.json.JSONObject
 
+/**
+ * Save temporary the set-up of the match received from the phone,
+ * so that if the app closes accidentally, the set-up setting won't be lost.
+ *
+ * Bridge between the arrival of setup message from the phone and the actual start of the match.
+ * This class ensures robustness and reliability in this phase.
+ */
 class PendingMatchSetupStore(context: Context) {
 
+    // settings saved through the Android SharedPreferences, that save them in key-value pairs
     private val prefs = context.applicationContext.getSharedPreferences(
         PREFS_NAME,
         Context.MODE_PRIVATE
     )
 
+    // Convert the MatchSet object into a JSON string, in order to be saved into the SharedPreferences
     fun save(setup: MatchSetup) {
         val json = setup.toJson().toString()
 
@@ -28,6 +37,7 @@ class PendingMatchSetupStore(context: Context) {
         Log.d(TAG, "Pending match setup saved: ${setup.matchId}")
     }
 
+    // Retrieve data in memory, reading the JSON string and converting it into a Kotlin object
     fun load(): MatchSetup? {
         val json = prefs.getString(KEY_SETUP_JSON, null) ?: return null
 
@@ -39,6 +49,7 @@ class PendingMatchSetupStore(context: Context) {
         }
     }
 
+    // Read the setup in memory and delete it immediately after
     fun consume(): MatchSetup? {
         val setup = load()
         if (setup != null) {
@@ -48,6 +59,7 @@ class PendingMatchSetupStore(context: Context) {
         return setup
     }
 
+    // Remove the data from the memory
     fun clear() {
         prefs.edit {
             remove(KEY_SETUP_JSON)

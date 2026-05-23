@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.drawToBitmap
@@ -75,7 +76,17 @@ fun GameAnalysisScreen(
 
     val teamANames = record?.teamAPlayers ?: setup?.teamA?.players?.joinToString(" & ") { it.name } ?: "Team A"
     val teamBNames = record?.teamBPlayers ?: setup?.teamB?.players?.joinToString(" & ") { it.name } ?: "Team B"
-    val displayScore = record?.score ?: "Match Data"
+
+    // Logic to clean the score: remove the third set if it is 0-0
+    val rawScore = record?.score ?: "Match Data"
+    val displayScore = if (rawScore.endsWith(", 0-0")) {
+        rawScore.removeSuffix(", 0-0")
+    } else if (rawScore.endsWith(" 0-0")) {
+        rawScore.removeSuffix(" 0-0")
+    } else {
+        rawScore
+    }
+    
 
     // Required tools for taking the screenshot and sharing it
     val context = LocalContext.current
@@ -429,6 +440,15 @@ fun MatchBadges(record: MatchRecord, activeRed: Color) {
 
 @Composable
 fun MatchSummaryShareCard(record: MatchRecord, activeRed: Color) {
+    // Logic to clean the score: remove the third set if it is 0-0
+    val rawScore = record.score
+    val displayScore = if (rawScore.endsWith(", 0-0")) {
+        rawScore.removeSuffix(", 0-0")
+    } else if (rawScore.endsWith(" 0-0")) {
+        rawScore.removeSuffix(" 0-0")
+    } else {
+        rawScore
+    }
 
     // Root container changed from Column to Box to allow background image
     Box(
@@ -465,11 +485,39 @@ fun MatchSummaryShareCard(record: MatchRecord, activeRed: Color) {
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(record.teamAPlayers ?: "Team A", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Text("vs", color = activeRed.copy(alpha = 0.7f), fontSize = 12.sp, fontWeight = FontWeight.Black)
-                    Text(record.teamBPlayers ?: "Team B", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(
+                        text = record.teamAPlayers ?: "Team A",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Text(
+                        text = "vs",
+                        color = activeRed.copy(alpha = 0.7f),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Black,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Text(
+                        text = record.teamBPlayers ?: "Team B",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(text = record.score ?: "4-6, 7-5, 6-4", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Black)
+                    Text(
+                        text = displayScore,
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Black,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
 
