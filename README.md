@@ -62,6 +62,7 @@ Optimized for performance and energy efficiency during sports activities.
     - **`model/`**:
         - `DomainModel.kt`: Internal data structures for match state (Sets, Games, Players).
         - `MatchSetupMappers.kt`: Converts shared communication models into internal domain models.
+    - **`ui/`**:
 
 ### 🤝 `:shared` Module (Shared Code)
 Common logic and models used by both modules to ensure binary compatibility.
