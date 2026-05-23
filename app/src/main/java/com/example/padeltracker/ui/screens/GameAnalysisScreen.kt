@@ -1,5 +1,6 @@
 package com.example.padeltracker.ui.screens
 
+import android.content.ClipData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,16 +14,25 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberCompositionContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.drawToBitmap
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
+import androidx.savedstate.findViewTreeSavedStateRegistryOwner
+import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.example.padeltracker.R
 import com.example.padeltracker.data.MatchRecord
 import com.example.padeltracker.shared.MatchSetup
@@ -41,6 +51,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ComposeView
 import android.content.Context
 import android.content.Intent
+import androidx.core.view.drawToBitmap
 import android.graphics.Bitmap
 import androidx.core.content.FileProvider
 import android.graphics.Paint
@@ -71,32 +82,24 @@ fun GameAnalysisScreen(
     val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
 
-    BackHandler {
-        onGoHome()
-    }
-
     Box(modifier = Modifier.fillMaxSize()) {
 
-        // 1. THE HIDDEN SHARE CARD
-        // Drawn first so it stays at the very back.
         if (record != null) {
             Box(
                 modifier = Modifier
-                    // This forces the Box to have a real size (not 0x0) regardless of the screen!
                     .wrapContentSize(unbounded = true)
                     .drawWithContent {
+                        // 1. Record the visual output to our graphics layer for sharing
                         graphicsLayer.record {
                             this@drawWithContent.drawContent()
                         }
-                        // Draw normally so Compose registers the dimensions in memory
-                        drawContent()
                     }
             ) {
                 MatchSummaryShareCard(record = record, activeRed = activeRed)
             }
         }
 
-        // 2. VISIBLE BACKGROUND
+        // VISIBLE BACKGROUND
         Image(
             painter = painterResource(id = R.drawable.statistics),
             contentDescription = null,
@@ -105,7 +108,7 @@ fun GameAnalysisScreen(
         )
         Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.7f)))
 
-        // 3. THE ACTUAL VISIBLE UI
+        // THE ACTUAL VISIBLE UI
         Column(
             modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp).verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -128,7 +131,7 @@ fun GameAnalysisScreen(
                                 shareBitmap(context, bitmap)
                             } catch (e: Exception) {
                                 e.printStackTrace()
-                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "Share error: ${e.message}", Toast.LENGTH_LONG).show()
                             }
                         }
                     }
@@ -169,7 +172,6 @@ fun GameAnalysisScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // This will only display if we have a recorded match
             if (record != null) {
                 MatchBadges(record = record, activeRed = activeRed)
                 Spacer(modifier = Modifier.height(20.dp))
@@ -573,10 +575,10 @@ fun shareBitmap(context: Context, bitmap: Bitmap) {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "image/png"
             putExtra(Intent.EXTRA_STREAM, uri)
-            //Added Subject and Text so the message looks better when sent via Viber/Email
             putExtra(Intent.EXTRA_SUBJECT, "Padel Match Full Analysis")
             putExtra(Intent.EXTRA_TEXT, "Detailed statistics from my last padel match!")
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            clipData = ClipData.newUri(context.contentResolver, "Padel Stats", uri)
         }
         context.startActivity(Intent.createChooser(intent, "Share Match Stats!"))
     } catch (e: Exception) {
