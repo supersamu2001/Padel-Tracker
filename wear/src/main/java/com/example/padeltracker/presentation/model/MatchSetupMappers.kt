@@ -34,6 +34,7 @@ fun MatchSetup.toDomain(): MatchState {
     return MatchState(
         teamA = this.teamA.toDomain(TeamId.TEAM_A),
         teamB = this.teamB.toDomain(TeamId.TEAM_B),
+        tournamentName = this.tournamentName,
         config = this.rules.toDomain(),
         status = MatchStatus.NOT_STARTED
     )

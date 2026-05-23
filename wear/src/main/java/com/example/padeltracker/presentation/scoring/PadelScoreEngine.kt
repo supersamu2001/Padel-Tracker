@@ -25,6 +25,7 @@ class PadelScoreEngine {
         val match = MatchState(
             teamA = teamA,
             teamB = teamB,
+            tournamentName = "",
             status = MatchStatus.WAITING_FOR_SETUP
         )
         return ScoreTrackerState(

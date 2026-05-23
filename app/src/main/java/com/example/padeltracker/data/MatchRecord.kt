@@ -21,5 +21,6 @@ data class MatchRecord(
     val services: Int,         // Total services
     val teamAPlayers: String,  // Names of Team A
     val teamBPlayers: String,   // Names of Team B
-    val winner: String         // Example: "Team A" or "Team B"
+    val winner: String,         // Example: "Team A" or "Team B"
+    val tournamentName: String = "" // Name of the tournament
 )

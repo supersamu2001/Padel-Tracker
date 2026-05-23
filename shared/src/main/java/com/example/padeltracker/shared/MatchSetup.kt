@@ -7,6 +7,7 @@ package com.example.padeltracker.shared
  */
 data class MatchSetup(
     val matchId: String,
+    val tournamentName: String = "",
     val teamA: TeamSetup,
     val teamB: TeamSetup,
     val rules: MatchRules = MatchRules(),
@@ -34,6 +35,7 @@ data class MatchRules(
 
 object MatchSetupDataKeys {
     const val MATCH_ID = "match_id"
+    const val TOURNAMENT_NAME = "tournament_name"
     const val CREATED_AT = "created_at"
     const val SENT_AT = "sent_at"
 

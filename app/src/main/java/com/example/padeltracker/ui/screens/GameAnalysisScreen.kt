@@ -93,6 +93,10 @@ fun GameAnalysisScreen(
     val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
 
+    BackHandler {
+        onGoHome()
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
 
         if (record != null) {
@@ -172,9 +176,22 @@ fun GameAnalysisScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text(teamANames, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            val isTeamAWinner = record?.winner == "Team A"
+                            val isTeamBWinner = record?.winner == "Team B"
+
+                            Text(
+                                text = teamANames,
+                                color = if (isTeamAWinner || record == null) Color.White else Color.White.copy(alpha = 0.5f),
+                                fontWeight = if (isTeamAWinner) FontWeight.ExtraBold else FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
                             Spacer(modifier = Modifier.height(8.dp))
-                            Text(teamBNames, color = Color.White.copy(alpha = 0.6f), fontSize = 16.sp)
+                            Text(
+                                text = teamBNames,
+                                color = if (isTeamBWinner || record == null) Color.White else Color.White.copy(alpha = 0.5f),
+                                fontWeight = if (isTeamBWinner) FontWeight.ExtraBold else FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
                         }
                         Text(text = displayScore, color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.Black)
                     }
@@ -438,6 +455,9 @@ fun MatchBadges(record: MatchRecord, activeRed: Color) {
     }
 }
 
+/**
+ * Function that implements the UI of the image created when we want to share the match
+ */
 @Composable
 fun MatchSummaryShareCard(record: MatchRecord, activeRed: Color) {
     // Logic to clean the score: remove the third set if it is 0-0
@@ -478,17 +498,19 @@ fun MatchSummaryShareCard(record: MatchRecord, activeRed: Color) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Scoreboard (Condensed)
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.2f)), // Adjusted alpha for overlay
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    val isTeamAWinner = record.winner == "Team A"
+                    val isTeamBWinner = record.winner == "Team B"
+
                     Text(
                         text = record.teamAPlayers ?: "Team A",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
+                        color = if (isTeamAWinner) Color.White else Color.White.copy(alpha = 0.5f),
+                        fontWeight = if (isTeamAWinner) FontWeight.ExtraBold else FontWeight.Bold,
                         fontSize = 15.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
@@ -503,8 +525,8 @@ fun MatchSummaryShareCard(record: MatchRecord, activeRed: Color) {
                     )
                     Text(
                         text = record.teamBPlayers ?: "Team B",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
+                        color = if (isTeamBWinner) Color.White else Color.White.copy(alpha = 0.5f),
+                        fontWeight = if (isTeamBWinner) FontWeight.ExtraBold else FontWeight.Bold,
                         fontSize = 15.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()

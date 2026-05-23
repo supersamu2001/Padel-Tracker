@@ -313,10 +313,11 @@ class MatchViewModel @JvmOverloads constructor(
             teamBPlayers = teamB,
             score = finalScore,
             winner = winnerName,
-            duration = finalDuration
+            duration = finalDuration,
+            tournamentName = match.tournamentName
         )
 
-        val info = "$finalScore|$avgHr|$teamA|$teamB|$winnerName|$finalDuration|$historyString"
+        val info = "$finalScore|$avgHr|$teamA|$teamB|$winnerName|$finalDuration|$historyString|${match.tournamentName}"
         val wearContext = getApplication<Application>()
 
         Wearable.getNodeClient(wearContext).connectedNodes.addOnSuccessListener { nodes ->

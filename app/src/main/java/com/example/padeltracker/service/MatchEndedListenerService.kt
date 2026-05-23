@@ -70,7 +70,8 @@ class MatchEndedListenerService : WearableListenerService() {
                     teamBPlayers = tokens.getOrNull(3) ?: "Team B",
                     winner = tokens.getOrNull(4) ?: "Draw",
                     duration = tokens.getOrNull(5) ?: "00:00",
-                    heartRateHistory = tokens.getOrNull(6) ?: ""
+                    heartRateHistory = tokens.getOrNull(6) ?: "",
+                    tournamentName = tokens.getOrNull(7) ?: ""
                 )
 
                 // save in database of the phone

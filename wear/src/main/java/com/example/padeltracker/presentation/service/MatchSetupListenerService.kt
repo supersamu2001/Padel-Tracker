@@ -61,6 +61,7 @@ class MatchSetupListenerService : WearableListenerService() {
 
         return MatchSetup(
             matchId = getString(MatchSetupDataKeys.MATCH_ID) ?: "unknown_match",
+            tournamentName = getString(MatchSetupDataKeys.TOURNAMENT_NAME) ?: "",
             createdAt = getLong(MatchSetupDataKeys.CREATED_AT),
             teamA = TeamSetup(
                 id = getString(MatchSetupDataKeys.TEAM_A_ID) ?: "team_a",

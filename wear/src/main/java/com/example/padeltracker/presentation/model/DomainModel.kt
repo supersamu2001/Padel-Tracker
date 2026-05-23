@@ -46,6 +46,7 @@ data class SetState(
 data class MatchState(
     val teamA: Team,
     val teamB: Team,
+    val tournamentName: String = "",
     val config: MatchConfig = MatchConfig(),
     val currentSet: SetState = SetState(),
     val completedSets: List<SetState> = emptyList(),

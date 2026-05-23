@@ -23,6 +23,7 @@ class WearMatchSetupSender(private val context: Context) {
                 WearPaths.MATCH_SETUP
             ).apply {
                 dataMap.putString(MatchSetupDataKeys.MATCH_ID, setup.matchId)
+                dataMap.putString(MatchSetupDataKeys.TOURNAMENT_NAME, setup.tournamentName)
                 dataMap.putLong(MatchSetupDataKeys.CREATED_AT, setup.createdAt)
                 dataMap.putLong(MatchSetupDataKeys.SENT_AT, System.currentTimeMillis())
 

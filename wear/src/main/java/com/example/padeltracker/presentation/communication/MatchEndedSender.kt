@@ -21,7 +21,8 @@ class MatchEndedSender(
                        teamBPlayers: String,
                        score: String,
                        winner: String,
-                       duration: String)
+                       duration: String,
+                       tournamentName: String)
 
     {
 
@@ -44,6 +45,7 @@ class MatchEndedSender(
             dataMap.putString("teamAPlayers", teamAPlayers)
             dataMap.putString("teamBPlayers", teamBPlayers)
             dataMap.putString("winner", winner)
+            dataMap.putString("tournamentName", tournamentName)
             dataMap.putInt("avgHeartRate", avgHeartRate)
         }.asPutDataRequest()
 

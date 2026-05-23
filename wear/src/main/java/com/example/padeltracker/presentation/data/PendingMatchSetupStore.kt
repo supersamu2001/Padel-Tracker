@@ -81,6 +81,7 @@ class PendingMatchSetupStore(context: Context) {
     private fun MatchSetup.toJson(): JSONObject {
         return JSONObject().apply {
             put("matchId", matchId)
+            put("tournamentName", tournamentName)
             put("createdAt", createdAt)
             put("teamA", teamA.toJson())
             put("teamB", teamB.toJson())
@@ -122,6 +123,7 @@ class PendingMatchSetupStore(context: Context) {
 
         return MatchSetup(
             matchId = optString("matchId", "unknown_match"),
+            tournamentName = optString("tournamentName", ""),
             createdAt = optLong("createdAt", 0L),
             teamA = optJSONObject("teamA")?.toTeamSetup(
                 fallbackId = "team_a",
