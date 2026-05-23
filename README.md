@@ -25,7 +25,6 @@ Manages the main user interface, advanced analysis logic, and data persistence.
     - `ShotClassifier.kt`: Orchestrates the classification process by extracting features and calling the model.
     - `PadelModel.java`: The core ML model (Random Forest) converted into native Java code for maximum performance.
     - `ShotDetectionState.kt`: Singleton that maintains the live count of detected shots.
-    - `ShotType.kt`: Enum defining shot types (Forehand, Backhand, Smash, Service, Lob).
 - **`service/`**: Background services.
     - `SensorDataListenerService.kt`: Receives real-time sensor packets and features from the watch.
     - `MatchEndedListenerService.kt`: Listens for the match-ended signal and saves the final data to Room.
