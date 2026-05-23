@@ -10,6 +10,11 @@ import kotlinx.coroutines.flow.map
 // 1. Create the DataStore instance named "tournament_prefs"
 val Context.dataStore by preferencesDataStore(name = "tournament_prefs")
 
+/**
+ * Make possible that when I set up a new game, it suggests the most recently used names
+ *
+ * It saves the player names into a DataStore
+ */
 class MatchPreferences(private val context: Context) {
 
     // 2. Define the Keys to know exactly where each name is saved
