@@ -1,80 +1,80 @@
 # Padel-Tracker 🎾
 
-Padel-Tracker è un'applicazione completa per Android (Smartphone + Wear OS) progettata per tracciare le partite di Padel e analizzare le prestazioni dei giocatori in tempo reale utilizzando il Machine Learning.
+Padel-Tracker is a comprehensive Android application (Smartphone + Wear OS) designed to track Padel matches and analyze player performance in real-time using Machine Learning.
 
-## 🏗️ Architettura del Progetto
+## 🏗️ Project Architecture
 
-Il progetto segue un'architettura distribuita per ottimizzare il consumo energetico e le prestazioni:
-- **Smartwatch (Wear OS)**: Gestisce la raccolta dei dati dei sensori (accelerometro e giroscopio), il rilevamento dei colpi e la gestione rapida del punteggio.
-- **Smartphone**: Riceve i dati elaborati o i segmenti grezzi via Bluetooth, esegue l'analisi ad alto livello tramite un modello TensorFlow Lite e salva le statistiche nel database locale.
+The project follows a distributed architecture to optimize energy consumption and performance:
+- **Smartwatch (Wear OS)**: Handles sensor data collection (accelerometer and gyroscope), shot detection, and real-time score management.
+- **Smartphone**: Receives processed data or raw segments via Bluetooth, performs high-level analysis using a TensorFlow Lite model, and saves statistics to a local database.
 
 ---
 
-## 📂 Struttura del Progetto
+## 📂 Project Structure
 
-### 📱 Modulo `:app` (Smartphone)
-Gestisce l'interfaccia utente principale, la logica di analisi avanzata e la persistenza dei dati.
+### 📱 `:app` Module (Smartphone)
+Manages the main user interface, advanced analysis logic, and data persistence.
 
-- **`data/`**: Gestione del database locale e preferenze.
-    - `AppDatabase.kt`: Configurazione del database SQLite tramite Room.
-    - `MatchDao.kt`: Interfaccia per le query al database (Insert, Delete, Query).
-    - `MatchRecord.kt`: Modello della tabella per i dettagli delle partite salvate.
-    - `HistoryRepository.kt`: Bridge tra il DAO e la UI per la gestione della cronologia.
-    - `MatchPreferences.kt`: Gestione dei nomi dei giocatori tramite DataStore.
-- **`ml/`**: Integrazione del Machine Learning.
-    - `ShotClassifier.kt`: Carica il modello `.tflite` ed esegue l'inferenza per classificare i colpi.
-    - `ShotDetectionState.kt`: Singleton che mantiene il conteggio live dei colpi rilevati.
-    - `ShotType.kt`: Enum che definisce le tipologie di colpi (Forehand, Backhand, Smash, etc.).
-- **`service/`**: Servizi in background.
-    - `SensorDataListenerService.kt`: Riceve i pacchetti dei sensori dall'orologio in tempo reale.
-    - `MatchEndedListenerService.kt`: Ascolta il segnale di fine partita e salva i dati nel database.
-    - `SensorStatusState.kt`: Mantiene lo stato live dei sensori per la visualizzazione sulla Home.
-    - `ShotLogger.kt`: Utility per il salvataggio dei dati dei sensori su file (per dataset).
-- **`ui/screens/`**: Interfaccia grafica in Jetpack Compose.
-    - `HomeScreen.kt`: Dashboard principale con stato connessione e accesso rapido.
-    - `SetupScreen.kt`: Configurazione della partita (nomi team e giocatori).
-    - `LiveScoreScreen.kt`: Visualizzazione in tempo reale del punteggio durante il match.
-    - `GameAnalysisScreen.kt`: Analisi dettagliata post-partita con grafici e statistiche.
-    - `HistoryScreen.kt`: Elenco delle partite passate con possibilità di eliminazione.
+- **`data/`**: Local database and preferences management.
+    - `AppDatabase.kt`: SQLite database configuration via Room.
+    - `MatchDao.kt`: Interface for database queries (Insert, Delete, Query).
+    - `MatchRecord.kt`: Table model for saved match details.
+    - `HistoryRepository.kt`: Bridge between the DAO and the UI for history management.
+    - `MatchPreferences.kt`: Player name management via DataStore.
+- **`ml/`**: Machine Learning integration.
+    - `ShotClassifier.kt`: Loads the `.tflite` model and performs inference to classify shots.
+    - `ShotDetectionState.kt`: Singleton that maintains the live count of detected shots.
+    - `ShotType.kt`: Enum defining shot types (Forehand, Backhand, Smash, Service, etc.).
+- **`service/`**: Background services.
+    - `SensorDataListenerService.kt`: Receives real-time sensor packets from the watch.
+    - `MatchEndedListenerService.kt`: Listens for the match-ended signal and saves data to the database.
+    - `SensorStatusState.kt`: Maintains live sensor state for the Home screen display.
+    - `ShotLogger.kt`: Utility for saving sensor data to files (for dataset creation).
+- **`ui/screens/`**: Graphical interface built with Jetpack Compose.
+    - `HomeScreen.kt`: Main dashboard with connection status and quick access.
+    - `SetupScreen.kt`: Match configuration (teams and players names).
+    - `LiveScoreScreen.kt`: Real-time score display during the match.
+    - `GameAnalysisScreen.kt`: Detailed post-match analysis with graphs and stats.
+    - `HistoryScreen.kt`: List of past matches with deletion capabilities.
 
-### ⌚ Modulo `:wear` (Smartwatch)
-Ottimizzato per le prestazioni e l'efficienza energetica durante l'attività sportiva.
+### ⌚ `:wear` Module (Smartwatch)
+Optimized for performance and energy efficiency during sports activities.
 
 - **`presentation/`**:
-    - `MainActivity.kt`: Punto di ingresso dell'app su Wear OS.
-    - **`scoring/`**: `PadelScoreEngine.kt` gestisce le regole del punteggio del padel.
-    - **`sensors/`**: `WearSensorManager.kt` gestisce i sensori IMU e la comunicazione con il telefono.
-    - **`service/`**: `MatchSetupListenerService.kt` riceve la configurazione della partita dal telefono.
-    - **`data/`**: `PendingMatchSetupStore.kt` salva temporaneamente il setup ricevuto tramite SharedPreferences.
-    - **`viewmodel/`**: `MatchViewModel.kt` gestisce lo stato della partita attiva sull'orologio.
-- **`communication/`**: Gestisce l'invio di messaggi e dati al telefono.
+    - `MainActivity.kt`: Entry point for the Wear OS app.
+    - **`scoring/`**: `PadelScoreEngine.kt` handles the logic of Padel scoring rules.
+    - **`sensors/`**: `WearSensorManager.kt` manages IMU sensors and phone communication.
+    - **`service/`**: `MatchSetupListenerService.kt` receives match configuration from the phone.
+    - **`data/`**: `PendingMatchSetupStore.kt` temporarily saves the received setup via SharedPreferences.
+    - **`viewmodel/`**: `MatchViewModel.kt` manages the state of the active match on the watch.
+- **`communication/`**: Handles sending messages and data to the phone.
 
-### 🤝 Modulo `:shared` (Codice Condiviso)
-Logica e modelli comuni utilizzati da entrambi i moduli per garantire coerenza.
+### 🤝 `:shared` Module (Shared Code)
+Common logic and models used by both modules to ensure consistency.
 
-- **`MatchSetup.kt`**: Modello dati per la configurazione della partita (Team A, Team B, Regole).
+- **`MatchSetup.kt`**: Data model for match configuration (Team A, Team B, Rules).
 - **`shotrecognition/`**:
-    - `ShotDetector.kt`: Logica per il rilevamento dei candidati colpi basata su soglie di accelerazione.
-    - `ShotWindow.kt`: Rappresenta una finestra temporale di dati dei sensori attorno a un colpo.
-    - `ShotFeatureExtractor.kt`: Estrazione di feature statistiche dai dati grezzi dei sensori.
-- **`sensors/`**: Strutture dati per i campioni IMU (`ImuVector`).
-- **`communication/`**: `WearPaths.kt` definisce i percorsi costanti per i messaggi tra dispositivi.
+    - `ShotDetector.kt`: Logic for detecting shot candidates based on acceleration thresholds.
+    - `ShotWindow.kt`: Represents a time window of sensor data around a shot.
+    - `ShotFeatureExtractor.kt`: Extracts statistical features from raw sensor data.
+- **`sensors/`**: Data structures for IMU samples (`ImuVector`).
+- **`communication/`**: `WearPaths.kt` defines constant paths for inter-device messaging.
 
 ---
 
-## 🚀 Funzionalità Principali
-1. **Riconoscimento Colpi AI**: Classificazione automatica dei colpi (Dritto, Rovescio, Smash, Servizio, Pallonetto) tramite sensori dello smartwatch.
-2. **Dashboard Live**: Punteggio sincronizzato in tempo reale tra orologio e telefono.
-3. **Analisi Partita**: Visualizzazione dell'andamento del battito cardiaco e distribuzione dei colpi.
-4. **Cronologia Locale**: Salvataggio persistente di tutte le partite giocate.
-5. **Condivisione**: Generazione di un'immagine riassuntiva dei risultati della partita per la condivisione.
+## 🚀 Main Features
+1. **AI Shot Recognition**: Automatic classification of shots (Forehand, Backhand, Smash, Service, Lob) using smartwatch sensors.
+2. **Live Dashboard**: Real-time score synchronization between the watch and the phone.
+3. **Match Analysis**: Visualization of heart rate trends and shot distribution.
+4. **Local History**: Persistent storage of all played matches.
+5. **Sharing**: Generates a summary image of match results for easy sharing.
 
 ---
 
-## 🛠️ Tecnologie Utilizzate
-- **Linguaggio**: Kotlin
+## 🛠️ Technologies Used
+- **Language**: Kotlin
 - **UI**: Jetpack Compose (Mobile & Wear)
 - **Database**: Room Persistence Library
 - **ML**: TensorFlow Lite
-- **Connettività**: Google Play Services Wearable API (MessageClient)
-- **Sensing**: Android SensorManager (Accelerometro & Giroscopio)
+- **Connectivity**: Google Play Services Wearable API (MessageClient)
+- **Sensing**: Android SensorManager (Accelerometer & Gyroscope)
