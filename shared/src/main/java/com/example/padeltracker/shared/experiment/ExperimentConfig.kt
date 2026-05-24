@@ -111,7 +111,7 @@ data class ExperimentConfig(
         get() = preTriggerSamples + 1 + postTriggerSamples
 
     /**
-     * Approximate shot window duration in milliseconds.
+     * Approximate shot window duration in milliseconds. Used during the tests
      *
      * Default:
      * 51 samples at 25 Hz = 2040 ms.
