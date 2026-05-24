@@ -28,13 +28,13 @@ Manages the main user interface, advanced analysis logic, and data persistence.
 - **`service/`**: Background services.
     - `SensorDataListenerService.kt`: Receives real-time sensor packets and features from the watch.
     - `MatchEndedListenerService.kt`: Listens for the match-ended signal and saves the final data to Room.
-    - `SensorStatusState.kt`: Maintains live sensor state for the Home screen monitoring dashboard.
+    - `SensorStatusState.kt`: Maintains live sensor state for the Home screen monitoring dashboard (used for debug).
     - `ShotLogger.kt`: Utility for saving sensor data to CSV files (for dataset creation and offline training).
 - **`wear/`**: Bridge components for Wear OS communication.
-    - `WearMatchSetupSender.kt`: Sends the match configuration (players, rules) to the watch.
+    - `WearMatchSetupSender.kt`: Sends the match set-up and configuration (players, rules) to the watch.
     - `PhoneMatchEndedEventBus.kt`: Internal event bus to notify the UI when a match is ended and saved.
 - **`ui/screens/`**: Graphical interface built with Jetpack Compose.
-    - `HomeScreen.kt`: Main dashboard with connection status and real-time sensor feedback.
+    - `HomeScreen.kt`: Main dashboard with connection status.
     - `SetupScreen.kt`: Match configuration (teams and players names).
     - `LiveScoreScreen.kt`: Real-time score display during the match.
     - `GameAnalysisScreen.kt`: Detailed post-match analysis with graphs, stats, and sharing capabilities.
@@ -93,9 +93,9 @@ Common logic and models used by both modules to ensure binary compatibility.
 ---
 
 ## 🛠️ Technologies Used
-- **Language**: Kotlin & Java
+- **Language**: Kotlin
 - **UI**: Jetpack Compose (Mobile & Wear)
 - **Database**: Room Persistence Library
-- **ML**: Custom Random Forest implementation
+- **ML**: Random Forest implementation
 - **Connectivity**: Google Play Services Wearable API
 - **Sensing**: Android SensorManager & Health Services (Heart Rate)
