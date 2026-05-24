@@ -70,7 +70,7 @@ Common logic and models used by both modules to ensure binary compatibility.
 - **`shotrecognition/`**:
     - `ShotDetector.kt`: Threshold-based logic for real-time candidate detection.
     - `ShotWindow.kt`: Data model representing the sensor data window around a hit.
-    - `ShotFeatureExtractor.kt`: Extracts 40 statistical features (Mean, Std, Max, etc.) from IMU windows.
+    - `ShotFeatureExtractor.kt`: Extracts 40 statistical features (Mean, Median, Std, Min, Max) from IMU windows.
 - **`sensors/`**:
     - `ImuModels.kt`: Unified structures for sensor samples (`ImuVector`).
 - **`communication/`**:
