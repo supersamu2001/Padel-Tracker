@@ -3,7 +3,6 @@ package com.example.padeltracker.shared.communication
 import com.example.padeltracker.shared.experiment.ExperimentMode
 import com.example.padeltracker.shared.sensors.ImuVector
 import com.example.padeltracker.shared.sensors.PairedImuSample
-import com.example.padeltracker.shared.shotrecognition.ShotFeatureVector
 import com.example.padeltracker.shared.shotrecognition.ShotWindow
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -76,44 +75,6 @@ object SensorPacketSerializer {
             ExperimentMode.SHOT_TO_PHONE -> deserializeShotWindowBatch(data)
             ExperimentMode.FEATURES_TO_PHONE -> deserializeFeatureVectorBatch(data)
         }
-    }
-
-    /**
-     * Serializes one raw IMU sample.
-     *
-     * Packet format:
-     * - sensorType: Int
-     * - timestampNanos: Long
-     * - x: Float
-     * - y: Float
-     * - z: Float
-     */
-    fun serializeRawSensorSample(
-        packet: SensorPacket.RawSensorSample
-    ): ByteArray {
-        val buffer = ByteBuffer.allocate(RAW_SAMPLE_BYTES)
-        buffer.order(ByteOrder.LITTLE_ENDIAN)
-
-        buffer.putInt(packet.sensorType)
-        buffer.putLong(packet.timestampNanos)
-        buffer.putImuVector(packet.value)
-
-        return buffer.array()
-    }
-
-    fun deserializeRawSensorSample(data: ByteArray): SensorPacket.RawSensorSample {
-        require(data.size == RAW_SAMPLE_BYTES) {
-            "Invalid raw sensor packet size: ${data.size} bytes."
-        }
-
-        val buffer = ByteBuffer.wrap(data)
-        buffer.order(ByteOrder.LITTLE_ENDIAN)
-
-        return SensorPacket.RawSensorSample(
-            sensorType = buffer.int,
-            timestampNanos = buffer.long,
-            value = buffer.readImuVector()
-        )
     }
 
     /**
@@ -225,42 +186,6 @@ object SensorPacketSerializer {
     }
 
     /**
-     * Serializes a shot window for classification.
-     *
-     * Packet format:
-     * - accelerometer samples
-     * - gyroscope samples
-     *
-     * No score header is included.
-     */
-    fun serializeShotWindowForClassification(
-        packet: SensorPacket.ShotWindowPacket
-    ): ByteArray {
-        return serializeShotWindowInternal(
-            shotWindow = packet.shotWindow,
-            scoreHeader = null
-        )
-    }
-
-    /**
-     * Deserializes a classification shot packet.
-     *
-     * This packet does not include match score context.
-     */
-    fun deserializeShotWindowForClassification(
-        data: ByteArray
-    ): SensorPacket.ShotWindowPacket {
-        val deserialized = deserializeShotWindowInternal(
-            data = data,
-            hasScoreHeader = false
-        )
-
-        return SensorPacket.ShotWindowPacket(
-            shotWindow = deserialized.shotWindow
-        )
-    }
-
-    /**
      * Serializes a batch of shot windows.
      *
      * Packet format:
@@ -328,50 +253,6 @@ object SensorPacketSerializer {
         }
 
         return SensorPacket.ShotWindowBatch(shotWindows)
-    }
-
-    /**
-     * Serializes a feature vector.
-     *
-     * Packet format:
-     * - feature count: Int
-     * - feature values: FloatArray
-     */
-    fun serializeFeatureVector(
-        packet: SensorPacket.FeatureVector
-    ): ByteArray {
-        val values = packet.values
-        val buffer = ByteBuffer.allocate(INT_BYTES + values.size * FLOAT_BYTES)
-        buffer.order(ByteOrder.LITTLE_ENDIAN)
-
-        buffer.putInt(values.size)
-        values.forEach { value ->
-            buffer.putFloat(value)
-        }
-
-        return buffer.array()
-    }
-
-    fun deserializeFeatureVector(data: ByteArray): SensorPacket.FeatureVector {
-        require(data.size >= INT_BYTES) {
-            "Feature vector packet is too small: ${data.size} bytes."
-        }
-
-        val buffer = ByteBuffer.wrap(data)
-        buffer.order(ByteOrder.LITTLE_ENDIAN)
-
-        val featureCount = buffer.int
-        val expectedSize = INT_BYTES + featureCount * FLOAT_BYTES
-
-        require(data.size == expectedSize) {
-            "Invalid feature vector packet size: ${data.size} bytes. Expected $expectedSize bytes."
-        }
-
-        val values = List(featureCount) {
-            buffer.float
-        }
-
-        return SensorPacket.FeatureVector(values = values)
     }
 
     /**
@@ -635,25 +516,9 @@ sealed class SensorPacket {
         val scoreHeader: ScoreHeader
     ) : SensorPacket()
 
-    data class ShotWindowPacket(
-        val shotWindow: ShotWindow
-    ) : SensorPacket()
-
     data class ShotWindowBatch(
         val shotWindows: List<ShotWindow>
     ) : SensorPacket()
-
-    data class FeatureVector(
-        val values: List<Float>
-    ) : SensorPacket() {
-        constructor(featureVector: ShotFeatureVector) : this(
-            values = featureVector.values
-        )
-
-        fun toFloatArray(): FloatArray {
-            return values.toFloatArray()
-        }
-    }
 
     data class FeatureVectorBatch(
         val featureVectors: List<List<Float>>

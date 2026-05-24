@@ -21,12 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.padeltracker.R
-import com.example.padeltracker.service.SensorStatusState
 import com.example.padeltracker.ui.theme.*
 import com.example.padeltracker.ui.components.TennisBallView
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @Composable
 fun HomeScreen(

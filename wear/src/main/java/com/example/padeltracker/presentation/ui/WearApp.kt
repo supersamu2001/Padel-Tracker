@@ -25,11 +25,12 @@ import com.example.padeltracker.presentation.viewmodel.MatchViewModel
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import com.example.padeltracker.shared.experiment.ExperimentConfig
+import com.example.padeltracker.shared.debug.DebugLogger
 
 // Shared style constants
 private val TeamAColor = Color(0xFF00BCD4) // Cyan/Blue
@@ -41,6 +42,7 @@ private const val BorderAlpha = 0.1f
 fun WearApp(viewModel: MatchViewModel) {
     val state = viewModel.state.value
     val heartRate by viewModel.heartRate
+    val experimentConfig = remember { ExperimentConfig() }
 
     // NEW PERMISSION REQUEST BLOCK
     val context = LocalContext.current
@@ -56,10 +58,12 @@ fun WearApp(viewModel: MatchViewModel) {
         val bodySensorsGranted = permissions[Manifest.permission.BODY_SENSORS] ?: false
         val heartRateGranted = permissions["android.permission.health.READ_HEART_RATE"] ?: false
         
-        if (bodySensorsGranted && heartRateGranted) {
-            Log.d("PERMISSIONS", "All health permissions GRANTED!")
-        } else {
-            Log.d("PERMISSIONS", "Some health permissions DENIED! Body: $bodySensorsGranted, HR: $heartRateGranted")
+        if (experimentConfig.debugMode) {
+            if (bodySensorsGranted && heartRateGranted) {
+                DebugLogger.d("PERMISSIONS", "All health permissions GRANTED!")
+            } else {
+                DebugLogger.d("PERMISSIONS", "Some health permissions DENIED! Body: $bodySensorsGranted, HR: $heartRateGranted")
+            }
         }
         viewModel.startMatch()
     }
@@ -69,7 +73,6 @@ fun WearApp(viewModel: MatchViewModel) {
         AppScaffold {
             when (state.currentMatch.status) {
                 MatchStatus.WAITING_FOR_SETUP -> WaitingForSetupScreen()
-                //new
                 MatchStatus.NOT_STARTED -> StartMatchScreen(
                     state = state,
                     onStart = {
@@ -79,7 +82,7 @@ fun WearApp(viewModel: MatchViewModel) {
                         if (hasBodySensors && hasHeartRate) {
                             viewModel.startMatch()
                         } else {
-                            // Αν δεν έχει άδεια, ΠΕΤΑΜΕ ΤΟ POP-UP!
+                            // Request the missing permissions.
                             permissionLauncher.launch(permissionsToRequest)
                         }
                     }
@@ -88,7 +91,7 @@ fun WearApp(viewModel: MatchViewModel) {
                 MatchStatus.SELECTING_SERVER -> SelectServerScreen(onSelect = { viewModel.selectInitialServer(it) })
                 MatchStatus.IN_PROGRESS -> MatchScoreScreen(
                     state = state,
-                    heartRate = heartRate, //pernaw palmous
+                    heartRate = heartRate,
                     onAddPoint = { viewModel.addPoint(it) },
                     onUndo = { viewModel.undo() },
                     onEndMatch = { viewModel.endMatchEarly() }

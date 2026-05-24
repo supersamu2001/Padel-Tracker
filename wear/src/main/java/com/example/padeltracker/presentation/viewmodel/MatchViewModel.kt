@@ -2,7 +2,6 @@ package com.example.padeltracker.presentation.viewmodel
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import com.google.android.gms.wearable.Wearable
@@ -16,6 +15,7 @@ import com.example.padeltracker.presentation.model.toDomain
 import com.example.padeltracker.presentation.scoring.PadelScoreEngine
 import com.example.padeltracker.presentation.sensors.WearSensorManager
 import com.example.padeltracker.shared.communication.WearPaths
+import com.example.padeltracker.shared.debug.DebugLogger
 
 /**
  * ViewModel that manages the padel match state and delegates logic to the PadelScoreEngine.
@@ -50,17 +50,16 @@ class MatchViewModel @JvmOverloads constructor(
             if (hrHistoryBuilder.isNotEmpty()) hrHistoryBuilder.append(",")
             hrHistoryBuilder.append(newRate.toInt())
             lastSavedTimestamp = currentTime
-            Log.d("VIEW_MODEL_TEST", "Saved HR point: ${newRate.toInt()}")
+            DebugLogger.d("VIEW_MODEL_TEST", "Saved HR point: ${newRate.toInt()}")
         }
-        // TEST
-        Log.d("VIEW_MODEL_TEST", "🚀 EXOUME ViewModel NEOS PALMOS: $newRate")
+        DebugLogger.d("VIEW_MODEL_TEST", "ViewModel received new heart rate: $newRate")
     }
     private val matchEndedSender = MatchEndedSender(application)
 
     private val pendingSetupChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (pendingSetupStore.isPendingSetupKey(key)) {
-                Log.d(TAG, "Pending setup change detected.")
+                DebugLogger.d(TAG, "Pending setup change detected.")
                 applyPendingSetupIfAvailable()
             }
         }
@@ -75,15 +74,15 @@ class MatchViewModel @JvmOverloads constructor(
         return if (pendingSetup != null) {
             val match = pendingSetup.toDomain()
 
-            Log.d(
+            DebugLogger.d(
                 TAG,
                 "Loaded pending match setup: ${pendingSetup.matchId}"
             )
-            Log.d(
+            DebugLogger.d(
                 TAG,
                 "Team A: ${match.teamA.players.joinToString { it.name }}"
             )
-            Log.d(
+            DebugLogger.d(
                 TAG,
                 "Team B: ${match.teamB.players.joinToString { it.name }}"
             )
@@ -96,13 +95,12 @@ class MatchViewModel @JvmOverloads constructor(
                 pointHistory = emptyList()
             )
         } else {
-            Log.d(TAG, "No pending match setup found. Using default match.")
+            DebugLogger.d(TAG, "No pending match setup found. Using default match.")
             currentMatchUsesPhoneSetup = false
             engine.createDefaultMatch()
         }
     }
 
-    //simplify labeling
     private fun updateSensorScoreMarker() {
         val match = _state.value.currentMatch
 
@@ -122,22 +120,22 @@ class MatchViewModel @JvmOverloads constructor(
         if ((currentState.currentMatch.status != MatchStatus.NOT_STARTED && currentState.currentMatch.status != MatchStatus.WAITING_FOR_SETUP) ||
             currentState.pointHistory.isNotEmpty()
         ) {
-            Log.d(TAG, "Pending setup not applied because a match is already active.")
+            DebugLogger.d(TAG, "Pending setup not applied because a match is already active.")
             return
         }
 
         val pendingSetup = pendingSetupStore.consume()
 
         if (pendingSetup == null) {
-            Log.d(TAG, "No pending setup to apply.")
+            DebugLogger.d(TAG, "No pending setup to apply.")
             return
         }
 
         val match = pendingSetup.toDomain()
 
-        Log.d(TAG, "Applied pending match setup: ${pendingSetup.matchId}")
-        Log.d(TAG, "Team A: ${match.teamA.players.joinToString { it.name }}")
-        Log.d(TAG, "Team B: ${match.teamB.players.joinToString { it.name }}")
+        DebugLogger.d(TAG, "Applied pending match setup: ${pendingSetup.matchId}")
+        DebugLogger.d(TAG, "Team A: ${match.teamA.players.joinToString { it.name }}")
+        DebugLogger.d(TAG, "Team B: ${match.teamB.players.joinToString { it.name }}")
 
         currentMatchUsesPhoneSetup = true
 
@@ -169,21 +167,7 @@ class MatchViewModel @JvmOverloads constructor(
         }
     }
 
-    /**
-     * Moves the match status to server selection.
-     */
-    fun startMatch() {
-        matchEndedMessageSent = false
-
-        matchStartTimeMs = System.currentTimeMillis()
-
-        _state.value = engine.startMatch(_state.value)
-
-        updateSensorScoreMarker()
-        // start the collection of data from sensors
-        sensorManager.startTracking()
-
-        // Sends a message to the phone stating that the match has officially started
+    private fun notifyMatchStartedOnPhone() {
         val context = getApplication<Application>()
         Wearable.getNodeClient(context).connectedNodes.addOnSuccessListener { nodes ->
             nodes.forEach { node ->
@@ -192,13 +176,37 @@ class MatchViewModel @JvmOverloads constructor(
         }
     }
 
+    private fun startSensorTrackingForActiveMatch() {
+        matchStartTimeMs = System.currentTimeMillis()
+        sensorManager.startTracking()
+        notifyMatchStartedOnPhone()
+    }
+
+    /**
+     * Moves the match status to server selection.
+     */
+    fun startMatch() {
+        matchEndedMessageSent = false
+        resetHeartRateHistory()
+
+        _state.value = engine.startMatch(_state.value)
+
+        updateSensorScoreMarker()
+    }
+
     /**
      * Selects the initial serving team and begins match scoring.
      */
     fun selectInitialServer(teamId: TeamId) {
+        val previousStatus = _state.value.currentMatch.status
         _state.value = engine.selectInitialServer(_state.value, teamId)
-        //simplify labeling
         updateSensorScoreMarker()
+
+        if (previousStatus != MatchStatus.IN_PROGRESS &&
+            _state.value.currentMatch.status == MatchStatus.IN_PROGRESS
+        ) {
+            startSensorTrackingForActiveMatch()
+        }
     }
 
     /**
@@ -211,6 +219,10 @@ class MatchViewModel @JvmOverloads constructor(
 
         sensorManager.flushPendingSensorBatches()
 
+        if (_state.value.currentMatch.status == MatchStatus.FINISHED) {
+            sensorManager.stopTracking()
+        }
+
         broadcastLiveScore()
     }
 
@@ -218,9 +230,17 @@ class MatchViewModel @JvmOverloads constructor(
      * Undoes the last point recorded.
      */
     fun undo() {
+        val previousStatus = _state.value.currentMatch.status
         _state.value = engine.undo(_state.value)
-        //simplify labeling
         updateSensorScoreMarker()
+
+        val newStatus = _state.value.currentMatch.status
+        if (previousStatus == MatchStatus.FINISHED && newStatus == MatchStatus.IN_PROGRESS) {
+            sensorManager.startTracking()
+        } else if (previousStatus == MatchStatus.IN_PROGRESS && newStatus == MatchStatus.SELECTING_SERVER) {
+            sensorManager.stopTracking()
+        }
+
         broadcastLiveScore()
     }
 
@@ -229,9 +249,9 @@ class MatchViewModel @JvmOverloads constructor(
      */
     fun resetMatch() {
         matchEndedMessageSent = false
+        resetHeartRateHistory()
         _state.value = createInitialState()
 
-        //simplify labeling
         updateSensorScoreMarker()
 
         // stops the collection of data from sensors
@@ -244,6 +264,10 @@ class MatchViewModel @JvmOverloads constructor(
     fun endMatchEarly() {
         _state.value = engine.endMatchEarly(_state.value)
         updateSensorScoreMarker()
+
+        if (_state.value.currentMatch.status == MatchStatus.FINISHED) {
+            sensorManager.stopTracking()
+        }
     }
 
     /**
@@ -253,24 +277,24 @@ class MatchViewModel @JvmOverloads constructor(
         val match = _state.value.currentMatch
 
         if (match.status != MatchStatus.FINISHED) {
-            Log.d(TAG, "End match confirmation ignored because match is not finished.")
+            DebugLogger.d(TAG, "End match confirmation ignored because match is not finished.")
             return
         }
 
         if (!currentMatchUsesPhoneSetup) {
-            Log.d(TAG, "Default Wear match ended locally. No phone notification sent.")
+            DebugLogger.d(TAG, "Default Wear match ended locally. No phone notification sent.")
             resetMatch()
             return
         }
 
         if (matchEndedMessageSent) {
-            Log.d(TAG, "Match ended message already sent.")
+            DebugLogger.d(TAG, "Match ended message already sent.")
             return
         }
 
         matchEndedMessageSent = true
 
-        Log.d(TAG, "User confirmed end match. Sending match ended message.")
+        DebugLogger.d(TAG, "User confirmed end match. Sending match ended message.")
         // Stop sensor tracking before sending match-end data.
         // This prevents sensor packets, especially RAW_TO_PHONE packets,
         // from delaying the match-ended communication.
@@ -304,31 +328,16 @@ class MatchViewModel @JvmOverloads constructor(
         val seconds = (durationMs / 1000) % 60
         val finalDuration = String.format(java.util.Locale.getDefault(), "%02d:%02d", minutes, seconds)
 
-
-        // Send the history to the sender
         matchEndedSender.sendMatchEnded(
-            heartRateHistory = historyString,
+            score = finalScore,
             avgHeartRate = avgHr,
             teamAPlayers = teamA,
             teamBPlayers = teamB,
-            score = finalScore,
             winner = winnerName,
             duration = finalDuration,
+            heartRateHistory = historyString,
             tournamentName = match.tournamentName
         )
-
-        val info = "$finalScore|$avgHr|$teamA|$teamB|$winnerName|$finalDuration|$historyString|${match.tournamentName}"
-        val wearContext = getApplication<Application>()
-
-        Wearable.getNodeClient(wearContext).connectedNodes.addOnSuccessListener { nodes ->
-            nodes.forEach { node ->
-                Wearable.getMessageClient(wearContext).sendMessage(
-                    node.id,
-                    WearPaths.MATCH_STATS,
-                    info.toByteArray(Charsets.UTF_8)
-                )
-            }
-        }
 
         resetMatch()
     }
@@ -337,6 +346,12 @@ class MatchViewModel @JvmOverloads constructor(
         super.onCleared()
         sensorManager.stopTracking()
         pendingSetupStore.unregisterChangeListener(pendingSetupChangeListener)
+    }
+
+    private fun resetHeartRateHistory() {
+        _heartRate.value = 0.0
+        hrHistoryBuilder.clear()
+        lastSavedTimestamp = 0L
     }
 
     companion object {

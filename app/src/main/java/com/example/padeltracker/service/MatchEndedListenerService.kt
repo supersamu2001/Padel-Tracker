@@ -1,6 +1,5 @@
 package com.example.padeltracker.service
 
-import android.util.Log
 import com.example.padeltracker.ml.ShotDetectionState
 import com.example.padeltracker.data.AppDatabase
 import com.example.padeltracker.data.HistoryRepository
@@ -16,6 +15,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import com.example.padeltracker.shared.communication.WearPaths
+import com.example.padeltracker.shared.debug.DebugLogger
+import org.json.JSONObject
 
 /**
  * Save the match infos into the Room database (with a coroutine) when the match is ended
@@ -35,20 +36,20 @@ class MatchEndedListenerService : WearableListenerService() {
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
 
-        Log.d("PHONE_MATCH_ENDED", "Message received. path=${messageEvent.path}")
+        DebugLogger.d(TAG, "Message received. path=${messageEvent.path}")
 
         if (messageEvent.path == WearPaths.MATCH_STARTED) {
             ShotDetectionState.reset()
-            Log.d("PHONE_MATCH_ENDED", "Match started: ShotDetectionState reset")
+            DebugLogger.d(TAG, "Match started: ShotDetectionState reset")
             return
         }
 
-        if (messageEvent.path == WearPaths.MATCH_STATS) {
-            val rawData = messageEvent.data?.toString(Charsets.UTF_8) ?: ""
-            Log.d("PHONE_MATCH_ENDED", "Received payload from wear: $rawData")
+        if (messageEvent.path == WearPaths.MATCH_ENDED) {
+            val rawData = messageEvent.data.toString(Charsets.UTF_8)
+            DebugLogger.d(TAG, "Received payload from wear: $rawData")
 
             try {
-                val tokens = rawData.split("|")
+                val payload = JSONObject(rawData)
                 val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
                 // Use the counts from the phone's classifier
@@ -58,34 +59,38 @@ class MatchEndedListenerService : WearableListenerService() {
                     // Room generates automatically a new incremental ID
                     id = 0,
                     date = currentDate,
-                    score = tokens.getOrNull(0) ?: "0-0",
-                    avgHeartRate = tokens.getOrNull(1)?.toIntOrNull() ?: 0,
+                    score = payload.optString("score", "0-0"),
+                    avgHeartRate = payload.optInt("avgHeartRate", 0),
                     forehands = currentShots.forehands,
                     backhands = currentShots.backhands,
                     smashes = currentShots.smashes,
                     services = currentShots.services,
                     forehandLobs = currentShots.forehandLobs,
                     backhandLobs = currentShots.backhandLobs,
-                    teamAPlayers = tokens.getOrNull(2) ?: "Team A",
-                    teamBPlayers = tokens.getOrNull(3) ?: "Team B",
-                    winner = tokens.getOrNull(4) ?: "Draw",
-                    duration = tokens.getOrNull(5) ?: "00:00",
-                    heartRateHistory = tokens.getOrNull(6) ?: "",
-                    tournamentName = tokens.getOrNull(7) ?: ""
+                    teamAPlayers = payload.optString("teamAPlayers", "Team A"),
+                    teamBPlayers = payload.optString("teamBPlayers", "Team B"),
+                    winner = payload.optString("winner", "Draw"),
+                    duration = payload.optString("duration", "00:00"),
+                    heartRateHistory = payload.optString("heartRateHistory", ""),
+                    tournamentName = payload.optString("tournamentName", "")
                 )
 
                 // save in database of the phone
                 serviceScope.launch {
                     repository.insertMatch(completedMatch)
-                    Log.d("PHONE_MATCH_ENDED", "Match saved to Room database successfully!")
+                    DebugLogger.d(TAG, "Match saved to Room database successfully!")
 
                     // end match
                     PhoneMatchEndedEventBus.notifyMatchEnded(System.currentTimeMillis())
                 }
 
             } catch (e: Exception) {
-                Log.e("PHONE_MATCH_ENDED", "Error parsing or saving match data", e)
+                DebugLogger.e(TAG, "Error parsing or saving match data", e)
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "PHONE_MATCH_ENDED"
     }
 }

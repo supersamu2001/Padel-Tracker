@@ -77,7 +77,6 @@
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
                 <data android:host="*" android:path="/match_started" android:scheme="wear" />
-                <data android:host="*" android:path="/match_stats" android:scheme="wear" />
                 <data android:host="*" android:path="/match/ended" android:scheme="wear" />
             </intent-filter>
         </service>

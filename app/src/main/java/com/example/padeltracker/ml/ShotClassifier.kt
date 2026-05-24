@@ -1,14 +1,8 @@
 package com.example.padeltracker.ml
 
 import android.content.Context
-import android.content.res.AssetManager
 import com.example.padeltracker.shared.shotrecognition.ShotFeatureExtractor
 import com.example.padeltracker.shared.shotrecognition.ShotWindow
-import org.tensorflow.lite.Interpreter
-import java.io.FileInputStream
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.nio.channels.FileChannel
 
 // Defines all the possible types of shot
 enum class ShotType {

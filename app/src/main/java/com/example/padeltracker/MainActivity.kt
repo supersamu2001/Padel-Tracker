@@ -1,7 +1,6 @@
 package com.example.padeltracker
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,6 +16,8 @@ import com.example.padeltracker.data.HistoryRepository
 import com.example.padeltracker.data.MatchRecord
 import com.example.padeltracker.shared.MatchSetup
 import com.example.padeltracker.shared.communication.WearPaths
+import com.example.padeltracker.shared.experiment.ExperimentConfig
+import com.example.padeltracker.shared.debug.DebugLogger
 import com.example.padeltracker.ui.screens.*
 import com.example.padeltracker.ui.theme.*
 import com.example.padeltracker.wear.PhoneMatchEndedEventBus
@@ -73,12 +74,15 @@ class MainActivity : ComponentActivity() {
                 val matchSetupSender = remember {
                     WearMatchSetupSender(this@MainActivity)
                 }
+                val experimentConfig = remember { ExperimentConfig() }
 
                 // Listener that when receives the signal that the match is ended, retrieve data just saved from the latest match,
                 // wait a bit and then move them into the AnalysisScreen
                 LaunchedEffect(Unit) {
                     PhoneMatchEndedEventBus.events.collect { endedAt ->
-                        Log.d("PHONE_MATCH_ENDED", "Match ended event received: $endedAt")
+                        if (experimentConfig.debugMode) {
+                            DebugLogger.d("PHONE_MATCH_ENDED", "Match ended event received: $endedAt")
+                        }
 
                         // Wait a bit for the DB to be written by the Service
                         delay(700)

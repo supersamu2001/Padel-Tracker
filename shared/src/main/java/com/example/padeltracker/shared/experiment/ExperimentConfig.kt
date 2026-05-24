@@ -12,6 +12,7 @@ data class ExperimentConfig(
     //val mode: ExperimentMode = ExperimentMode.RAW_TO_PHONE,
     val mode: ExperimentMode = ExperimentMode.FEATURES_TO_PHONE,
     //val mode: ExperimentMode = ExperimentMode.SHOT_TO_PHONE,
+    val debugMode: Boolean = false,
     /**
      * Sensor sampling frequency.
      *
@@ -61,7 +62,7 @@ data class ExperimentConfig(
      * Shows a toast when a shot is detected.
      * Mainly useful during debugging or dataset collection.
      */
-    val showShotDetectionToast: Boolean = true,
+    val showShotDetectionToast: Boolean = debugMode,
 
     /**
      * Number of shot windows accumulated before sending them to the phone.

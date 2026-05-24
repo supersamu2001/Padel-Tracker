@@ -16,8 +16,6 @@ object WearPaths {
     const val MATCH_STARTED = "/match_started"
     const val LIVE_SCORE = "/live_score"
     const val MATCH_ENDED = "/match/ended"
-    const val MATCH_STATS = "/match_stats"
-    const val MATCH_RESULT = "/match_result"
 
     // Raw sensor data
     const val SENSOR_RAW = "/sensor_data"
@@ -42,6 +40,4 @@ object WearPaths {
      * This will be used by FEATURES_TO_PHONE mode.
      */
     const val SENSOR_FEATURES = "/shot_features"
-
-    const val HEART_RATE = "/heart_rate_data"
 }

@@ -5,10 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import com.google.android.gms.wearable.Wearable
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
 
 //toast debug
@@ -37,6 +34,7 @@ import com.example.padeltracker.shared.shotrecognition.ShotFeatureVector
 import com.example.padeltracker.shared.communication.WearPaths
 import com.example.padeltracker.shared.communication.ScoreHeader
 import com.example.padeltracker.shared.communication.SensorPacket
+import com.example.padeltracker.shared.debug.DebugLogger
 import com.example.padeltracker.shared.experiment.ExperimentMode
 
 class WearSensorManager(
@@ -94,8 +92,8 @@ class WearSensorManager(
     private var shotWindowBatchFlushScheduled = false
     private var featureVectorBatchFlushScheduled = false
     private var rawBatchFlushScheduled = false
+    private var isTracking = false
 
-    // adding score to  simplify labeling
     @Volatile
     private var currentTeamASets: Int = 0
 
@@ -114,7 +112,7 @@ class WearSensorManager(
 
     private val heartRateCallback = object : MeasureCallback {
         override fun onAvailabilityChanged(dataType: DeltaDataType<*, *>, availability: Availability) {
-            Log.d(TAG, "Heart Rate Sensor Availability: $availability")
+            DebugLogger.d(TAG, "Heart Rate Sensor Availability: $availability")
         }
 
         override fun onDataReceived(data: DataPointContainer) {
@@ -124,17 +122,7 @@ class WearSensorManager(
 
                 onHeartRateChanged(latestHeartRate)
 
-                Log.d(TAG, "❤️ Heart Rate: $latestHeartRate BPM")
-
-                // Send the heart rate to the phone using the new path
-                targetNodeId?.let { nodeId ->
-                    val buffer = ByteBuffer.allocate(8) // 8 bytes for a Double
-                    buffer.order(ByteOrder.LITTLE_ENDIAN)
-                    buffer.putDouble(latestHeartRate)
-
-                    messageClient.sendMessage(nodeId, WearPaths.HEART_RATE, buffer.array())
-                        .addOnFailureListener { Log.e(TAG, "FAILED TO SEND HEART RATE") }
-                }
+                DebugLogger.d(TAG, "Heart Rate: $latestHeartRate BPM")
             }
         }
     }
@@ -143,15 +131,14 @@ class WearSensorManager(
         // Search for connected phone
         nodeClient.connectedNodes.addOnSuccessListener { nodes ->
             if (nodes.isEmpty()) {
-                Log.e(TAG, "ERROR: NO PHONE FOUND!")
+                DebugLogger.e(TAG, "ERROR: NO PHONE FOUND!")
             } else {
                 targetNodeId = nodes.firstOrNull()?.id
-                Log.d(TAG, "PHONE FOUND: $targetNodeId")
+                DebugLogger.d(TAG, "PHONE FOUND: $targetNodeId")
             }
         }
     }
 
-    // simplify labeling
     fun updateScoreMarker(
         teamASets: Int,
         teamBSets: Int,
@@ -163,7 +150,7 @@ class WearSensorManager(
         currentTeamAGames = teamAGames
         currentTeamBGames = teamBGames
 
-        Log.d(
+        DebugLogger.d(
             TAG,
             "Score marker updated: S$teamASets-$teamBSets" +
                     "_G$teamAGames-$teamBGames"
@@ -182,35 +169,48 @@ class WearSensorManager(
     }
 
     fun startTracking() {
-        Log.d(TAG, "Start tracking sensors (${experimentConfig.samplingHz}Hz)...")
+        if (isTracking) {
+            DebugLogger.d(TAG, "Sensor tracking already active")
+            return
+        }
+
+        DebugLogger.d(TAG, "Start tracking sensors (${experimentConfig.samplingHz}Hz)...")
+        isTracking = true
 
         experimentPipeline.reset()
 
         accelerometer?.let {
             sensorManager.registerListener(this, it, experimentConfig.sensorDelayMicros)
-            Log.d(TAG, "Accelerometer registered at ${experimentConfig.samplingHz}Hz")
-        } ?: Log.e(TAG, "Accelerometer not found!")
+            DebugLogger.d(TAG, "Accelerometer registered at ${experimentConfig.samplingHz}Hz")
+        } ?: DebugLogger.e(TAG, "Accelerometer not found!")
 
         gyroscope?.let {
             sensorManager.registerListener(this, it, experimentConfig.sensorDelayMicros)
-            Log.d(TAG, "Gyroscope registered at ${experimentConfig.samplingHz}Hz")
-        } ?: Log.e(TAG, "Gyroscope not found!")
+            DebugLogger.d(TAG, "Gyroscope registered at ${experimentConfig.samplingHz}Hz")
+        } ?: DebugLogger.e(TAG, "Gyroscope not found!")
 
         //heartbeat
 
         scope.launch {
             try {
                 measureClientHR.registerMeasureCallback(DataType.HEART_RATE_BPM, heartRateCallback)
-                Log.d(TAG, "Heart Rate registered successfully!")
+                DebugLogger.d(TAG, "Heart Rate registered successfully!")
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to register HR: ${e.message}")
+                DebugLogger.e(TAG, "Failed to register HR: ${e.message}")
             }
         }
 
     }
 
     fun stopTracking() {
-        Log.d(TAG, "Interruption tracking sensors")
+        if (!isTracking) {
+            flushPendingSensorBatches()
+            DebugLogger.d(TAG, "Sensor tracking already stopped")
+            return
+        }
+
+        DebugLogger.d(TAG, "Interruption tracking sensors")
+        isTracking = false
         flushPendingSensorBatches()
         sensorManager.unregisterListener(this)
 
@@ -221,9 +221,9 @@ class WearSensorManager(
         scope.launch {
             try {
                 measureClientHR.unregisterMeasureCallback(DataType.HEART_RATE_BPM,heartRateCallback)
-                Log.d(TAG, "Heart Rate unregistered.")
+                DebugLogger.d(TAG, "Heart Rate unregistered.")
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to unregister HR: ${e.message}")
+                DebugLogger.e(TAG, "Failed to unregister HR: ${e.message}")
             }
         }
 
@@ -299,13 +299,13 @@ class WearSensorManager(
         targetNodeId?.let { nodeId ->
             messageClient.sendMessage(nodeId, WearPaths.SENSOR_RAW, data)
                 .addOnSuccessListener {
-                    Log.d(
+                    DebugLogger.d(
                         TAG,
                         "Raw sensor batch sent successfully! path=${WearPaths.SENSOR_RAW}, bytes=${data.size}, samples=${batch.size}"
                     )
                 }
                 .addOnFailureListener { e ->
-                    Log.e(TAG, "FAILED TO SEND RAW SENSOR BATCH: ${e.message}")
+                    DebugLogger.e(TAG, "FAILED TO SEND RAW SENSOR BATCH: ${e.message}")
                 }
         }
     }
@@ -327,14 +327,14 @@ class WearSensorManager(
         targetNodeId?.let { nodeId ->
             messageClient.sendMessage(nodeId, WearPaths.SENSOR_SHOT_DATA_COLLECTION, data)
                 .addOnSuccessListener {
-                    Log.d(
+                    DebugLogger.d(
                         TAG,
                         "Data collection shot sent successfully! (${shotWindow.totalSamples} samples)"
                     )
                     showShotDetectedToast()
                 }
                 .addOnFailureListener { e ->
-                    Log.e(TAG, "FAILED TO SEND DATA COLLECTION SHOT: ${e.message}")
+                    DebugLogger.e(TAG, "FAILED TO SEND DATA COLLECTION SHOT: ${e.message}")
                 }
         }
     }
@@ -402,13 +402,13 @@ class WearSensorManager(
         targetNodeId?.let { nodeId ->
             messageClient.sendMessage(nodeId, WearPaths.SENSOR_SHOT_WINDOW, data)
                 .addOnSuccessListener {
-                    Log.d(
+                    DebugLogger.d(
                         TAG,
                         "Shot window batch sent successfully! path=${WearPaths.SENSOR_SHOT_WINDOW}, bytes=${data.size}, windows=${batch.size}"
                     )
                 }
                 .addOnFailureListener { e ->
-                    Log.e(TAG, "FAILED TO SEND SHOT WINDOW BATCH: ${e.message}")
+                    DebugLogger.e(TAG, "FAILED TO SEND SHOT WINDOW BATCH: ${e.message}")
                 }
         }
     }
@@ -430,13 +430,13 @@ class WearSensorManager(
         targetNodeId?.let { nodeId ->
             messageClient.sendMessage(nodeId, WearPaths.SENSOR_FEATURES, data)
                 .addOnSuccessListener {
-                    Log.d(
+                    DebugLogger.d(
                         TAG,
                         "Feature vector batch sent successfully! path=${WearPaths.SENSOR_FEATURES}, bytes=${data.size}, vectors=${batch.size}"
                     )
                 }
                 .addOnFailureListener { e ->
-                    Log.e(TAG, "FAILED TO SEND FEATURE VECTOR BATCH: ${e.message}")
+                    DebugLogger.e(TAG, "FAILED TO SEND FEATURE VECTOR BATCH: ${e.message}")
                 }
         }
     }
@@ -445,4 +445,5 @@ class WearSensorManager(
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         // Not necessary up to now
     }
+
 }

@@ -2,12 +2,12 @@ package com.example.padeltracker.presentation.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.core.content.edit
 import com.example.padeltracker.shared.MatchRules
 import com.example.padeltracker.shared.MatchSetup
 import com.example.padeltracker.shared.PlayerSetup
 import com.example.padeltracker.shared.TeamSetup
+import com.example.padeltracker.shared.debug.DebugLogger
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -19,7 +19,6 @@ import org.json.JSONObject
  * This class ensures robustness and reliability in this phase.
  */
 class PendingMatchSetupStore(context: Context) {
-
     // settings saved through the Android SharedPreferences, that save them in key-value pairs
     private val prefs = context.applicationContext.getSharedPreferences(
         PREFS_NAME,
@@ -34,7 +33,7 @@ class PendingMatchSetupStore(context: Context) {
             putString(KEY_SETUP_JSON, json)
         }
 
-        Log.d(TAG, "Pending match setup saved: ${setup.matchId}")
+        DebugLogger.d(TAG, "Pending match setup saved: ${setup.matchId}")
     }
 
     // Retrieve data in memory, reading the JSON string and converting it into a Kotlin object
@@ -44,7 +43,7 @@ class PendingMatchSetupStore(context: Context) {
         return try {
             JSONObject(json).toMatchSetup()
         } catch (error: Exception) {
-            Log.e(TAG, "Failed to load pending match setup", error)
+            DebugLogger.e(TAG, "Failed to load pending match setup", error)
             null
         }
     }
@@ -54,7 +53,7 @@ class PendingMatchSetupStore(context: Context) {
         val setup = load()
         if (setup != null) {
             clear()
-            Log.d(TAG, "Pending match setup consumed: ${setup.matchId}")
+            DebugLogger.d(TAG, "Pending match setup consumed: ${setup.matchId}")
         }
         return setup
     }
@@ -65,7 +64,7 @@ class PendingMatchSetupStore(context: Context) {
             remove(KEY_SETUP_JSON)
         }
 
-        Log.d(TAG, "Pending match setup cleared")
+        DebugLogger.d(TAG, "Pending match setup cleared")
     }
 
     fun registerChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {

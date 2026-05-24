@@ -1,7 +1,6 @@
 package com.example.padeltracker.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -9,14 +8,8 @@ import com.example.padeltracker.presentation.ui.WearApp
 import com.example.padeltracker.presentation.viewmodel.MatchViewModel
 import com.example.padeltracker.presentation.data.PendingMatchSetupStore
 import com.example.padeltracker.shared.communication.WearPaths
+import com.example.padeltracker.shared.debug.DebugLogger
 import com.google.android.gms.wearable.Wearable
-import android.Manifest // heartbeat
-import android.content.pm.PackageManager
-//new
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.padeltracker.presentation.ui.WearApp
 
 /**
  * Launch the app and manage the initial permissions
@@ -40,17 +33,10 @@ class MainActivity : ComponentActivity() {
         Wearable.getCapabilityClient(this)
             .addLocalCapability(WearPaths.WATCH_CAPABILITY)
             .addOnSuccessListener {
-                Log.d(
-                    "WATCH_CAPABILITY",
-                    "Local capability registered: ${WearPaths.WATCH_CAPABILITY}"
-                )
+                DebugLogger.d("WATCH_CAPABILITY", "Local capability registered: ${WearPaths.WATCH_CAPABILITY}")
             }
             .addOnFailureListener { error ->
-                Log.e(
-                    "WATCH_CAPABILITY",
-                    "Failed to register local capability",
-                    error
-                )
+                DebugLogger.e("WATCH_CAPABILITY", "Failed to register local capability", error)
             }
     }
 
@@ -58,14 +44,14 @@ class MainActivity : ComponentActivity() {
         val setup = PendingMatchSetupStore(this).load()
 
         if (setup == null) {
-            Log.d("PENDING_MATCH_SETUP", "No pending match setup found")
+            DebugLogger.d("PENDING_MATCH_SETUP", "No pending match setup found")
         } else {
-            Log.d("PENDING_MATCH_SETUP", "Pending match setup available: ${setup.matchId}")
-            Log.d(
+            DebugLogger.d("PENDING_MATCH_SETUP", "Pending match setup available: ${setup.matchId}")
+            DebugLogger.d(
                 "PENDING_MATCH_SETUP",
                 "teamA=${setup.teamA.name}: ${setup.teamA.players.joinToString { it.name }}"
             )
-            Log.d(
+            DebugLogger.d(
                 "PENDING_MATCH_SETUP",
                 "teamB=${setup.teamB.name}: ${setup.teamB.players.joinToString { it.name }}"
             )

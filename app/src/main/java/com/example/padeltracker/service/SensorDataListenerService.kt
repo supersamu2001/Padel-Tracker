@@ -1,7 +1,6 @@
 package com.example.padeltracker.service
 
 import android.hardware.Sensor
-import android.util.Log
 import com.example.padeltracker.ml.ShotClassifier
 import com.example.padeltracker.ml.ShotDetectionState
 import com.example.padeltracker.ml.ShotType
@@ -13,6 +12,7 @@ import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.WearableListenerService
 import com.example.padeltracker.shared.experiment.ExperimentConfig
 import com.example.padeltracker.shared.shotrecognition.ShotDetector
+import com.example.padeltracker.shared.debug.DebugLogger
 
 class SensorDataListenerService : WearableListenerService() {
 
@@ -33,13 +33,12 @@ class SensorDataListenerService : WearableListenerService() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d(TAG, ">>> SERVICE STARTED: onCreate called correctly! <<<")
+        DebugLogger.d(TAG, ">>> SERVICE STARTED: onCreate called correctly! <<<")
         try {
             classifier = ShotClassifier(this)
-            Log.d(TAG, "Classifier initialized with success")
+            DebugLogger.d(TAG, "Classifier initialized with success")
         } catch (e: Exception) {
-            Log.e(TAG, "ERROR in the initialization of the Classifier: ${e.message}")
-            e.printStackTrace()
+            DebugLogger.e(TAG, "ERROR in the initialization of the Classifier: ${e.message}", e)
         }
         shotLogger = ShotLogger(this)
     }
@@ -47,7 +46,7 @@ class SensorDataListenerService : WearableListenerService() {
     override fun onMessageReceived(messageEvent: MessageEvent) {
         val data = messageEvent.data
 
-        Log.d(
+        DebugLogger.d(
             TAG,
             "Message received. path=${messageEvent.path}, bytes=${data.size}"
         )
@@ -74,7 +73,7 @@ class SensorDataListenerService : WearableListenerService() {
             }
 
             else -> {
-                Log.d(TAG, "Ignored message on path: ${messageEvent.path}")
+                DebugLogger.d(TAG, "Ignored message on path: ${messageEvent.path}")
             }
         }
     }
@@ -87,7 +86,7 @@ class SensorDataListenerService : WearableListenerService() {
                 data = data
             ) as SensorPacket.RawSensorBatch
 
-            Log.d(
+            DebugLogger.d(
                 TAG,
                 "Raw sensor batch received. samples=${packet.samples.size}"
             )
@@ -97,19 +96,21 @@ class SensorDataListenerService : WearableListenerService() {
             }
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error parsing raw sensor batch packet: ${e.message}", e)
+            DebugLogger.e(TAG, "Error parsing raw sensor batch packet: ${e.message}", e)
         }
     }
 
     private fun processRawSensorSample(packet: SensorPacket.RawSensorSample) {
         val value = packet.value
 
-        SensorStatusState.updateData(
-            type = packet.sensorType,
-            x = value.x,
-            y = value.y,
-            z = value.z
-        )
+        if (experimentConfig.debugMode) {
+            SensorStatusState.updateData(
+                type = packet.sensorType,
+                x = value.x,
+                y = value.y,
+                z = value.z
+            )
+        }
 
         val shotWindow = when (packet.sensorType) {
             Sensor.TYPE_ACCELEROMETER -> {
@@ -130,19 +131,21 @@ class SensorDataListenerService : WearableListenerService() {
         }
 
         if (shotWindow != null) {
-            Log.d(
+            DebugLogger.d(
                 TAG,
                 "Raw pipeline detected shot. samples=${shotWindow.totalSamples}"
             )
 
             val shotType = classifier?.classify_shot(shotWindow) ?: ShotType.UNKNOWN
-            Log.d(TAG, "Raw pipeline shot classified: $shotType")
+            DebugLogger.d(TAG, "Raw pipeline shot classified: $shotType")
 
             // Record the shot in order to show all of them in the final AnalysisScreen
             ShotDetectionState.recordShot(shotType)
 
             // Record the shot in order to show it in the HomeScreen as debug
-            SensorStatusState.recordShot(shotWindow.totalSamples)
+            if (experimentConfig.debugMode) {
+                SensorStatusState.recordShot(shotWindow.totalSamples)
+            }
         }
     }
 
@@ -173,17 +176,19 @@ class SensorDataListenerService : WearableListenerService() {
                 )
             }
 
-            Log.d(
+            DebugLogger.d(
                 TAG,
                 "Received data collection shot: ${shotWindow.totalSamples} samples, scoreMarker=$scoreMarker"
             )
 
             shotLogger?.logShot(accBatch, gyroBatch, scoreMarker)
 
-            SensorStatusState.recordShot(shotWindow.totalSamples)
+            if (experimentConfig.debugMode) {
+                SensorStatusState.recordShot(shotWindow.totalSamples)
+            }
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error parsing data collection shot packet: ${e.message}", e)
+            DebugLogger.e(TAG, "Error parsing data collection shot packet: ${e.message}", e)
         }
     }
 
@@ -195,23 +200,25 @@ class SensorDataListenerService : WearableListenerService() {
                 data = data
             ) as SensorPacket.ShotWindowBatch
 
-            Log.d(
+            DebugLogger.d(
                 TAG,
                 "Shot window batch received. windows=${packet.shotWindows.size}"
             )
 
             packet.shotWindows.forEach { shotWindow ->
                 val shotType = classifier?.classify_shot(shotWindow) ?: ShotType.UNKNOWN
-                Log.d(TAG, "Shot classified: $shotType")
+                DebugLogger.d(TAG, "Shot classified: $shotType")
 
                 //
                 ShotDetectionState.recordShot(shotType)
 
-                SensorStatusState.recordShot(shotWindow.totalSamples)
+                if (experimentConfig.debugMode) {
+                    SensorStatusState.recordShot(shotWindow.totalSamples)
+                }
             }
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error parsing shot window batch packet: ${e.message}", e)
+            DebugLogger.e(TAG, "Error parsing shot window batch packet: ${e.message}", e)
         }
     }
 
@@ -223,7 +230,7 @@ class SensorDataListenerService : WearableListenerService() {
                 data = data
             ) as SensorPacket.FeatureVectorBatch
 
-            Log.d(
+            DebugLogger.d(
                 TAG,
                 "Feature vector batch received. vectors=${packet.featureVectors.size}"
             )
@@ -232,18 +239,18 @@ class SensorDataListenerService : WearableListenerService() {
                 val doubleFeatures = values.map { it.toDouble() }.toDoubleArray()
                 val shotType = classifier?.classify_shot(doubleFeatures) ?: ShotType.UNKNOWN
 
-                Log.d(TAG, "Feature vector classified: $shotType")
+                DebugLogger.d(TAG, "Feature vector classified: $shotType")
                 ShotDetectionState.recordShot(shotType)
             }
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error parsing feature vector batch packet: ${e.message}", e)
+            DebugLogger.e(TAG, "Error parsing feature vector batch packet: ${e.message}", e)
         }
     }
 
     override fun onDestroy() {
         phoneShotDetector.reset()
-        Log.d(TAG, "Service destroyed")
+        DebugLogger.d(TAG, "Service destroyed")
         super.onDestroy()
     }
 }
