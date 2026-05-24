@@ -20,7 +20,7 @@ Manages the main user interface, advanced analysis logic, and data persistence.
     - `MatchDao.kt`: Interface for database queries (Insert, Delete, Query).
     - `MatchRecord.kt`: Table model for saved match details.
     - `HistoryRepository.kt`: Bridge between the DAO and the UI for history management.
-    - `MatchPreferences.kt`: Player name management via DataStore for field pre-filling.
+    - `MatchPreferences.kt`: Player name management via DataStore for field pre-filling during the match set-up
 - **`ml/`**: Machine Learning integration.
     - `ShotClassifier.kt`: Orchestrates the classification process by extracting features and calling the model.
     - `PadelModel.java`: The core ML model (Random Forest) converted into native Java code for maximum performance.
