@@ -59,7 +59,7 @@ Optimized for performance and energy efficiency during sports activities.
     - **`viewmodel/`**:
         - `MatchViewModel.kt`: Manages the live state of the match, heart rate history, and duration.
     - **`communication/`**:
-        - `MatchEndedSender.kt`: Sends the final match summary to the phone via DataClient and MessageClient.
+        - `MatchEndedSender.kt`: Sends the final match summary to the phone through MessageClient using a JSON payload.
     - **`model/`**:
         - `DomainModel.kt`: Internal data structures for match state (Sets, Games, Players).
         - `MatchSetupMappers.kt`: Converts shared communication models into internal domain models.
