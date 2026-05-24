@@ -6,6 +6,12 @@ import com.example.padeltracker.shared.debug.DebugLogger
 import com.google.android.gms.wearable.Wearable
 import org.json.JSONObject
 
+/**
+ * Sends the completed match summary from the Wear app to connected phones.
+ *
+ * Called by MatchViewModel when the user confirms the end of the match.
+ */
+
 class MatchEndedSender(
     private val context: Context
 ) {
