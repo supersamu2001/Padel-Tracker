@@ -45,6 +45,8 @@ Optimized for performance and energy efficiency during sports activities.
 
 - **`presentation/`**:
     - `MainActivity.kt`: Entry point for the Wear OS app, manages initial permissions.
+    - **`ui/`**:
+        - `WearApp.kt`: The main UI orchestrator. It handles the navigation flow between different match states (Waiting, Setup, Scoring, Finished) and manages health-related permissions.
     - **`sensors/`**:
         - `WearSensorManager.kt`: Orchestrates IMU sensors and high-level communication logic.
         - `WearExperimentPipeline.kt`: Manages the flow of sensor data through detection and feature extraction.
@@ -61,7 +63,6 @@ Optimized for performance and energy efficiency during sports activities.
     - **`model/`**:
         - `DomainModel.kt`: Internal data structures for match state (Sets, Games, Players).
         - `MatchSetupMappers.kt`: Converts shared communication models into internal domain models.
-    - **`ui/`**:
 
 ### 🤝 `:shared` Module (Shared Code)
 Common logic and models used by both modules to ensure binary compatibility.
