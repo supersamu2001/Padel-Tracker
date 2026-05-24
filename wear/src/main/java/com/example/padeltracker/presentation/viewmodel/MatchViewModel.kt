@@ -217,7 +217,8 @@ class MatchViewModel @JvmOverloads constructor(
 
         updateSensorScoreMarker()
 
-        sensorManager.flushPendingSensorBatches()
+        // since it also flush
+        // sensorManager.flushPendingSensorBatches()
 
         if (_state.value.currentMatch.status == MatchStatus.FINISHED) {
             sensorManager.stopTracking()

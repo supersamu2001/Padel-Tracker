@@ -68,14 +68,14 @@ data class ExperimentConfig(
      *
      * Used only in SHOT_TO_PHONE mode.
      */
-    val shotWindowBatchSize: Int = 10,
+    val shotWindowBatchSize: Int = 20,
 
     /**
      * Number of feature vectors accumulated before sending them to the phone.
      *
      * Used only in FEATURES_TO_PHONE mode.
      */
-    val featureVectorBatchSize: Int = 10,
+    val featureVectorBatchSize: Int = 20,
 
     /**
      * Maximum time a shot/feature batch can remain pending before being sent.
