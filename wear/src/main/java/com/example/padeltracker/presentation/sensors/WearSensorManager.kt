@@ -39,6 +39,11 @@ import com.example.padeltracker.shared.communication.ScoreHeader
 import com.example.padeltracker.shared.communication.SensorPacket
 import com.example.padeltracker.shared.experiment.ExperimentMode
 
+/**
+ * Orchestrates IMU sensors and high-level communication logic
+ *
+ * (Search for "messageClient.sendMessage" to see the lines of the actual transmission of data)
+ */
 class WearSensorManager(
     private val context: Context,
     private val onHeartRateChanged: (Double) -> Unit
@@ -296,6 +301,7 @@ class WearSensorManager(
             packet = SensorPacket.RawSensorBatch(batch)
         )
 
+        // Actual sending of stream of all the raw data to the phone
         targetNodeId?.let { nodeId ->
             messageClient.sendMessage(nodeId, WearPaths.SENSOR_RAW, data)
                 .addOnSuccessListener {
@@ -324,6 +330,7 @@ class WearSensorManager(
             )
         )
 
+        // Actual sending of raw data of the shot with score_marker for data collection
         targetNodeId?.let { nodeId ->
             messageClient.sendMessage(nodeId, WearPaths.SENSOR_SHOT_DATA_COLLECTION, data)
                 .addOnSuccessListener {
@@ -399,6 +406,7 @@ class WearSensorManager(
             packet = SensorPacket.ShotWindowBatch(batch)
         )
 
+        // Actual sending of raw data of the detected shot
         targetNodeId?.let { nodeId ->
             messageClient.sendMessage(nodeId, WearPaths.SENSOR_SHOT_WINDOW, data)
                 .addOnSuccessListener {
@@ -427,6 +435,7 @@ class WearSensorManager(
             )
         )
 
+        // Actual sending of feature vectors
         targetNodeId?.let { nodeId ->
             messageClient.sendMessage(nodeId, WearPaths.SENSOR_FEATURES, data)
                 .addOnSuccessListener {

@@ -26,16 +26,18 @@ object WearPaths {
      * Shot window sent during dataset collection.
      *
      * Packet format:
-     * score header + shot window samples.
+     * score_marker + shot window samples.
      */
     const val SENSOR_SHOT_DATA_COLLECTION = "/shot_data"
+
     /**
      * Shot window sent to the phone.
      *
      * Packet format:
-     * shot window samples only, without score header.
+     * shot window samples only, without score_marker.
      */
     const val SENSOR_SHOT_WINDOW = "/shot_window"
+
     /**
      * Feature vector sent for classification.
      *

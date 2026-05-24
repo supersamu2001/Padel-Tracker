@@ -19,6 +19,7 @@ import com.google.android.gms.wearable.WearableListenerService
  */
 class MatchSetupListenerService : WearableListenerService() {
 
+    // Called when a match setup is received from the phone
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         super.onDataChanged(dataEvents)
 
@@ -33,6 +34,7 @@ class MatchSetupListenerService : WearableListenerService() {
             if (event.type == DataEvent.TYPE_CHANGED &&
                 path == WearPaths.MATCH_SETUP
             ) {
+                // Convert the data received into a MatchSetup object
                 val dataMap = DataMapItem.fromDataItem(dataItem).dataMap
                 val setup = dataMap.toMatchSetup()
 
@@ -56,6 +58,7 @@ class MatchSetupListenerService : WearableListenerService() {
         }
     }
 
+    // Take the data packet sent by the phone and convert it into a structured object (MatchSetup) that can be used by the watch module
     private fun DataMap.toMatchSetup(): MatchSetup {
         val defaultRules = MatchRules()
 

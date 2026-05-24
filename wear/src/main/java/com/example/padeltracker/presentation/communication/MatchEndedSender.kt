@@ -11,6 +11,8 @@ import java.util.Locale
 
 /**
  * Sends a match-ended event from the Wear app to connected devices.
+ *
+ * Called by the MatchViewModel when the user ends the match
  */
 class MatchEndedSender(
     private val context: Context
@@ -30,7 +32,7 @@ class MatchEndedSender(
 
         Log.d(TAG, "Preparing to send match ended message")
 
-        // new, date
+        // Retrieve the current date
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
 

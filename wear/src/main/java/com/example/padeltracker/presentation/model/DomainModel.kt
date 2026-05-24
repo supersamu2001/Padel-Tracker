@@ -1,5 +1,9 @@
 package com.example.padeltracker.presentation.model
 
+/**
+ * Set of internal data structures for match state (Sets, Games, Players) and match configurations
+ */
+
 enum class TeamId {
     TEAM_A, TEAM_B
 }

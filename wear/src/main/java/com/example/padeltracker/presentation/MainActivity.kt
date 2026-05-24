@@ -19,7 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.padeltracker.presentation.ui.WearApp
 
 /**
- * Launch the app and manage the initial permissions
+ * Launch the watch app and manage the initial permissions
  */
 class MainActivity : ComponentActivity() {
 
