@@ -12,7 +12,7 @@ import com.example.padeltracker.shared.debug.DebugLogger
 import com.google.android.gms.wearable.Wearable
 
 /**
- * Launch the app and manage the initial permissions
+ * Launch the watch app and manage the initial permissions
  */
 class MainActivity : ComponentActivity() {
 

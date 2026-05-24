@@ -4,6 +4,7 @@ import com.example.padeltracker.presentation.model.*
 
 /**
  * Pure padel scoring logic. Independent from Android UI.
+ * Contains all the functions that manage the score during the match and all the padel scoring rules
  */
 class PadelScoreEngine {
 

@@ -4,8 +4,7 @@ package com.example.padeltracker.shared.experiment
  * Central configuration for sensor-based experiments.
  *
  * Keep all values that must be shared between watch and phone here,
- * so sampling, shot detection, feature extraction, and logging do not
- * rely on duplicated constants.
+ * so sampling, shot detection, feature extraction, and logging do not rely on duplicated constants.
  */
 data class ExperimentConfig(
     //val mode: ExperimentMode = ExperimentMode.DATA_COLLECTION,

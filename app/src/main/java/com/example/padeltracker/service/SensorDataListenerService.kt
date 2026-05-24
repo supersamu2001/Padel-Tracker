@@ -14,6 +14,9 @@ import com.example.padeltracker.shared.experiment.ExperimentConfig
 import com.example.padeltracker.shared.shotrecognition.ShotDetector
 import com.example.padeltracker.shared.debug.DebugLogger
 
+/**
+ * Receives real-time sensor packets and features from the watch.
+ */
 class SensorDataListenerService : WearableListenerService() {
 
     // Shot classifier
@@ -43,6 +46,7 @@ class SensorDataListenerService : WearableListenerService() {
         shotLogger = ShotLogger(this)
     }
 
+    // Called each time a data is received from the watch
     override fun onMessageReceived(messageEvent: MessageEvent) {
         val data = messageEvent.data
 

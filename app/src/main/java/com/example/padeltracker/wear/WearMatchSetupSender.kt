@@ -10,6 +10,8 @@ import com.google.android.gms.wearable.Wearable
 
 /**
  * Send the match set up to the phone
+ *
+ * (Search for "Wearable.getDataClient" to see the lines of the actual transmission of data)
  */
 class WearMatchSetupSender(private val context: Context) {
 
@@ -59,6 +61,7 @@ class WearMatchSetupSender(private val context: Context) {
                 dataMap.putInt(MatchSetupDataKeys.MINIMUM_ADVANTAGE, setup.rules.minimumAdvantage)
             }.asPutDataRequest().setUrgent()
 
+            // Actual sending of setup data to the watch
             Wearable.getDataClient(context).putDataItem(request)
                 .addOnSuccessListener {
                     DebugLogger.d(TAG, "Successfully sent match setup to watch")
