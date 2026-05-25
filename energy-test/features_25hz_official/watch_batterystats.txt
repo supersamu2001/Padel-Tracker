@@ -1,0 +1,2926 @@
+﻿Battery History [Format: 2] (2% used, 45KB used of 1536KB, 47 strings using 1399):
+  05-25 10:14:04.881 RESET:TIME: 2026-05-25-10-14-04
+  05-25 10:14:04.881 100 status=discharging health=good plug=none temp=294 volt=4307 charge=314 modemRailChargemAh=0 wifiRailChargemAh=0 +running +sensor +wifi_multicast +wifi_radio +screen_doze +wifi wifi_signal_strength=4 wifi_suppl=completed
+  05-25 10:14:04.881 100 fg=u0a116:"com.google.android.apps.wearable.systemui"
+  05-25 10:14:04.881 100 fg=u0a49:"com.google.android.wearable.sysui"
+  05-25 10:14:04.881 100 fg=u0a50:"com.google.android.wearable.assistant"
+  05-25 10:14:04.881 100 top=u0a147:"com.example.padeltracker"
+  05-25 10:14:04.881 100 user=0:"0"
+  05-25 10:14:04.881 100 userfg=0:"0"
+  05-25 10:14:04.881 100 tmpwhitelist=u0a107:"5836c56 com.google.android.c2dm.intent.RECEIVE/u0/0x152"
+  05-25 10:14:04.881 100 tmpwhitelist=u0a55:"com.google.android.wearable.app"
+  05-25 10:14:04.881 100 tmpwhitelist=1000:"com.google.wear.services"
+  05-25 10:14:04.906 100 wake_reason=0:"Abort: Device c800000.qcom,icnss failed to suspend noirq: error -11"
+  05-25 10:14:05.002 100
+  05-25 10:14:05.002 100
+  05-25 10:14:05.002 100
+  05-25 10:14:05.002 100
+  05-25 10:14:05.002 100
+  05-25 10:14:05.002 100 stats=0:"reset"
+  05-25 10:14:05.095 100 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:14:05.101 100 -wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:14:05.101 100 +wake_lock=u0a49:"notification_tray_update"
+  05-25 10:14:05.107 100 -wake_lock=u0a49:"notification_tray_update"
+  05-25 10:14:05.114 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:14:05.115 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:14:05.116 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:14:05.118 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:14:06.416 100 -running
+  05-25 10:14:06.476 100 +running wake_reason=0:"215 WLAN_CE_2"
+  05-25 10:14:06.746 100 -running
+  05-25 10:14:08.011 100 +running wake_reason=0:"215 WLAN_CE_2"
+  05-25 10:14:08.275 100 -running
+  05-25 10:14:09.949 100 +running wake_reason=0:"215 WLAN_CE_2"
+  05-25 10:14:10.288 100 -running
+  05-25 10:14:11.431 100 +running +wake_lock=u0a107:"GCM_READ" wake_reason=0:"215 WLAN_CE_2"
+  05-25 10:14:11.521 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:14:11.523 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:14:11.524 100
+  05-25 10:14:11.538 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:14:11.538 100 +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:14:11.650 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:14:11.652 100 volt=4210 conn=1:"CONNECTED"
+  05-25 10:14:11.959 100 +tmpwhitelist=u0a147:"com.example.padeltracker"
+  05-25 10:14:16.077 100 volt=4363 -top=u0a147:"com.example.padeltracker"
+  05-25 10:14:16.542 100 +top=u0a140:"com.google.android.permissioncontroller"
+  05-25 10:14:16.549 100
+  05-25 10:14:17.145 100
+  05-25 10:14:17.145 100
+  05-25 10:14:17.227 100 -top=u0a140:"com.google.android.permissioncontroller"
+  05-25 10:14:17.227 100 +top=u0a147:"com.example.padeltracker"
+  05-25 10:14:17.230 100
+  05-25 10:14:17.884 100
+  05-25 10:14:18.450 100 +sensor +state=10147:"sensor:0x10001"
+  05-25 10:14:18.464 100 +state=10147:"sensor:0x10007"
+  05-25 10:14:22.844 100
+  05-25 10:14:22.868 100 +state=10116:"sensor:0x10028"
+  05-25 10:14:22.908 100 display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:14:22.908 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze
+  05-25 10:14:23.004 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:14:23.018 100 volt=4295 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:14:23.719 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:14:24.584 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:14:26.299 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:14:29.557 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub" screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:14:30.505 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:14:30.516 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:14:30.516 100 +wake_lock=-1:"screen" +screen -screen_doze
+  05-25 10:14:30.516 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:14:30.636 100 volt=4351 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:14:30.672 100 conn=1:"CONNECTED"
+  05-25 10:14:31.461 100 -tmpwhitelist=u0a107:"5836c56 com.google.android.c2dm.intent.RECEIVE/u0/0x152"
+  05-25 10:14:32.105 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:14:32.145 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:14:32.196 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:14:32.210 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:14:32.241 100 volt=4277
+  05-25 10:14:36.042 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub" -tmpwhitelist=u0a55:"com.google.android.wearable.app"
+  05-25 10:14:36.716 100 -tmpwhitelist=1000:"com.google.wear.services"
+  05-25 10:14:41.251 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:14:41.254 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:14:41.275 100 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:14:41.281 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:14:41.281 100 +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:14:41.419 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:14:41.425 100 volt=4346 conn=1:"CONNECTED"
+  05-25 10:14:41.961 100 -tmpwhitelist=u0a147:"com.example.padeltracker"
+  05-25 10:14:42.413 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:14:42.454 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:14:42.523 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:14:42.533 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:14:42.541 100 volt=4272
+  05-25 10:14:43.889 100
+  05-25 10:14:43.934 100
+  05-25 10:14:48.891 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:14:50.909 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:14:50.911 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:14:50.929 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:14:50.929 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:14:51.066 100 volt=4237 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:14:51.117 100 conn=1:"CONNECTED"
+  05-25 10:14:51.916 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:14:51.962 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:15:00.130 100 +wake_lock=1000:"*alarm*:TIME_TICK"
+  05-25 10:15:00.196 100
+  05-25 10:15:00.211 100
+  05-25 10:15:00.213 100
+  05-25 10:15:00.230 100
+  05-25 10:15:00.332 100
+  05-25 10:15:00.438 100
+  05-25 10:15:00.439 100 +job=u0a97:"#SyncWorker#@androidx.work.systemjobscheduler@com.fitbit.FitbitMobile/androidx.work.impl.background.systemjob.SystemJobService"
+  05-25 10:15:00.490 100 -job=u0a97:"#SyncWorker#@androidx.work.systemjobscheduler@com.fitbit.FitbitMobile/androidx.work.impl.background.systemjob.SystemJobService"
+  05-25 10:15:00.566 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:15:00.568 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:15:00.575 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:15:00.575 100 +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:15:00.692 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:15:00.712 100 volt=4280 conn=1:"CONNECTED"
+  05-25 10:15:02.199 100
+  05-25 10:15:02.213 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:15:02.253 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:15:02.354 100 volt=4225
+  05-25 10:15:09.292 100 stats=0:"wakelock-change"
+  05-25 10:15:09.325 100
+  05-25 10:15:11.466 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:15:11.468 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:15:11.477 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:15:11.477 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:15:11.601 100 stats=0:"procstate-change"
+  05-25 10:15:11.601 100 -sensor wifi_signal_strength=3 -state=10116:"sensor:0x10028"
+  05-25 10:15:11.710 100 conn=1:"CONNECTED"
+  05-25 10:15:12.822 100
+  05-25 10:15:12.837 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:15:12.879 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:15:12.952 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:15:12.964 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:15:14.578 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:15:20.018 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:15:20.022 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:15:20.037 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:15:20.037 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:15:20.152 100 volt=4247 -sensor wifi_signal_strength=4 -state=10116:"sensor:0x10028"
+  05-25 10:15:20.207 100 conn=1:"CONNECTED"
+  05-25 10:15:24.092 100
+  05-25 10:15:24.106 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:15:24.146 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:15:24.184 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:15:24.206 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:15:31.081 100 +wake_lock=u0a55:"CloudNodeRpcWakeLock"
+  05-25 10:15:31.277 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:15:31.280 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:15:31.315 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:15:31.315 100 +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:15:31.460 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:15:31.503 100 conn=1:"CONNECTED"
+  05-25 10:15:34.532 100 wifi_signal_strength=3 conn=1:"CONNECTED"
+  05-25 10:15:40.509 100
+  05-25 10:15:40.524 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:15:40.570 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:15:40.585 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:15:40.615 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:15:40.623 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:15:40.627 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:15:40.663 100 volt=4298
+  05-25 10:15:41.737 100 volt=4342 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:15:42.266 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:15:42.276 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:15:42.276 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:15:42.383 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:15:42.408 100 volt=4298 wifi_signal_strength=4 conn=1:"CONNECTED"
+  05-25 10:15:45.541 100
+  05-25 10:15:45.557 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:15:45.593 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:15:45.642 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:15:45.646 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:15:45.660 100 +wake_lock=u0a107:"CallbackRunner"
+  05-25 10:15:45.680 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:15:45.684 100 volt=4247
+  05-25 10:15:51.042 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:15:51.050 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:15:51.061 100 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:15:51.061 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:15:51.183 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:15:51.184 100 volt=4280 wifi_signal_strength=3 conn=1:"CONNECTED"
+  05-25 10:15:52.089 100
+  05-25 10:15:52.877 100
+  05-25 10:15:52.890 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:15:52.920 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:15:52.951 100 +wake_lock=u0a107:"CallbackRunner"
+  05-25 10:15:52.953 100 -wake_lock=u0a107:"CallbackRunner"
+  05-25 10:15:52.967 100 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:15:52.968 100 -wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:15:52.990 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:15:53.003 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:15:53.011 100 volt=4308
+  05-25 10:15:59.910 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:15:59.912 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:15:59.929 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:15:59.929 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:16:00.035 100 volt=4345 -sensor wifi_signal_strength=4 -state=10116:"sensor:0x10028"
+  05-25 10:16:00.078 100 conn=1:"CONNECTED"
+  05-25 10:16:02.190 100
+  05-25 10:16:02.213 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:16:02.272 100 -wake_lock=-1:"screen" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:16:02.306 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:16:02.306 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:16:02.311 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:16:02.312 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:16:02.358 100 volt=4322
+  05-25 10:16:05.832 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:16:09.383 100
+  05-25 10:16:11.126 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:16:11.134 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:16:11.140 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:16:11.140 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:16:11.271 100 volt=4220 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:16:11.417 100 conn=1:"CONNECTED"
+  05-25 10:16:12.141 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:16:12.175 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:16:12.231 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:16:12.244 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:16:12.812 100 +wake_lock=u0a55:"CloudNodeRpcWakeLock" stats=0:"procstate-change"
+  05-25 10:16:12.969 100 stats=0:"wakelock-change"
+  05-25 10:16:13.097 100 -wake_lock=u0a55:"CloudNodeRpcWakeLock"
+  05-25 10:16:19.999 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:16:20.003 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:16:20.012 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:16:20.012 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:16:20.136 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:16:20.147 100 volt=4351 conn=1:"CONNECTED"
+  05-25 10:16:21.586 100
+  05-25 10:16:21.604 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:16:21.644 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:16:21.744 100 volt=4263
+  05-25 10:16:31.027 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:16:31.031 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:16:31.054 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:16:31.054 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:16:31.185 100 volt=4231 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:16:31.270 100 conn=1:"CONNECTED"
+  05-25 10:16:32.026 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:16:32.062 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:16:32.100 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:16:32.115 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:16:40.128 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:16:40.131 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:16:40.142 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:16:40.142 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:16:40.268 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:16:40.275 100 volt=4339 conn=1:"CONNECTED"
+  05-25 10:16:41.600 100
+  05-25 10:16:41.617 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:16:41.670 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:16:41.711 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:16:41.711 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:16:41.762 100 volt=4231
+  05-25 10:16:49.670 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:16:49.674 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:16:49.691 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:16:49.691 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:16:49.814 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:16:49.842 100 conn=1:"CONNECTED"
+  05-25 10:16:49.860 100 volt=4337
+  05-25 10:16:51.221 100
+  05-25 10:16:51.234 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:16:51.305 100 -wake_lock=-1:"screen" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:16:51.331 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:16:51.334 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:16:51.385 100 volt=4252
+  05-25 10:16:52.216 100
+  05-25 10:17:00.134 100 +wake_lock=1000:"*alarm*:TIME_TICK"
+  05-25 10:17:00.643 100 -wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:17:00.649 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:17:00.651 100 -wake_lock=1000:"DisplayOffload" screenwake=1000:"android.policy:MOTION"
+  05-25 10:17:00.821 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:17:00.828 100 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:17:00.829 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:17:00.962 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:17:00.974 100 volt=4341 wifi_signal_strength=3 conn=1:"CONNECTED"
+  05-25 10:17:04.065 100 wifi_signal_strength=4 conn=1:"CONNECTED"
+  05-25 10:17:09.756 100
+  05-25 10:17:09.775 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:17:09.809 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze wake_reason=0:"Abort: Pending Wakeup Sources: event7 nanohub nanohub userspace-abort" display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:17:09.900 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:17:09.913 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:17:09.918 100 volt=4265 screenwake=1000:"android.policy:MOTION"
+  05-25 10:17:10.479 100 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:17:10.489 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:17:10.508 100 +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:17:10.509 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:17:10.618 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:17:10.632 100 volt=4217 wifi_signal_strength=3 conn=1:"CONNECTED"
+  05-25 10:17:11.704 100
+  05-25 10:17:11.719 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:17:11.796 100 -wake_lock=-1:"screen" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:17:11.829 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:17:11.832 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:17:13.101 100 stats=0:"wakelock-change"
+  05-25 10:17:15.495 100 volt=4348
+  05-25 10:17:20.014 100 stats=0:"procstate-change"
+  05-25 10:17:20.253 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:17:20.257 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:17:20.268 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:17:20.268 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:17:20.378 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:17:20.381 100 volt=4226 wifi_signal_strength=4 conn=1:"CONNECTED"
+  05-25 10:17:21.926 100
+  05-25 10:17:21.940 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:17:21.978 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:17:22.023 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:17:22.039 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:17:22.071 100 volt=4291
+  05-25 10:17:29.977 100 +wake_lock=u0a55:"CloudNodeRpcWakeLock"
+  05-25 10:17:30.279 100 -wake_lock=u0a55:"CloudNodeRpcWakeLock"
+  05-25 10:17:31.387 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:17:31.391 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:17:31.408 100 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:17:31.426 100 +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:17:31.428 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:17:31.565 100 volt=4220 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:17:31.717 100 conn=1:"CONNECTED"
+  05-25 10:17:41.616 100
+  05-25 10:17:41.633 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:17:41.669 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:17:41.725 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:17:41.745 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:17:49.931 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:17:49.934 100
+  05-25 10:17:49.939 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:17:49.943 100 +wake_lock=u0a116:"SystemUIRCDCLock" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:17:49.950 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:17:50.078 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:17:50.100 100 conn=1:"CONNECTED"
+  05-25 10:17:51.724 100
+  05-25 10:17:51.737 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:17:51.778 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:17:51.807 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:17:51.825 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:17:52.400 100
+  05-25 10:18:00.130 100 +wake_lock=1000:"*alarm*:TIME_TICK"
+  05-25 10:18:00.962 100 -wake_lock=u0a55:"CloudNodeRpcWakeLock" screenwake=1000:"android.policy:MOTION"
+  05-25 10:18:01.863 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:18:01.885 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:18:01.885 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:18:02.028 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:18:02.092 100 conn=1:"CONNECTED"
+  05-25 10:18:03.111 100
+  05-25 10:18:03.128 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:18:03.162 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:18:03.213 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:18:03.225 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:18:03.258 100 volt=4305
+  05-25 10:18:09.951 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub" screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:18:10.259 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:18:10.270 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:18:10.270 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:18:10.384 100 volt=4238 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:18:10.471 100 conn=1:"CONNECTED"
+  05-25 10:18:12.129 100
+  05-25 10:18:12.143 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:18:12.178 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:18:12.275 100 volt=4286
+  05-25 10:18:20.291 100 stats=0:"procstate-change"
+  05-25 10:18:20.309 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:18:20.312 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:18:20.323 100 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:18:20.328 100 +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:18:20.332 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:18:20.437 100 volt=4337 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:18:20.480 100 conn=1:"CONNECTED"
+  05-25 10:18:22.065 100 stats=0:"wakelock-change"
+  05-25 10:18:22.238 100
+  05-25 10:18:22.252 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:18:22.287 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:18:22.367 100 volt=4265
+  05-25 10:18:30.140 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:18:30.144 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:18:30.160 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:18:30.160 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:18:30.279 100 volt=4342 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:18:30.329 100 conn=1:"CONNECTED"
+  05-25 10:18:31.538 100
+  05-25 10:18:31.556 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:18:31.604 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:18:31.655 100 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:18:31.656 100 -wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:18:31.663 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:18:31.664 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:18:31.668 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:18:31.684 100 -wake_lock=u0a107:"CallbackRunner"
+  05-25 10:18:31.716 100 volt=4211
+  05-25 10:18:40.612 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:18:40.638 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:18:40.647 100 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:18:40.651 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:18:40.744 100 volt=4320
+  05-25 10:18:40.838 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:18:40.850 100
+  05-25 10:18:40.882 100 conn=1:"CONNECTED"
+  05-25 10:18:41.519 100
+  05-25 10:18:41.535 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:18:41.596 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:18:41.638 100 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:18:41.638 100 -wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:18:41.639 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:18:41.639 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:18:41.660 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:18:41.674 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:18:41.684 100 volt=4167
+  05-25 10:18:47.084 100
+  05-25 10:18:47.094 100
+  05-25 10:18:47.098 100
+  05-25 10:18:47.100 100
+  05-25 10:18:49.250 100 volt=4349 charge=311
+  05-25 10:18:49.910 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:18:49.917 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:18:49.924 100 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:18:49.925 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:18:50.051 100 volt=4236 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:18:50.105 100 conn=1:"CONNECTED"
+  05-25 10:18:51.427 100
+  05-25 10:18:51.442 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:18:51.485 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:18:51.532 100 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:18:51.535 100 -wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:18:51.556 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:18:51.574 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:18:51.587 100 volt=4204
+  05-25 10:19:00.131 100 +wake_lock=1000:"*alarm*:TIME_TICK"
+  05-25 10:19:00.641 100 -wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:19:00.645 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:19:00.648 100 -wake_lock=1000:"DisplayOffload" screenwake=1000:"android.policy:MOTION"
+  05-25 10:19:01.537 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:19:01.565 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:19:01.565 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:19:01.663 100 volt=4326 wifi_signal_strength=3 conn=1:"CONNECTED"
+  05-25 10:19:01.750 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:19:02.615 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:19:02.652 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:19:02.696 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:19:02.696 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:19:02.701 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:19:02.717 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:19:02.739 100 volt=4213
+  05-25 10:19:03.051 100
+  05-25 10:19:10.012 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:19:10.441 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:19:10.444 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:19:10.453 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:19:10.453 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:19:10.557 100 volt=4243 -sensor wifi_signal_strength=4 -state=10116:"sensor:0x10028"
+  05-25 10:19:10.606 100 conn=1:"CONNECTED"
+  05-25 10:19:12.626 100
+  05-25 10:19:12.639 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:19:12.694 100 -wake_lock=-1:"screen" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:19:12.698 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:19:12.727 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:19:12.731 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:19:12.732 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:19:19.829 100 volt=4346 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:19:20.146 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:19:20.159 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:19:20.159 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:19:20.280 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:19:20.320 100 conn=1:"CONNECTED"
+  05-25 10:19:20.324 100 stats=0:"procstate-change"
+  05-25 10:19:21.694 100
+  05-25 10:19:21.706 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:19:21.741 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:19:21.824 100 volt=4285
+  05-25 10:19:31.588 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:19:31.590 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:19:31.618 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:19:31.618 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:19:31.779 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:19:31.814 100 conn=1:"CONNECTED"
+  05-25 10:19:41.381 100
+  05-25 10:19:41.396 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:19:41.446 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:19:41.492 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:19:41.493 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:19:41.495 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:19:41.508 100 -wake_lock=1000:"WifiSuspend" stats=0:"wakelock-change"
+  05-25 10:19:50.669 100 +wake_lock=u0a55:"CloudNodeRpcWakeLock"
+  05-25 10:19:50.987 100 -wake_lock=u0a55:"CloudNodeRpcWakeLock" screenwake=1000:"android.policy:MOTION"
+  05-25 10:19:51.619 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:19:51.641 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:19:51.641 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:19:51.766 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:19:51.777 100 volt=4217 conn=1:"CONNECTED"
+  05-25 10:20:00.980 100 wifi_signal_strength=3 conn=1:"CONNECTED"
+  05-25 10:20:01.657 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:20:01.706 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:20:01.740 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:20:01.740 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:20:01.740 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:20:01.751 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:20:03.737 100
+  05-25 10:20:03.774 100
+  05-25 10:20:10.184 100 wake_reason=0:"Abort: Device spi0.0 failed to suspend noirq: error -16"
+  05-25 10:20:11.045 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:20:11.048 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:20:11.063 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:20:11.063 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:20:11.200 100 volt=4288 -sensor wifi_signal_strength=4 -state=10116:"sensor:0x10028"
+  05-25 10:20:11.294 100 conn=1:"CONNECTED"
+  05-25 10:20:21.594 100
+  05-25 10:20:21.610 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:20:21.694 100 stats=0:"procstate-change"
+  05-25 10:20:21.706 100 -wake_lock=-1:"screen" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:20:21.730 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:20:21.730 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:20:21.790 100 volt=4248
+  05-25 10:20:23.016 100 volt=4333
+  05-25 10:20:30.760 100 +wake_lock=u0a55:"CloudNodeRpcWakeLock"
+  05-25 10:20:31.127 100 -wake_lock=u0a55:"CloudNodeRpcWakeLock" screenwake=1000:"android.policy:MOTION"
+  05-25 10:20:31.592 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:20:31.608 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:20:31.608 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:20:31.710 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:20:31.830 100 conn=1:"CONNECTED"
+  05-25 10:20:41.444 100
+  05-25 10:20:41.468 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:20:41.507 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:20:41.605 100 volt=4209
+  05-25 10:20:50.678 100 stats=0:"wakelock-change"
+  05-25 10:20:51.418 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:20:51.419 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:20:51.436 100 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:20:51.454 100 +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:20:51.454 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:20:51.548 100 volt=4231 conn=1:"CONNECTED"
+  05-25 10:20:51.638 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:21:01.932 100
+  05-25 10:21:01.946 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:21:01.986 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:21:02.016 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:21:02.018 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:21:02.022 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:21:02.032 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:21:02.075 100 volt=4206
+  05-25 10:21:10.231 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub_logs"
+  05-25 10:21:10.466 100 +wake_lock=u0a55:"CloudNodeRpcWakeLock"
+  05-25 10:21:10.860 100 -wake_lock=u0a55:"CloudNodeRpcWakeLock" screenwake=1000:"android.policy:MOTION"
+  05-25 10:21:11.235 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:21:11.253 100 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:21:11.254 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:21:11.376 100 volt=4294
+  05-25 10:21:11.394 100
+  05-25 10:21:11.448 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:21:11.503 100 conn=1:"CONNECTED"
+  05-25 10:21:21.734 100
+  05-25 10:21:21.748 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:21:21.787 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:21:21.872 100 volt=4227
+  05-25 10:21:31.016 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:21:31.033 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:21:31.041 100 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:21:31.048 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:21:31.174 100 volt=4326 -sensor wifi_signal_strength=3 -state=10116:"sensor:0x10028"
+  05-25 10:21:31.239 100 conn=1:"CONNECTED"
+  05-25 10:21:31.613 100 stats=0:"procstate-change"
+  05-25 10:21:34.285 100 wifi_signal_strength=4 conn=1:"CONNECTED"
+  05-25 10:21:41.384 100
+  05-25 10:21:41.399 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:21:41.455 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:21:41.538 100 volt=4215
+  05-25 10:21:50.840 100 +wake_lock=u0a55:"CloudNodeRpcWakeLock"
+  05-25 10:21:51.103 100 -wake_lock=u0a55:"CloudNodeRpcWakeLock" stats=0:"wakelock-change"
+  05-25 10:21:51.611 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:21:51.614 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:21:51.636 100 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:21:51.638 100 +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:21:51.638 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:21:51.763 100 volt=4238 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:21:51.863 100 conn=1:"CONNECTED"
+  05-25 10:21:56.770 100 volt=4334
+  05-25 10:22:01.452 100 +tmpwhitelist=u0a107:"d2b665e com.google.android.c2dm.intent.RECEIVE/u0/0x152"
+  05-25 10:22:01.483 100
+  05-25 10:22:01.516 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:22:01.581 100 -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:22:01.700 100 volt=4143 -wake_lock=u0a107:"CloudNodeSyncWakeLock"
+  05-25 10:22:01.868 100 +wake_lock=u0a107:"CloudNodeSyncWakeLock" +tmpwhitelist=u0a55:"com.google.android.wearable.app"
+  05-25 10:22:01.875 100 -wake_lock=u0a107:"CloudNodeSyncWakeLock" +tmpwhitelist=1000:"com.google.wear.services"
+  05-25 10:22:10.282 100 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:22:11.775 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:22:11.778 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:22:11.786 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:22:11.786 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:22:11.910 100 volt=4322 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:22:12.013 100 conn=1:"CONNECTED"
+  05-25 10:22:12.404 100
+  05-25 10:22:13.024 100
+  05-25 10:22:13.038 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:22:13.068 100 -wake_lock=u0a107:"CallbackRunner" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:22:13.121 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:22:13.133 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:22:13.152 100 volt=4300
+  05-25 10:22:20.088 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:22:20.091 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:22:20.102 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:22:20.102 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:22:20.224 100 volt=4217 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:22:20.282 100 conn=1:"CONNECTED"
+  05-25 10:22:21.470 100 -tmpwhitelist=u0a107:"d2b665e com.google.android.c2dm.intent.RECEIVE/u0/0x152"
+  05-25 10:22:21.570 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:22:21.610 100 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:22:21.655 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:22:21.656 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:22:21.693 100 volt=4270
+  05-25 10:22:30.464 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:22:30.466 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:22:30.485 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:22:30.485 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:22:30.604 100 volt=4237 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:22:30.641 100 conn=1:"CONNECTED"
+  05-25 10:22:31.779 100
+  05-25 10:22:31.794 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:22:31.838 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:22:31.884 100 +wake_lock=u0a49:"SysUi:ModuleBus" -tmpwhitelist=u0a55:"com.google.android.wearable.app"
+  05-25 10:22:31.888 100 -wake_lock=u0a49:"SysUi:ModuleBus" -tmpwhitelist=1000:"com.google.wear.services"
+  05-25 10:22:31.909 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:22:31.922 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:22:31.941 100 volt=4199
+  05-25 10:22:41.394 100 stats=0:"procstate-change"
+  05-25 10:22:41.708 100 screenwake=1000:"android.policy:MOTION"
+  05-25 10:22:41.713 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:22:41.725 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:22:41.725 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:22:41.901 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:22:42.012 100 conn=1:"CONNECTED"
+  05-25 10:22:51.641 100 stats=0:"wakelock-change"
+  05-25 10:22:51.827 100
+  05-25 10:22:51.844 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:22:51.891 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:22:51.949 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:22:51.962 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:22:51.973 100 volt=4282
+  05-25 10:23:00.134 100 +wake_lock=1000:"*alarm*:TIME_TICK"
+  05-25 10:23:00.644 100 -wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:23:00.648 100 +wake_lock=1000:"DisplayOffload"
+  05-25 10:23:00.651 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:23:00.992 100 +wake_lock=u0a55:"CloudNodeRpcWakeLock" screenwake=1000:"android.policy:MOTION"
+  05-25 10:23:01.221 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:23:01.235 100 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:23:01.235 100 +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:23:01.457 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:23:01.488 100 conn=1:"CONNECTED"
+  05-25 10:23:11.995 100
+  05-25 10:23:12.009 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:23:12.055 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:23:12.094 100 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:23:12.111 100 -wake_lock=1000:"DisplayOffload"
+  05-25 10:23:12.172 100 volt=4211 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub nanohub"
+  05-25 10:23:12.180 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:23:12.191 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:23:12.960 100
+  05-25 10:23:20.463 100 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:23:20.465 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:23:20.479 100 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:23:20.479 100 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:23:20.597 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:23:20.630 100 conn=1:"CONNECTED"
+  05-25 10:23:22.222 100
+  05-25 10:23:22.238 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:23:22.277 100 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:23:22.311 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:23:22.336 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:23:30.533 100 volt=4322 charge=308 screenwake=1000:"android.policy:MOTION"
+  05-25 10:23:30.948 100 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:23:30.962 100 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:23:30.964 100 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:23:31.089 100 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:23:31.160 100 conn=1:"CONNECTED"
+  05-25 10:23:41.505 100
+  05-25 10:23:41.526 100 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:23:41.564 100 -wake_lock=u0a107:"CallbackRunner" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:23:41.602 100 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:23:41.606 100 -wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:23:41.633 100 +wake_lock=1000:"WifiSuspend"
+  05-25 10:23:41.645 100 -wake_lock=1000:"WifiSuspend"
+  05-25 10:23:41.660 100 volt=4188 stats=0:"procstate-change"
+  05-25 10:23:46.067 099 volt=4332
+                 Details: cpu=145010u+191850s
+                          /proc/stat=139540 usr, 140190 sys, 1250 io, 30380 irq, 2400 sirq, 2099780 idle (13,0% of 6h 42m 15s 400ms), SubsystemPowerState SubsystemPowerState subsystem_0 name=MODEM state_0 name=Sleep time=63055904 count=28785 last entry=2759295158 subsystem_1 name=APSS state_0 name=Sleep time=62217360 count=301446 last entry=2759295089 subsystem_2 name=SOC state_0 name=VDD_MIN time=53290353 count=2024 last entry=2758719257 subsystem_3 name=ADSP_ISLAND state_0 name=Sleep time=0 count=0 last entry=0 subsystem_4 name=ADSP state_0 name=Sleep time=66781070 count=207 last entry=2759290255
+  05-25 10:23:46.610 099 +wake_lock=1000:"DisplayOffload"
+  05-25 10:23:46.611 099 -wake_lock=1000:"DisplayOffload"
+  05-25 10:23:46.613 099 +wake_lock=1000:"DisplayOffload"
+  05-25 10:23:46.614 099 -wake_lock=1000:"DisplayOffload"
+  05-25 10:23:50.578 099 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:23:50.580 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:23:50.599 099 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:23:50.599 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:23:50.706 099
+  05-25 10:23:50.730 099 volt=4249
+  05-25 10:23:50.749 099 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:23:50.781 099 conn=1:"CONNECTED"
+  05-25 10:23:52.133 099
+  05-25 10:23:52.162 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:23:52.214 099 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:23:52.279 099 +wake_lock=u0a107:"CallbackRunner"
+  05-25 10:23:52.282 099 -wake_lock=u0a107:"CallbackRunner"
+  05-25 10:23:52.303 099 volt=4193
+  05-25 10:23:56.860 099
+  05-25 10:23:56.863 099
+  05-25 10:23:56.870 099
+  05-25 10:23:56.874 099
+  05-25 10:24:00.130 099 +wake_lock=1000:"*alarm*:TIME_TICK"
+  05-25 10:24:00.232 099 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:24:00.234 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:24:00.242 099 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:24:00.242 099 +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:24:00.363 099 volt=4291 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:24:00.402 099 conn=1:"CONNECTED"
+  05-25 10:24:03.426 099 wifi_signal_strength=3 conn=1:"CONNECTED"
+  05-25 10:24:04.756 099
+  05-25 10:24:04.770 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:24:04.798 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:24:04.838 099 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:24:04.840 099 -wake_lock=1000:"DisplayOffload"
+  05-25 10:24:04.847 099 +wake_lock=u0a107:"CallbackRunner"
+  05-25 10:24:04.853 099 -wake_lock=u0a107:"CallbackRunner"
+  05-25 10:24:04.875 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:24:04.887 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:24:11.466 099 screenwake=1000:"android.policy:MOTION"
+  05-25 10:24:11.469 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:24:11.494 099 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:24:11.494 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:24:11.628 099 volt=4236 -sensor wifi_signal_strength=4 -state=10116:"sensor:0x10028"
+  05-25 10:24:11.728 099 conn=1:"CONNECTED"
+  05-25 10:24:13.157 099
+  05-25 10:24:13.193 099
+  05-25 10:24:20.830 099 wifi_signal_strength=3
+  05-25 10:24:20.844 099 conn=1:"CONNECTED"
+  05-25 10:24:21.505 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:24:21.543 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:24:21.565 099 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:24:21.572 099 -wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:24:21.577 099 +wake_lock=1000:"DisplayOffload"
+  05-25 10:24:21.580 099 -wake_lock=1000:"DisplayOffload"
+  05-25 10:24:21.585 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:24:21.596 099 -wake_lock=1000:"WifiSuspend" wake_reason=0:"Abort: Last active Wakeup Source: eventpoll"
+  05-25 10:24:21.669 099 volt=4289
+  05-25 10:24:31.056 099 screenwake=1000:"android.policy:MOTION"
+  05-25 10:24:31.073 099 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:24:31.078 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:24:31.086 099 +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:24:31.087 099 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:24:31.235 099 volt=4327 -sensor wifi_signal_strength=4 -state=10116:"sensor:0x10028"
+  05-25 10:24:31.284 099 conn=1:"CONNECTED"
+  05-25 10:24:32.589 099
+  05-25 10:24:32.606 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:24:32.643 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:24:32.688 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:24:32.704 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:24:32.733 099 volt=4265
+  05-25 10:24:40.332 099 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:24:40.334 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:24:40.343 099 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:24:40.343 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:24:40.483 099 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:24:40.485 099 volt=4212 conn=1:"CONNECTED"
+  05-25 10:24:42.090 099
+  05-25 10:24:42.103 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:24:42.148 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:24:46.615 099 stats=0:"wakelock-change"
+  05-25 10:24:50.592 099 stats=0:"procstate-change"
+  05-25 10:24:50.592 099 screenwake=1000:"android.policy:MOTION"
+  05-25 10:24:51.405 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:24:51.429 099 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:24:51.429 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:24:51.565 099 volt=4319 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:24:51.635 099 conn=1:"CONNECTED"
+  05-25 10:24:52.561 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:24:52.597 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:24:52.642 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:24:52.658 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:24:52.688 099 volt=4264
+  05-25 10:25:00.133 099 +wake_lock=1000:"*alarm*:TIME_TICK" screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:25:00.253 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:25:00.262 099 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:25:00.262 099 +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:25:00.370 099 volt=4199 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:25:00.417 099 conn=1:"CONNECTED"
+  05-25 10:25:01.852 099
+  05-25 10:25:01.867 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:25:01.921 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:25:01.935 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:25:01.970 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:25:04.289 099 volt=4315
+  05-25 10:25:12.329 099 screenwake=1000:"android.policy:MOTION"
+  05-25 10:25:12.335 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:25:12.349 099 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:25:12.349 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:25:12.528 099 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:25:12.530 099 volt=4197 conn=1:"CONNECTED"
+  05-25 10:25:14.392 099
+  05-25 10:25:14.439 099
+  05-25 10:25:22.102 099
+  05-25 10:25:22.115 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:25:22.153 099 -wake_lock=1000:"WifiSuspend" -screen +screen_doze wake_reason=0:"Abort: Pending Wakeup Sources: nanohub" display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:25:30.012 099 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:25:30.014 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:25:30.028 099 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:25:30.028 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:25:30.144 099 volt=4255 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:25:30.176 099 conn=1:"CONNECTED"
+  05-25 10:25:31.764 099
+  05-25 10:25:31.777 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:25:31.816 099 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:25:31.902 099 volt=4215
+  05-25 10:25:41.516 099 screenwake=1000:"android.policy:MOTION"
+  05-25 10:25:41.526 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:25:41.540 099 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:25:41.541 099 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:25:41.691 099 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:25:41.770 099 conn=1:"CONNECTED"
+  05-25 10:25:42.560 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:25:42.621 099 -wake_lock=-1:"screen" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:25:42.660 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:25:42.666 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:25:42.715 099 volt=4272
+  05-25 10:25:49.942 099 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:25:49.944 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:25:49.957 099 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:25:49.957 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:25:50.077 099 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:25:50.117 099 conn=1:"CONNECTED"
+  05-25 10:25:51.413 099
+  05-25 10:25:51.420 099 stats=0:"procstate-change"
+  05-25 10:25:51.420 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:25:51.462 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:25:51.493 099 +wake_lock=1000:"DisplayOffload"
+  05-25 10:25:51.494 099 -wake_lock=1000:"DisplayOffload"
+  05-25 10:25:51.498 099 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:25:51.501 099 -wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:25:51.520 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:25:51.533 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:25:51.546 099 volt=4182
+  05-25 10:25:52.683 099 stats=0:"wakelock-change"
+  05-25 10:26:00.129 099 +wake_lock=1000:"*alarm*:TIME_TICK"
+  05-25 10:26:00.646 099 -wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:26:00.650 099 +wake_lock=1000:"DisplayOffload"
+  05-25 10:26:00.653 099 -wake_lock=1000:"DisplayOffload" screenwake=1000:"android.policy:MOTION"
+  05-25 10:26:01.297 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:26:01.325 099 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:26:01.326 099 +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:26:01.327 099 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:26:01.456 099 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:26:01.458 099 volt=4321 conn=1:"CONNECTED"
+  05-25 10:26:11.745 099
+  05-25 10:26:11.759 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:26:11.796 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:26:11.841 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:26:11.853 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:26:11.881 099 volt=4197
+  05-25 10:26:15.737 099
+  05-25 10:26:15.788 099
+  05-25 10:26:20.770 099 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:26:20.772 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:26:20.791 099 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:26:20.796 099 +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:26:20.798 099 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:26:20.924 099 volt=4228 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:26:20.966 099 conn=1:"CONNECTED"
+  05-25 10:26:23.605 099
+  05-25 10:26:23.619 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:26:23.655 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:26:23.701 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:26:23.716 099 -running -wake_lock=1000:"WifiSuspend"
+  05-25 10:26:25.817 099 +running wake_reason=0:"215 WLAN_CE_2"
+  05-25 10:26:25.828 099 volt=4333 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:26.224 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:26.693 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:27.551 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:29.216 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub" screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:26:29.995 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:26:30.005 099 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:26:30.005 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:26:30.113 099 volt=4226 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:26:30.161 099 conn=1:"CONNECTED"
+  05-25 10:26:31.755 099
+  05-25 10:26:31.769 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:26:31.807 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:26:31.847 099 +wake_lock=1000:"DisplayOffload"
+  05-25 10:26:31.849 099 -wake_lock=1000:"DisplayOffload"
+  05-25 10:26:31.852 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:26:31.868 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:26:31.900 099 volt=4253 -running
+  05-25 10:26:34.732 099 +running wake_reason=0:"215 WLAN_CE_2"
+  05-25 10:26:34.881 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:35.128 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:35.590 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub userspace-abort"
+  05-25 10:26:36.452 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:38.063 099 volt=4318 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:40.701 099 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:26:40.704 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:26:40.717 099 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:26:40.723 099 +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:26:40.729 099 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:26:40.839 099 volt=4232 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:26:40.868 099 conn=1:"CONNECTED"
+  05-25 10:26:42.288 099
+  05-25 10:26:42.302 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:26:42.348 099 -wake_lock=u0a116:"AmbientDreamProxy" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:26:42.391 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:26:42.414 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:26:42.466 099 volt=4080 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:44.855 099 +wake_lock=u0a55:"CloudNodeRpcWakeLock"
+  05-25 10:26:45.180 099 -wake_lock=u0a55:"CloudNodeRpcWakeLock"
+  05-25 10:26:49.025 099 -running
+  05-25 10:26:50.030 099 +running wake_reason=0:"16 mpm:131 autobahn-irq"
+  05-25 10:26:50.038 099 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:26:50.041 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:26:50.051 099 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:26:50.051 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:26:50.159 099 volt=4192 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:26:50.212 099 conn=1:"CONNECTED"
+  05-25 10:26:51.639 099
+  05-25 10:26:51.651 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:26:51.689 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:26:51.912 099 volt=4253 wake_reason=0:"Abort: Device spi0.0 failed to suspend noirq: error -16"
+  05-25 10:26:52.182 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub userspace-abort"
+  05-25 10:26:52.651 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:53.506 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:55.165 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:26:58.418 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub userspace-abort"
+  05-25 10:27:00.132 099 +wake_lock=1000:"*alarm*:TIME_TICK"
+  05-25 10:27:00.651 099 -wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:27:00.658 099 +wake_lock=1000:"DisplayOffload"
+  05-25 10:27:00.661 099 -wake_lock=1000:"DisplayOffload" screenwake=1000:"android.policy:MOTION"
+  05-25 10:27:00.987 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:27:00.999 099 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:27:00.999 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:27:01.152 099 volt=4186 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:27:01.229 099 conn=1:"CONNECTED"
+  05-25 10:27:01.919 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:27:01.976 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:27:02.009 099 +wake_lock=1000:"DisplayOffload"
+  05-25 10:27:02.009 099 -wake_lock=1000:"DisplayOffload"
+  05-25 10:27:02.015 099 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:27:02.019 099 -wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:27:02.043 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:27:02.056 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:27:04.869 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub" stats=0:"wakelock-change"
+  05-25 10:27:06.423 099 stats=0:"procstate-change"
+  05-25 10:27:06.423 099
+  05-25 10:27:10.448 099 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:27:10.452 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:27:10.459 099 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:27:10.459 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:27:10.580 099 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:27:10.584 099 volt=4317 conn=1:"CONNECTED"
+  05-25 10:27:12.090 099
+  05-25 10:27:12.105 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:27:12.156 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:27:12.190 099 +wake_lock=u0a107:"CallbackRunner"
+  05-25 10:27:12.190 099 -wake_lock=u0a107:"CallbackRunner"
+  05-25 10:27:12.190 099 +wake_lock=1000:"DisplayOffload"
+  05-25 10:27:12.190 099 -wake_lock=1000:"DisplayOffload"
+  05-25 10:27:12.216 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:27:12.230 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:27:12.236 099 volt=4194
+  05-25 10:27:17.743 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:27:21.256 099 screenwake=1000:"android.policy:MOTION"
+  05-25 10:27:21.272 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:27:21.283 099 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:27:21.284 099 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:27:21.434 099 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:27:21.555 099 conn=1:"CONNECTED"
+  05-25 10:27:22.438 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:27:22.477 099 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:27:27.026 099
+  05-25 10:27:27.167 099
+  05-25 10:27:30.267 099 +wake_lock=u0a55:"CloudNodeRpcWakeLock"
+  05-25 10:27:30.519 099 -wake_lock=u0a55:"CloudNodeRpcWakeLock" screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:27:30.712 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:27:30.722 099 +wake_lock=u0a116:"SystemUIRCDCLock" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:27:30.726 099 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:27:30.837 099 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:27:30.880 099 conn=1:"CONNECTED"
+  05-25 10:27:32.413 099
+  05-25 10:27:32.427 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:27:32.479 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:27:32.518 099 +wake_lock=1000:"DisplayOffload"
+  05-25 10:27:32.518 099 -wake_lock=1000:"DisplayOffload"
+  05-25 10:27:41.679 099 screenwake=1000:"android.policy:MOTION"
+  05-25 10:27:41.681 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:27:41.702 099 display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:27:41.702 099 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:27:41.832 099 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:27:41.884 099 volt=4279 conn=1:"CONNECTED"
+  05-25 10:27:50.668 099
+  05-25 10:27:50.689 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:27:50.722 099 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:27:50.813 099 wake_reason=0:"Abort: Pending Wakeup Sources: nanohub"
+  05-25 10:27:57.663 099 screenwake=1000:"android.policy:MOTION"
+  05-25 10:27:57.685 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:27:57.697 099 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:27:57.698 099 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:27:57.847 099 volt=4232 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:27:57.924 099 conn=1:"CONNECTED"
+  05-25 10:28:01.644 099
+  05-25 10:28:01.665 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:28:01.706 099 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:28:01.792 099 volt=4272
+  05-25 10:28:02.806 099 screenwake=1000:"android.policy:MOTION"
+  05-25 10:28:02.831 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:28:02.837 099 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:28:02.838 099 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:28:02.951 099 volt=4313 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:28:03.079 099 conn=1:"CONNECTED"
+  05-25 10:28:08.435 099
+  05-25 10:28:08.453 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:28:08.486 099 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:28:08.546 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:28:08.558 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:28:08.578 099 volt=4268
+  05-25 10:28:10.459 099 stats=0:"procstate-change"
+  05-25 10:28:10.949 099 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:28:10.953 099
+  05-25 10:28:10.960 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:28:10.972 099 +wake_lock=u0a116:"SystemUIRCDCLock" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:28:10.980 099 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:28:11.085 099 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:28:11.091 099 volt=4213 charge=305 conn=1:"CONNECTED"
+  05-25 10:28:12.227 099 stats=0:"wakelock-change"
+  05-25 10:28:12.787 099
+  05-25 10:28:12.801 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:28:12.834 099 -wake_lock=u0a107:"CallbackRunner" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:28:12.871 099 +wake_lock=1000:"DisplayOffload"
+  05-25 10:28:12.872 099 -wake_lock=1000:"DisplayOffload"
+  05-25 10:28:12.880 099 +wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:28:12.885 099 -wake_lock=u0a49:"SysUi:ModuleBus"
+  05-25 10:28:12.897 099 +wake_lock=1000:"WifiSuspend"
+  05-25 10:28:12.911 099 -wake_lock=1000:"WifiSuspend"
+  05-25 10:28:12.919 099 volt=4299
+  05-25 10:28:21.176 099 screenwake=1000:"android.policy:MOTION"
+  05-25 10:28:21.179 099 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:28:21.203 099 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:28:21.205 099 +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:28:21.207 099 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:28:21.361 099 -sensor wifi_signal_strength=3 -state=10116:"sensor:0x10028"
+  05-25 10:28:21.448 099 conn=1:"CONNECTED"
+  05-25 10:28:22.428 099 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:28:22.473 099 -wake_lock=1000:"WifiSuspend" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:28:22.550 099 volt=4192
+  05-25 10:28:23.559 098 volt=4305
+                 Details: cpu=61540u+88700s
+                          /proc/stat=58610 usr, 64510 sys, 360 io, 14000 irq, 980 sirq, 941860 idle (12,8% of 3h 0m 3s 200ms), SubsystemPowerState SubsystemPowerState subsystem_0 name=MODEM state_0 name=Sleep time=63282644 count=30232 last entry=2759572637 subsystem_1 name=APSS state_0 name=Sleep time=62373023 count=312220 last entry=2759572555 subsystem_2 name=SOC state_0 name=VDD_MIN time=53295375 count=2027 last entry=2759478055 subsystem_3 name=ADSP_ISLAND state_0 name=Sleep time=0 count=0 last entry=0 subsystem_4 name=ADSP state_0 name=Sleep time=67058466 count=210 last entry=2759535399
+  05-25 10:28:24.091 098 +wake_lock=1000:"DisplayOffload"
+  05-25 10:28:24.092 098 -wake_lock=1000:"DisplayOffload"
+  05-25 10:28:24.094 098 +wake_lock=1000:"DisplayOffload"
+  05-25 10:28:24.096 098 -wake_lock=1000:"DisplayOffload"
+  05-25 10:28:29.955 098 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:28:29.959 098 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:28:29.978 098 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:28:29.978 098 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:28:30.111 098 -sensor wifi_signal_strength=4 -state=10116:"sensor:0x10028"
+  05-25 10:28:30.161 098 conn=1:"CONNECTED"
+  05-25 10:28:31.796 098
+  05-25 10:28:31.808 098
+  05-25 10:28:31.825 098 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:28:31.860 098
+  05-25 10:28:31.871 098 display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:28:31.871 098 -wake_lock=u0a107:"CallbackRunner" -screen +screen_doze
+  05-25 10:28:31.961 098 +wake_lock=1000:"WifiSuspend"
+  05-25 10:28:31.977 098 volt=4156 -wake_lock=1000:"WifiSuspend"
+  05-25 10:28:40.058 098 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:28:40.061 098 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:28:40.076 098 display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:28:40.076 098 +wake_lock=-1:"screen" +sensor +screen -screen_doze +state=1000:"sensor:0x10009"
+  05-25 10:28:40.183 098 volt=4228 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:28:40.223 098 conn=1:"CONNECTED"
+  05-25 10:28:41.492 098
+  05-25 10:28:41.506 098 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:28:41.545 098 -wake_lock=u0a55:"CloudNodeRpcWakeLock" -screen +screen_doze wake_reason=0:"Abort: Pending Wakeup Sources: nanohub" display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:28:50.640 098 screenwake=1000:"android.policy:MOTION"
+  05-25 10:28:50.648 098 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:28:50.677 098 +wake_lock=u0a116:"SystemUIRCDCLock" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:28:50.679 098 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:28:50.812 098 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:28:50.881 098 conn=1:"CONNECTED"
+  05-25 10:28:50.893 098 volt=4164
+  05-25 10:28:51.610 098 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:28:51.648 098 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:28:51.696 098 +wake_lock=1000:"WifiSuspend"
+  05-25 10:28:51.708 098 -wake_lock=1000:"WifiSuspend"
+  05-25 10:28:51.738 098 volt=4204
+  05-25 10:29:00.066 098 screenwake=u0a116:"wear:policy:tiltToWake"
+  05-25 10:29:00.069 098 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:29:00.086 098 +wake_lock=u0a116:"SystemUIRCDCLock"
+  05-25 10:29:00.086 098 +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=TILT"
+  05-25 10:29:00.087 098 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:29:00.194 098 volt=4308
+  05-25 10:29:00.195 098
+  05-25 10:29:00.214 098 -sensor -state=10116:"sensor:0x10028"
+  05-25 10:29:00.319 098 conn=1:"CONNECTED"
+  05-25 10:29:01.458 098
+  05-25 10:29:01.471 098 +sensor +state=10116:"sensor:0x10028"
+  05-25 10:29:01.510 098 -wake_lock=1000:"DisplayOffload" -screen +screen_doze display_state_changed=-1:"display=0 state=DOZE reason=DEFAULT_POLICY"
+  05-25 10:29:01.549 098 +wake_lock=1000:"DisplayOffload"
+  05-25 10:29:01.549 098 -wake_lock=1000:"DisplayOffload"
+  05-25 10:29:01.560 098 +wake_lock=1000:"WifiSuspend"
+  05-25 10:29:01.580 098 -wake_lock=1000:"WifiSuspend"
+  05-25 10:29:01.600 098 volt=4181
+  05-25 10:29:06.411 098
+  05-25 10:29:06.419 098
+  05-25 10:29:06.422 098
+  05-25 10:29:06.424 098
+  05-25 10:29:10.965 098 stats=0:"procstate-change"
+  05-25 10:29:10.965 098
+  05-25 10:29:14.644 098 screenwake=1000:"android.policy:MOTION"
+  05-25 10:29:14.645 098 -sensor -state=1000:"sensor:0x10009"
+  05-25 10:29:14.660 098 +wake_lock=-1:"screen" +screen -screen_doze display_state_changed=-1:"display=0 state=ON reason=MOTION"
+  05-25 10:29:14.662 098 +sensor +state=1000:"sensor:0x10009"
+  05-25 10:29:14.674 098 -sensor -state=10147:"sensor:0x10001"
+  05-25 10:29:14.679 098 -state=10147:"sensor:0x10007"
+  05-25 10:29:14.793 098 volt=4233 -state=10116:"sensor:0x10028"
+  05-25 10:29:14.836 098 conn=1:"CONNECTED"
+  05-25 10:29:26.355 098
+  05-25 10:29:26.355 098
+  05-25 10:29:26.355 098
+  05-25 10:29:26.355 098
+  05-25 10:29:26.355 098
+  05-25 10:29:26.355 098
+  05-25 10:29:26.419 098 stats=0:"dump"
+  05-25 10:29:26.419 098
+
+Per-PID Stats:
+  PID 1616 wake time: +9s205ms
+  PID 1616 wake time: +273ms
+  PID 1616 wake time: +370ms
+  PID 1888 wake time: +879ms
+  PID 2824 wake time: +35ms
+  PID 10915 wake time: +38s818ms
+  PID 1616 wake time: +57ms
+  PID 10915 wake time: +1s958ms
+  PID 1616 wake time: +80ms
+  PID 2095 wake time: +14s214ms
+  PID 1616 wake time: +654ms
+  PID 1616 wake time: +742ms
+
+Discharge step durations:
+  #0: +4m37s492ms to 98 (power-save-off, device-idle-off)
+  Estimated discharge time remaining: +7h33m14s216ms
+
+Daily stats:
+  Current start time: 2026-05-25-03-50-45
+  Next min deadline: 2026-05-26-01-00-00
+  Next max deadline: 2026-05-26-03-00-00
+  Current daily discharge step durations:
+    #0: +4m37s492ms to 98 (power-save-off, device-idle-off)
+    #1: +1h0m0s99ms to 78 (screen-off, power-save-off, device-idle-off)
+    #2: +1h5m31s348ms to 79 (screen-off, power-save-off, device-idle-off)
+    #3: +12m14s298ms to 80 (screen-off, power-save-off, device-idle-off)
+    #4: +12m14s297ms to 80 (screen-off, power-save-off, device-idle-off)
+    #5: +1h10m32s342ms to 82 (screen-off, power-save-off, device-idle-off)
+    #6: +59m38s68ms to 83 (screen-off, power-save-off, device-idle-off)
+    #7: +34m36s858ms to 84 (screen-off, power-save-off, device-idle-off)
+      Discharge total time: 2d 18h 32m 40s 0ms  (from 8 steps)
+      Discharge screen off time: 3d 2h 56m 58s 700ms  (from 7 steps)
+  Current daily charge step durations:
+    #0: +7m53s424ms to 100 (screen-off, power-save-off, device-idle-off)
+    #1: +4m8s321ms to 99 (screen-off, power-save-off, device-idle-off)
+    #2: +3m12s346ms to 98 (screen-off, power-save-off, device-idle-off)
+    #3: +2m26s383ms to 97 (screen-off, power-save-off, device-idle-off)
+    #4: +1m50s148ms to 96 (screen-off, power-save-off, device-idle-off)
+    #5: +2m8s229ms to 95 (screen-off, power-save-off, device-idle-off)
+    #6: +1m30s625ms to 94 (screen-off, power-save-off, device-idle-off)
+    #7: +1m25s726ms to 93 (screen-off, power-save-off, device-idle-off)
+    #8: +1m20s140ms to 92 (screen-off, power-save-off, device-idle-off)
+    #9: +1m4s88ms to 91 (screen-off, power-save-off, device-idle-off)
+    #10: +1m4s115ms to 90 (screen-off, power-save-off, device-idle-off)
+    #11: +1m20s137ms to 89 (screen-off, power-save-off, device-idle-off)
+    #12: +1m5s787ms to 88 (screen-off, power-save-off, device-idle-off)
+    #13: +1m4s258ms to 87 (screen-off, power-save-off, device-idle-off)
+    #14: +1m18s209ms to 86 (screen-off, power-save-off, device-idle-off)
+    #15: +1m11s536ms to 85 (screen-off, power-save-off, device-idle-off)
+    #16: +1m12s602ms to 84 (screen-off, power-save-off, device-idle-off)
+    #17: +51s391ms to 83 (screen-off, power-save-off, device-idle-off)
+    #18: +12s643ms to 82 (screen-off, power-save-off, device-idle-off)
+    #19: +49s356ms to 81 (screen-off, power-save-off, device-idle-off)
+    #20: +46s624ms to 80 (power-save-off, device-idle-off)
+      Charge total time: 3h 0m 38s 500ms  (from 21 steps)
+      Charge screen off time: 3h 5m 47s 300ms  (from 20 steps)
+    Package changes:
+      Update com.google.android.apps.youtube.music vers=92040730
+      Update com.google.android.apps.youtube.music vers=92040730
+      Update com.google.android.wearable.assistant vers=311287596
+      Update com.google.android.wearable.assistant vers=311287596
+      Update com.google.android.tts vers=210641611
+      Update com.google.android.tts vers=210641611
+  Daily from 2026-05-24-11-44-00 to 2026-05-25-03-50-45:
+    Discharge step durations:
+      #0: +1h0m0s949ms to 86 (screen-off, power-save-off, device-idle-off)
+      #1: +26m55s982ms to 87 (screen-off, power-save-off, device-idle-off)
+      #2: +1h8m16s959ms to 88 (screen-off, power-save-off, device-idle-off)
+      #3: +59m59s585ms to 89 (screen-off, power-save-off, device-idle-off)
+      #4: +35m10s447ms to 90 (screen-off, power-save-off, device-idle-off)
+      #5: +59m59s952ms to 91 (screen-off, power-save-off, device-idle-off)
+      #6: +29m59s978ms to 92 (screen-off, power-save-off, device-idle-off)
+      #7: +1h4m49s717ms to 93 (screen-off, power-save-off, device-idle-off)
+      #8: +18m43s270ms to 94 (screen-off, power-save-off, device-idle-off)
+      #9: +18m43s269ms to 94 (screen-off, power-save-off, device-idle-off)
+      #10: +15m38s347ms to 96 (screen-off, power-save-off, device-idle-off)
+      #11: +15m38s347ms to 96 (screen-off, power-save-off, device-idle-off)
+      #12: +5m35s163ms to 92 (power-save-off, device-idle-off)
+      #13: +4m36s483ms to 93 (power-save-off, device-idle-off)
+      #14: +3m18s650ms to 94 (power-save-off, device-idle-off)
+      #15: +4m18s355ms to 93 (power-save-off, device-idle-off)
+      #16: +4m43s340ms to 94 (power-save-off, device-idle-off)
+      #17: +4m30s341ms to 92 (power-save-off, device-idle-off)
+      #18: +2m33s544ms to 93 (power-save-off, device-idle-off)
+      #19: +9m42s736ms to 94 (power-save-off, device-idle-off)
+      #20: +6m11s525ms to 93 (power-save-off, device-idle-off)
+      #21: +6m8s642ms to 94 (power-save-off, device-idle-off)
+      #22: +3m8s324ms to 95 (power-save-off, device-idle-off)
+      #23: +4m56s794ms to 96 (power-save-off, device-idle-off)
+      #24: +2m33s601ms to 86 (power-save-off, device-idle-off)
+      #25: +3m4s324ms to 87 (power-save-off, device-idle-off)
+      #26: +3m4s322ms to 88 (power-save-off, device-idle-off)
+      #27: +2m2s855ms to 89 (power-save-off, device-idle-off)
+      #28: +5m1s407ms to 90 (power-save-off)
+      #29: +6m14s348ms to 91 (power-save-off)
+      #30: +4m6s15ms to 92 (power-save-off, device-idle-off)
+      #31: +3m31s354ms to 93 (power-save-off, device-idle-off)
+      #32: +1m33s993ms to 94 (power-save-off, device-idle-off)
+      #33: +1m32s130ms to 95 (screen-on, power-save-off, device-idle-off)
+      #34: +4m18s42ms to 57 (power-save-off, device-idle-off)
+      #35: +1m56s849ms to 58 (power-save-off)
+      #36: +5m7s621ms to 59 (screen-doze-suspend, power-save-off, device-idle-on)
+      #37: +20s685ms to 60 (screen-doze-suspend, power-save-off, device-idle-on)
+      #38: +5m5s452ms to 61 (screen-doze-suspend, power-save-off, device-idle-on)
+      #39: +5m52s24ms to 62 (power-save-off)
+      #40: +1m56s226ms to 63 (power-save-off, device-idle-off)
+      #41: +3m53s928ms to 64 (power-save-off)
+      #42: +5m5s868ms to 65 (screen-doze-suspend, power-save-off, device-idle-on)
+      #43: +4m40s990ms to 66 (screen-doze-suspend, power-save-off, device-idle-on)
+      #44: +5m4s842ms to 67 (screen-doze-suspend, power-save-off, device-idle-on)
+      #45: +5m51s566ms to 68 (screen-doze-suspend, power-save-off)
+      #46: +4m10s362ms to 69 (power-save-off, device-idle-off)
+      #47: +4m24s291ms to 70 (power-save-off)
+      #48: +9m0s990ms to 71 (screen-doze-suspend, power-save-off, device-idle-on)
+      #49: +5m50s522ms to 72 (screen-doze-suspend, power-save-off)
+      #50: +3m30s523ms to 73 (power-save-off, device-idle-off)
+        Discharge total time: 20h 59m 59s 600ms  (from 51 steps)
+        Discharge screen off time: 2d 17h 49m 33s 300ms  (from 12 steps)
+        Discharge screen on time: 2h 33m 33s 0ms  (from 1 steps)
+        Discharge screen doze-suspend time: 8h 32m 41s 500ms  (from 9 steps)
+        Discharge screen doze-suspend device idle time: 8h 12m 0s 600ms  (from 7 steps)
+    Charge step durations:
+      #0: +4m18s935ms to 99 (screen-off, power-save-off, device-idle-off)
+      #1: +2m44s467ms to 98 (screen-off, power-save-off, device-idle-off)
+      #2: +1m57s292ms to 97 (screen-off, power-save-off, device-idle-off)
+      #3: +1m35s388ms to 96 (screen-off, power-save-off, device-idle-off)
+      #4: +1m57s345ms to 95 (screen-off, power-save-off, device-idle-off)
+      #5: +1m58s60ms to 94 (power-save-off, device-idle-off)
+      #6: +20m2s415ms to 93 (power-save-off, device-idle-off)
+      #7: +1m10s966ms to 96 (screen-off, power-save-off, device-idle-off)
+      #8: +4m6s894ms to 95 (power-save-off, device-idle-off)
+      #9: +19m22s268ms to 94 (power-save-off, device-idle-off)
+      #10: +1m33s469ms to 96 (power-save-off, device-idle-off)
+      #11: +1m32s811ms to 95 (power-save-off, device-idle-off)
+      #12: +3m5s637ms to 94 (screen-off, power-save-off, device-idle-off)
+      #13: +22m20s177ms to 93 (power-save-off, device-idle-off)
+      #14: +1m25s920ms to 96 (power-save-off, device-idle-off)
+      #15: +3m15s451ms to 95 (power-save-off, device-idle-off)
+      #16: +29m16s187ms to 94 (power-save-off, device-idle-off)
+      #17: +2m18s413ms to 98 (power-save-off, device-idle-off)
+      #18: +1m52s830ms to 97 (power-save-off, device-idle-off)
+      #19: +2m1s280ms to 96 (power-save-off, device-idle-off)
+      #20: +1m10s762ms to 95 (power-save-off, device-idle-off)
+      #21: +1m33s799ms to 94 (screen-off, power-save-off, device-idle-off)
+      #22: +1m8s489ms to 93 (screen-off, power-save-off, device-idle-off)
+      #23: +1m10s349ms to 92 (power-save-off, device-idle-off)
+      #24: +48s132ms to 91 (power-save-off, device-idle-off)
+      #25: +44s946ms to 90 (power-save-off, device-idle-off)
+      #26: +46s328ms to 89 (screen-off, power-save-off, device-idle-off)
+      #27: +47s793ms to 88 (power-save-off, device-idle-off)
+      #28: +6m57s825ms to 100 (screen-off, power-save-off, device-idle-off)
+      #29: +4m17s185ms to 99 (screen-off, power-save-off, device-idle-off)
+      #30: +3m12s833ms to 98 (screen-off, power-save-off, device-idle-off)
+      #31: +2m24s603ms to 97 (power-save-off, device-idle-off)
+      #32: +1m52s499ms to 96 (power-save-off, device-idle-off)
+      #33: +2m1s952ms to 95 (screen-off, power-save-off, device-idle-off)
+      #34: +1m35s671ms to 94 (screen-off, power-save-off, device-idle-off)
+      #35: +59s327ms to 93 (screen-off, power-save-off, device-idle-off)
+      #36: +1m32s575ms to 92 (screen-off, power-save-off, device-idle-off)
+      #37: +1m20s323ms to 91 (screen-off, power-save-off, device-idle-off)
+      #38: +41s107ms to 90 (screen-off, power-save-off, device-idle-off)
+      #39: +1m11s502ms to 89 (screen-off, power-save-off, device-idle-off)
+      #40: +52s481ms to 88 (screen-off, power-save-off, device-idle-off)
+      #41: +1m2s12ms to 87 (screen-off, power-save-off, device-idle-off)
+      #42: +46s313ms to 86 (screen-off, power-save-off, device-idle-off)
+      #43: +48s164ms to 85 (screen-off, power-save-off, device-idle-off)
+      #44: +1m5s442ms to 84 (screen-off, power-save-off, device-idle-off)
+      #45: +31s127ms to 83 (screen-off, power-save-off, device-idle-off)
+      #46: +24s953ms to 82 (screen-off, power-save-off, device-idle-off)
+      #47: +1m11s605ms to 81 (screen-off, power-save-off, device-idle-off)
+      #48: +1m7s390ms to 80 (screen-off, power-save-off, device-idle-off)
+      #49: +45s990ms to 79 (screen-off, power-save-off, device-idle-off)
+      #50: +1m15s5ms to 78 (screen-off, power-save-off, device-idle-off)
+      #51: +48s1ms to 77 (screen-off, power-save-off, device-idle-off)
+      #52: +37s229ms to 76 (screen-off, power-save-off, device-idle-off)
+      #53: +55s732ms to 75 (screen-off, power-save-off, device-idle-off)
+      #54: +40s906ms to 74 (screen-off, power-save-off, device-idle-off)
+      #55: +52s127ms to 73 (screen-off, power-save-off, device-idle-off)
+      #56: +12s483ms to 72 (screen-off, power-save-off, device-idle-off)
+      #57: +49s510ms to 71 (screen-off, power-save-off, device-idle-off)
+      #58: +46s875ms to 70 (screen-off, power-save-off, device-idle-off)
+      #59: +44s289ms to 69 (screen-off, power-save-off, device-idle-off)
+      #60: +23s447ms to 68 (screen-off, power-save-off, device-idle-off)
+      #61: +35s161ms to 67 (screen-off, power-save-off, device-idle-off)
+      #62: +34s95ms to 66 (screen-off, power-save-off, device-idle-off)
+      #63: +21s69ms to 65 (screen-off, power-save-off, device-idle-off)
+      #64: +19s189ms to 64 (screen-off, power-save-off, device-idle-off)
+      #65: +19s401ms to 63 (screen-off, power-save-off, device-idle-off)
+      #66: +23s436ms to 62 (screen-off, power-save-off, device-idle-off)
+      #67: +35s155ms to 61 (screen-off, power-save-off, device-idle-off)
+      #68: +35s196ms to 60 (power-save-off, device-idle-off)
+      #69: +32s909ms to 59 (screen-doze, power-save-off, device-idle-off)
+      #70: +38s82ms to 75 (screen-off, power-save-off, device-idle-off)
+      #71: +1m14s502ms to 74 (screen-off, power-save-off, device-idle-off)
+      #72: +48s240ms to 73 (screen-off, power-save-off, device-idle-off)
+      #73: +50s256ms to 72 (power-save-off, device-idle-off)
+      #74: +46s318ms to 71 (power-save-off, device-idle-off)
+      #75: +34s901ms to 70 (screen-off, power-save-off, device-idle-off)
+      #76: +47s792ms to 69 (screen-off, power-save-off, device-idle-off)
+      #77: +57s995ms to 68 (screen-off, power-save-off, device-idle-off)
+      #78: +36s315ms to 67 (screen-off, power-save-off, device-idle-off)
+      #79: +48s272ms to 66 (screen-off, power-save-off, device-idle-off)
+      #80: +32s222ms to 65 (screen-off, power-save-off, device-idle-off)
+      #81: +16s107ms to 64 (screen-off, power-save-off, device-idle-off)
+      #82: +32s195ms to 63 (screen-off, power-save-off, device-idle-off)
+      #83: +22s880ms to 62 (screen-off, power-save-off, device-idle-off)
+      #84: +41s552ms to 61 (screen-off, power-save-off, device-idle-off)
+      #85: +39s716ms to 60 (screen-off, power-save-off, device-idle-off)
+      #86: +35s114ms to 59 (screen-off, power-save-off, device-idle-off)
+      #87: +35s202ms to 58 (screen-off, power-save-off, device-idle-off)
+      #88: +35s161ms to 57 (screen-off, power-save-off, device-idle-off)
+      #89: +23s432ms to 56 (screen-off, power-save-off, device-idle-off)
+      #90: +35s172ms to 55 (screen-off, power-save-off, device-idle-off)
+      #91: +23s435ms to 54 (screen-off, power-save-off, device-idle-off)
+      #92: +36s165ms to 53 (screen-off, power-save-off, device-idle-off)
+      #93: +22s437ms to 52 (screen-off, power-save-off, device-idle-off)
+      #94: +35s161ms to 51 (screen-off, power-save-off, device-idle-off)
+      #95: +23s428ms to 50 (screen-off, power-save-off, device-idle-off)
+      #96: +35s176ms to 49 (screen-off, power-save-off, device-idle-off)
+      #97: +23s417ms to 48 (screen-off, power-save-off, device-idle-off)
+      #98: +35s167ms to 47 (screen-off, power-save-off, device-idle-off)
+      #99: +23s444ms to 46 (screen-off, power-save-off, device-idle-off)
+      #100: +29s821ms to 45 (screen-off, power-save-off, device-idle-off)
+      #101: +17s44ms to 44 (screen-off, power-save-off, device-idle-off)
+      #102: +23s457ms to 43 (screen-off, power-save-off, device-idle-off)
+      #103: +23s439ms to 42 (screen-off, power-save-off, device-idle-off)
+      #104: +24s318ms to 41 (screen-off, power-save-off, device-idle-off)
+      #105: +22s562ms to 40 (screen-off, power-save-off, device-idle-off)
+      #106: +35s145ms to 39 (power-save-off, device-idle-off)
+      #107: +23s395ms to 38 (screen-doze, power-save-off, device-idle-off)
+      #108: +23s470ms to 37 (screen-doze, power-save-off, device-idle-off)
+      #109: +46s910ms to 36 (power-save-off, device-idle-off)
+      #110: +23s438ms to 35 (screen-off, power-save-off, device-idle-off)
+      #111: +23s404ms to 34 (screen-off, power-save-off, device-idle-off)
+      #112: +35s420ms to 33 (screen-off, power-save-off, device-idle-off)
+      #113: +23s722ms to 32 (screen-off, power-save-off, device-idle-off)
+      #114: +34s656ms to 31 (screen-off, power-save-off, device-idle-off)
+      #115: +23s448ms to 30 (screen-off, power-save-off, device-idle-off)
+      #116: +35s165ms to 29 (screen-off, power-save-off, device-idle-off)
+      #117: +23s422ms to 28 (screen-off, power-save-off, device-idle-off)
+      #118: +28s758ms to 27 (screen-off, power-save-off, device-idle-off)
+      #119: +41s568ms to 26 (screen-off, power-save-off, device-idle-off)
+      #120: +23s431ms to 25 (screen-off, power-save-off, device-idle-off)
+      #121: +14s738ms to 24 (screen-off, power-save-off, device-idle-off)
+      #122: +25s786ms to 23 (screen-off, power-save-off, device-idle-off)
+      #123: +18s37ms to 22 (screen-off, power-save-off, device-idle-off)
+      #124: +23s494ms to 21 (screen-off, power-save-off, device-idle-off)
+      #125: +45s325ms to 20 (power-save-off, device-idle-off)
+      #126: +30s78ms to 19 (power-save-off, device-idle-off)
+      #127: +30s78ms to 19 (power-save-off, device-idle-off)
+      #128: +23s434ms to 17 (screen-off, power-save-off, device-idle-off)
+      #129: +35s156ms to 16 (screen-off, power-save-off, device-idle-off)
+      #130: +23s411ms to 15 (screen-off, power-save-off, device-idle-off)
+      #131: +23s400ms to 14 (power-save-off, device-idle-off)
+      #132: +44s89ms to 13 (screen-doze, power-save-off, device-idle-off)
+        Charge total time: 2h 44m 27s 0ms  (from 133 steps)
+        Charge screen off time: 1h 30m 51s 300ms  (from 100 steps)
+        Charge screen doze time: 51m 36s 500ms  (from 4 steps)
+  Daily from 2026-05-22-09-56-27 to 2026-05-24-11-44-00:
+    Discharge step durations:
+      #0: +2m53s844ms to 0 (screen-off, power-save-off, device-idle-on)
+      #1: +34m46s273ms to 1 (screen-off, power-save-off, device-idle-on)
+      #2: +25m13s816ms to 2 (screen-off, power-save-off, device-idle-on)
+      #3: +1h3m29s41ms to 3 (screen-off, power-save-off, device-idle-on)
+      #4: +34m37s42ms to 4 (screen-off, power-save-off, device-idle-on)
+      #5: +25m22s912ms to 5 (screen-off, power-save-off, device-idle-on)
+      #6: +38m2s35ms to 6 (screen-off, power-save-off, device-idle-on)
+      #7: +58m29s120ms to 7 (screen-off, power-save-off, device-idle-on)
+      #8: +8m55s952ms to 8 (screen-off, power-save-off, device-idle-on)
+      #9: +8m55s952ms to 8 (screen-off, power-save-off, device-idle-on)
+      #10: +8m55s952ms to 8 (screen-off, power-save-off, device-idle-on)
+      #11: +8m55s952ms to 8 (screen-off, power-save-off, device-idle-on)
+      #12: +16m17s490ms to 12 (screen-off, power-save-off, device-idle-on)
+      #13: +16m17s489ms to 12 (screen-off, power-save-off, device-idle-on)
+      #14: +19s324ms to 14 (screen-off, power-save-off, device-idle-on)
+      #15: +17m5s514ms to 15 (power-save-off)
+      #16: +2m20s914ms to 16 (power-save-off, device-idle-off)
+      #17: +2m27s591ms to 17 (power-save-off)
+      #18: +4m24s986ms to 18 (screen-doze-suspend, power-save-off)
+      #19: +2m9s70ms to 19 (power-save-off, device-idle-off)
+      #20: +31s994ms to 20 (power-save-off, device-idle-off)
+      #21: +2m48s410ms to 21 (power-save-off)
+      #22: +4m36s207ms to 22 (power-save-off, device-idle-off)
+      #23: +1m32s150ms to 23 (power-save-off, device-idle-off)
+      #24: +1m44s953ms to 24 (power-save-off, device-idle-off)
+      #25: +2m30s240ms to 25 (power-save-off, device-idle-off)
+      #26: +3m7s843ms to 26 (power-save-off, device-idle-off)
+      #27: +2m52s421ms to 27 (power-save-off, device-idle-off)
+      #28: +3m21s883ms to 28 (power-save-off)
+      #29: +3m22s724ms to 29 (power-save-off, device-idle-off)
+      #30: +2m28s915ms to 30 (power-save-off, device-idle-off)
+      #31: +2m12s299ms to 31 (power-save-off, device-idle-off)
+      #32: +2m29s646ms to 32 (power-save-off, device-idle-off)
+      #33: +2m26s532ms to 33 (power-save-off, device-idle-off)
+      #34: +4m57s43ms to 34 (power-save-off)
+      #35: +3m0s534ms to 35 (power-save-off, device-idle-off)
+      #36: +2m30s709ms to 36 (power-save-off, device-idle-off)
+      #37: +56m15s628ms to 37 (power-save-off)
+      #38: +1h3m32s248ms to 38 (screen-off, power-save-off, device-idle-on)
+      #39: +34m37s34ms to 39 (screen-off, power-save-off, device-idle-on)
+      #40: +29m59s976ms to 40 (screen-off, power-save-off, device-idle-on)
+      #41: +29m59s975ms to 40 (screen-off, power-save-off, device-idle-on)
+      #42: +1h4m23s954ms to 42 (screen-off, power-save-off, device-idle-on)
+      #43: +15m32s684ms to 43 (screen-off, power-save-off, device-idle-on)
+      #44: +5m4s562ms to 44 (screen-off, power-save-off, device-idle-on)
+      #45: +5m28s387ms to 45 (screen-off, power-save-off, device-idle-on)
+      #46: +5m27s250ms to 46 (screen-off, power-save-off, device-idle-on)
+      #47: +5m28s930ms to 47 (screen-off, power-save-off, device-idle-on)
+      #48: +5m51s155ms to 48 (screen-off, power-save-off, device-idle-on)
+      #49: +5m52s145ms to 49 (screen-off, power-save-off, device-idle-on)
+      #50: +5m51s151ms to 50 (screen-off, power-save-off, device-idle-on)
+      #51: +5m5s251ms to 51 (power-save-off)
+      #52: +2m47s393ms to 52 (power-save-off, device-idle-off)
+      #53: +1m34s405ms to 53 (power-save-off, device-idle-off)
+      #54: +4m37s672ms to 54 (power-save-off)
+      #55: +4m40s981ms to 55 (power-save-off)
+      #56: +3m48s221ms to 56 (power-save-off, device-idle-off)
+      #57: +4m0s272ms to 57 (power-save-off, device-idle-off)
+      #58: +46s120ms to 58 (power-save-off, device-idle-off)
+      #59: +8m44s41ms to 59 (power-save-off)
+      #60: +20s480ms to 60 (screen-doze-suspend, power-save-off)
+      #61: +4m5s432ms to 61 (power-save-off, device-idle-off)
+      #62: +4m4s877ms to 62 (power-save-off, device-idle-off)
+      #63: +4m49s134ms to 63 (power-save-off, device-idle-off)
+      #64: +2m36s188ms to 64 (power-save-off, device-idle-off)
+      #65: +2m58s277ms to 65 (power-save-off, device-idle-off)
+      #66: +4m46s27ms to 66 (power-save-off, device-idle-off)
+      #67: +3m20s185ms to 67 (power-save-off, device-idle-off)
+      #68: +3m43s765ms to 68 (power-save-off)
+      #69: +5m34s890ms to 69 (screen-doze-suspend, power-save-off)
+      #70: +3m4s322ms to 70 (power-save-off, device-idle-off)
+      #71: +3m14s500ms to 71 (power-save-off)
+      #72: +4m39s881ms to 72 (screen-doze-suspend, power-save-off, device-idle-on)
+      #73: +7m4s230ms to 73 (screen-doze-suspend, power-save-off, device-idle-on)
+      #74: +5m5s175ms to 74 (screen-doze-suspend, power-save-off)
+      #75: +3m54s478ms to 75 (power-save-off, device-idle-off)
+      #76: +3m5s92ms to 76 (power-save-off, device-idle-off)
+      #77: +2m31s69ms to 77 (power-save-off, device-idle-off)
+      #78: +2m2s880ms to 78 (power-save-off, device-idle-off)
+      #79: +3m42s903ms to 79 (power-save-off)
+      #80: +20s195ms to 80 (screen-off, power-save-off, device-idle-off)
+      #81: +2m23s727ms to 81 (power-save-off, device-idle-off)
+      #82: +1m32s170ms to 82 (power-save-off, device-idle-off)
+      #83: +2m2s870ms to 83 (power-save-off, device-idle-off)
+      #84: +1m59s475ms to 84 (power-save-off, device-idle-off)
+      #85: +1m7s5ms to 85 (power-save-off, device-idle-off)
+      #86: +30s704ms to 86 (screen-on, power-save-off, device-idle-off)
+        Discharge total time: 16h 52m 20s 300ms  (from 87 steps)
+        Discharge screen off time: 1d 12h 9m 4s 200ms  (from 29 steps)
+        Discharge screen off device idle time: 1d 13h 25m 20s 100ms  (from 28 steps)
+        Discharge screen on time: 51m 10s 400ms  (from 1 steps)
+        Discharge screen doze-suspend time: 7h 32m 40s 700ms  (from 6 steps)
+        Discharge screen doze-suspend device idle time: 9h 46m 45s 500ms  (from 2 steps)
+    Package changes:
+      Update com.example.padeltracker vers=0
+      Update com.example.padeltracker vers=1
+      Update com.example.padeltracker vers=1
+  Daily from 2026-05-21-16-16-17 to 2026-05-22-09-56-27:
+    Discharge step durations:
+      #0: +7m22s271ms to 90 (screen-doze-suspend, power-save-off)
+      #1: +4m21s162ms to 91 (power-save-off)
+      #2: +2m33s599ms to 92 (power-save-off)
+      #3: +2m2s895ms to 93 (power-save-off, device-idle-off)
+      #4: +5m43s498ms to 94 (power-save-off, device-idle-off)
+      #5: +1m36s119ms to 95 (power-save-off, device-idle-off)
+      #6: +30s712ms to 96 (screen-on, power-save-off, device-idle-off)
+      #7: +4m8s782ms to 59 (power-save-off)
+      #8: +20s88ms to 60 (screen-off, power-save-off, device-idle-on)
+      #9: +5m51s335ms to 61 (screen-off, power-save-off, device-idle-on)
+      #10: +5m52s168ms to 62 (screen-off, power-save-off, device-idle-on)
+      #11: +6m38s425ms to 63 (screen-off, power-save-off, device-idle-on)
+      #12: +4m9s357ms to 64 (power-save-off)
+      #13: +2m4s910ms to 65 (power-save-off, device-idle-off)
+      #14: +3m3s432ms to 66 (power-save-off, device-idle-off)
+      #15: +1m38s54ms to 67 (power-save-off, device-idle-off)
+      #16: +58s313ms to 68 (power-save-off, device-idle-off)
+      #17: +30s796ms to 69 (screen-on, power-save-off, device-idle-off)
+      #18: +1m9s66ms to 70 (power-save-off, device-idle-off)
+        Discharge total time: 5h 18m 51s 400ms  (from 19 steps)
+        Discharge screen off time: 7h 47m 30s 400ms  (from 4 steps)
+        Discharge screen off device idle time: 7h 47m 30s 400ms  (from 4 steps)
+        Discharge screen on time: 51m 15s 400ms  (from 2 steps)
+        Discharge screen doze-suspend time: 12h 17m 7s 100ms  (from 1 steps)
+    Charge step durations:
+      #0: +11m8s578ms to 100 (power-save-off, device-idle-off)
+      #1: +6m3s244ms to 99 (screen-off, power-save-off, device-idle-off)
+      #2: +3m21s361ms to 98 (screen-off, power-save-off, device-idle-off)
+      #3: +2m2s873ms to 97 (screen-off, power-save-off, device-idle-off)
+      #4: +2m2s897ms to 96 (screen-off, power-save-off, device-idle-off)
+      #5: +1m32s164ms to 95 (screen-off, power-save-off, device-idle-off)
+      #6: +1m1s430ms to 94 (screen-off, power-save-off, device-idle-off)
+      #7: +1m32s159ms to 93 (screen-off, power-save-off, device-idle-off)
+      #8: +1m1s449ms to 92 (screen-off, power-save-off, device-idle-off)
+      #9: +1m1s431ms to 91 (screen-off, power-save-off, device-idle-off)
+      #10: +1m1s438ms to 90 (screen-off, power-save-off, device-idle-off)
+      #11: +30s737ms to 89 (screen-off, power-save-off, device-idle-off)
+      #12: +1m1s431ms to 88 (screen-off, power-save-off, device-idle-off)
+      #13: +30s718ms to 87 (screen-off, power-save-off, device-idle-off)
+      #14: +1m1s438ms to 86 (screen-off, power-save-off, device-idle-off)
+      #15: +30s720ms to 85 (screen-off, power-save-off, device-idle-off)
+      #16: +1m1s434ms to 84 (screen-off, power-save-off, device-idle-off)
+      #17: +1m1s457ms to 83 (screen-off, power-save-off, device-idle-off)
+      #18: +30s717ms to 82 (screen-off, power-save-off, device-idle-off)
+      #19: +30s716ms to 82 (screen-off, power-save-off, device-idle-off)
+      #20: +30s712ms to 80 (screen-off, power-save-off, device-idle-off)
+      #21: +1m1s445ms to 79 (screen-off, power-save-off, device-idle-off)
+      #22: +30s703ms to 78 (screen-off, power-save-off, device-idle-off)
+      #23: +1m1s443ms to 77 (screen-off, power-save-off, device-idle-off)
+      #24: +47s119ms to 76 (screen-off, power-save-off, device-idle-off)
+      #25: +30s704ms to 75 (screen-off, power-save-off, device-idle-off)
+      #26: +30s730ms to 74 (screen-off, power-save-off, device-idle-off)
+      #27: +1m1s441ms to 73 (screen-off, power-save-off, device-idle-off)
+      #28: +15s363ms to 72 (screen-off, power-save-off, device-idle-off)
+      #29: +15s362ms to 72 (screen-off, power-save-off, device-idle-off)
+      #30: +30s716ms to 70 (screen-off, power-save-off, device-idle-off)
+      #31: +57s954ms to 69 (screen-off, power-save-off, device-idle-off)
+      #32: +28s862ms to 68 (screen-off, power-save-off, device-idle-off)
+      #33: +20s219ms to 67 (screen-off, power-save-off, device-idle-off)
+      #34: +30s173ms to 66 (screen-off, power-save-off, device-idle-off)
+      #35: +15s363ms to 65 (screen-off, power-save-off, device-idle-off)
+      #36: +15s363ms to 65 (screen-off, power-save-off, device-idle-off)
+      #37: +31s127ms to 63 (power-save-off, device-idle-off)
+      #38: +25s12ms to 62 (screen-doze, power-save-off, device-idle-off)
+      #39: +31s334ms to 61 (screen-doze, power-save-off, device-idle-off)
+        Charge total time: 2h 4m 8s 800ms  (from 40 steps)
+        Charge screen off time: 1h 42m 56s 300ms  (from 36 steps)
+        Charge screen doze time: 46m 57s 300ms  (from 2 steps)
+    Package changes:
+      Update com.example.padeltracker vers=1
+      Update com.example.padeltracker vers=1
+      Update com.google.android.apps.maps vers=1068561765
+      Update com.google.android.apps.maps vers=1068561765
+      Update com.google.android.wearable.assistant vers=311287566
+      Update com.google.android.wearable.assistant vers=311287566
+      Update com.google.android.tts vers=210636283
+      Update com.google.android.tts vers=210636283
+      Update com.google.android.GoogleCamera vers=68813319
+      Update com.google.android.GoogleCamera vers=68813319
+      Update com.google.android.keep vers=220658919
+      Update com.google.android.keep vers=220658919
+      Update com.google.android.apps.youtube.music vers=91940730
+      Update com.google.android.apps.youtube.music vers=91940730
+      Update com.google.android.apps.adm vers=50069044
+      Update com.google.android.apps.adm vers=50069044
+      Update com.fitbit.FitbitMobile vers=1104041926
+      Update com.fitbit.FitbitMobile vers=1104041926
+      Update com.google.android.apps.messaging vers=308183500
+      Update com.google.android.apps.messaging vers=308183500
+      Update com.google.android.contacts vers=3273357
+      Update com.google.android.contacts vers=3273357
+      Update com.google.android.marvin.talkback vers=60199268
+      Update com.google.android.marvin.talkback vers=60199268
+      Update com.google.android.apps.walletnfcrel vers=933474007
+      Update com.google.android.apps.walletnfcrel vers=933474007
+      Update com.google.android.wearable.pixel.pdms vers=158132
+      Update com.google.android.wearable.pixel.pdms vers=158132
+      Update com.google.android.deskclock vers=60289338
+      Update com.google.android.deskclock vers=60289338
+      Update com.google.android.wearable.watchface.rwf vers=20023226
+      Update com.google.android.wearable.watchface.rwf vers=20023226
+      Update com.fitbit.ecg vers=288410
+      Update com.fitbit.ecg vers=288410
+      Update com.google.android.wearable.protolayout.renderer vers=100043118
+      Update com.google.android.wearable.protolayout.renderer vers=100043118
+      Update com.google.android.dialer vers=250013
+      Update com.google.android.dialer vers=250013
+      Update com.google.android.gm vers=65751427
+      Update com.google.android.gm vers=65751427
+      Update com.google.android.wearable.app vers=790481931
+      Update com.google.android.wearable.app vers=790481931
+      Update com.google.android.apps.safetyhub vers=100828297
+      Update com.google.android.apps.safetyhub vers=100828297
+      Update com.google.android.apps.chromecast.app vers=27936014
+      Update com.google.android.apps.chromecast.app vers=27936014
+      Update com.google.android.inputmethod.latin vers=2001861
+      Update com.google.android.inputmethod.latin vers=2001861
+      Update com.google.android.wearable.healthservices vers=1491535
+      Update com.google.android.wearable.healthservices vers=1491535
+      Update com.google.android.apps.weather vers=1021771
+      Update com.google.android.apps.weather vers=1021771
+      Update com.google.android.wearable.dwf.receiver vers=393
+      Update com.google.android.wearable.dwf.receiver vers=393
+      Update com.google.android.calendar vers=2018121584
+      Update com.google.android.calendar vers=2018121584
+  Daily from 2026-05-20-18-20-06 to 2026-05-21-16-16-17:
+    Discharge step durations:
+      #0: +14m41s192ms to 76 (power-save-off)
+      #1: +14m41s191ms to 76 (power-save-off)
+      #2: +8m5s228ms to 78 (power-save-off)
+      #3: +31m40s789ms to 79 (power-save-off)
+      #4: +10m5s262ms to 80 (power-save-off)
+      #5: +10m5s262ms to 80 (power-save-off)
+      #6: +10m5s262ms to 80 (power-save-off)
+      #7: +14m55s696ms to 83 (power-save-off)
+      #8: +1m1s415ms to 84 (screen-on, power-save-off, device-idle-off)
+      #9: +30s744ms to 85 (screen-on, power-save-off, device-idle-off)
+        Discharge total time: 19h 18m 40s 400ms  (from 10 steps)
+        Discharge screen on time: 1h 16m 47s 900ms  (from 2 steps)
+    Package changes:
+      Update com.android.vending vers=85142115
+      Update com.android.vending vers=85142115
+  Daily from 2026-02-10-00-02-42 to 2026-05-20-18-20-06:
+    Discharge step durations:
+      #0: +1m1s448ms to 87 (screen-on, power-save-off, device-idle-off)
+      #1: +1m1s406ms to 88 (screen-on, power-save-off, device-idle-off)
+        Discharge total time: 1h 42m 22s 700ms  (from 2 steps)
+        Discharge screen on time: 1h 42m 22s 700ms  (from 2 steps)
+
+Statistics since last charge:
+  System starts: 0, currently on battery: true
+  Estimated battery capacity: 318 mAh
+  Last learned battery capacity: 318 mAh
+  Min learned battery capacity: 318 mAh
+  Max learned battery capacity: 318 mAh
+  Time on battery: 15m 21s 673ms (100,0%) realtime, 15m 12s 427ms (99,0%) uptime
+  Time on battery screen off: 10m 18s 184ms (67,1%) realtime, 10m 8s 926ms (66,1%) uptime
+  Time on battery screen doze: 10m 18s 184ms (67,1%)
+  Total run time: 15m 21s 673ms realtime, 15m 12s 427ms uptime
+  Battery time remaining: 7h 33m 14s 216ms 
+  Discharge: 9.54 mAh
+  Screen off discharge: 6.36 mAh
+  Screen doze discharge: 6.36 mAh
+  Screen on discharge: 3.18 mAh
+  Device light doze discharge: 0 mAh
+  Device deep doze discharge: 0 mAh
+  Start clock time: 2026-05-25-10-14-04
+  Screen on: 5m 3s 489ms (32,9%) 75x, Interactive: 5m 0s 434ms (32,6%)
+  Screen brightnesses:
+    dark 5m 3s 489ms (100,0%)
+  Connectivity changes: 81
+  Total partial wakelock time: 11s 66ms
+  Total WiFi Multicast wakelock Count: 0
+  Total WiFi Multicast wakelock time: 15m 21s 673ms
+
+  CONNECTIVITY POWER SUMMARY START
+  Logging duration for connectivity statistics: 15m 21s 673ms 
+  Cellular Statistics:
+     Cellular kernel active time: 0ms (0,0%)
+     Cellular Sleep time:  0ms (0,0%)
+     Cellular Idle time:   0ms (0,0%)
+     Cellular Rx time:     0ms (0,0%)
+     Cellular Tx time:     0ms (0,0%)
+     Active Cellular Radio Access Technology Breakdown:
+       (no activity)
+     Cellular data received: 0B
+     Cellular data sent: 0B
+     Cellular packets received: 0
+     Cellular packets sent: 0
+     Cellular Radio Access Technology: (no activity)
+     Cellular Rx signal strength (RSRP): (no activity)
+  Wifi Statistics:
+     Wifi kernel active time: 15m 21s 673ms (100,0%)
+     WiFi Scan time:  0ms (0,0%)
+     WiFi Sleep time:  13m 36s 725ms (88,6%)
+     WiFi Idle time:   1m 37s 775ms (10,6%)
+     WiFi Rx time:     5s 398ms (0,6%)
+     WiFi Tx time:     1s 777ms (0,2%)
+     Wifi data received: 376,27KB
+     Wifi data sent: 784,34KB
+     Wifi packets received: 2873
+     Wifi packets sent: 2673
+     Wifi states:
+       sta 15m 21s 673ms (100,0%) 
+     Wifi supplicant states:
+       completed 15m 21s 673ms (100,0%) 
+     Wifi Rx signal strength (RSSI):
+         good (-66.25dBm to -55dBm): 1m 27s 811ms (9,5%) 
+         great (greater than -55dBm): 13m 53s 862ms (90,5%) 
+  GPS Statistics:
+     GPS signal quality (Top 4 Average CN0):
+      poor (less than 20 dBHz): 0ms (0,0%) 
+      good (greater than 20 dBHz): 0ms (0,0%) 
+  CONNECTIVITY POWER SUMMARY END
+
+  Bluetooth total received: 0B, sent: 0B
+  Bluetooth scan time: 0ms 
+     Bluetooth Idle time:   7s 588ms (0,8%)
+     Bluetooth Rx time:     24s 188ms (2,6%)
+     Bluetooth Tx time:     8s 939ms (1,0%)
+
+  Device battery use since last full charge
+    Amount discharged (lower bound): 1
+    Amount discharged (upper bound): 2
+    Amount discharged while screen on: 0
+    Amount discharged while screen off: 2
+    Amount discharged while screen doze: 2
+
+  Estimated power use (mAh):
+    Capacity: 318, Computed drain: 9.54, actual drain: 9.54
+    Global
+    screen: 0.290 apps: 0.290
+    cpu: 22.4 apps: 22.4 duration: 15m 12s 240ms 
+    sensors: 0.000924 apps: 0.000922
+    wakelock: 0.271 apps: 0.271 duration: 10m 8s 814ms 
+    ambient_display: 0.300 apps: 0
+      (on battery, screen on)
+      screen: 0.290 apps: 0.290
+      cpu: 7.29 apps: 7.27 duration: 5m 0s 975ms 
+      sensors: 0.000594 apps: 0.000592
+      wakelock: 0.0891 apps: 0.271 duration: 3m 20s 417ms 
+      (on battery, screen off/doze)
+      cpu: 15.1 apps: 15.1 duration: 10m 11s 265ms 
+      sensors: 0.000330 apps: 0.000330
+      wakelock: 0.182 apps: 0 duration: 6m 48s 397ms 
+      ambient_display: 0.300 apps: 0
+  UID 1000: 10.2 bg: 10.2
+      cpu=10.1 cpu:bg=10.1 sensors=0.000253 sensors:bg=0.000253 wakelock=0.0915 (3s 332ms) wakelock:bg=0.0915 (3s 332ms)
+      (on battery, screen on) cpu=3.29 cpu:bg=3.29 sensors=0.000253 sensors:bg=0.000253 wakelock=0.0915 (3s 332ms) wakelock:bg=0.0915 (3s 332ms)
+      (on battery, screen off/doze) cpu=6.82 cpu:bg=6.82
+  UID u0a147: 5.69 fg: 5.27 (15m 9s 192ms) bg: 0.127 cached: 0.000788 (82ms)
+      screen=0.290 cpu=5.40 cpu:fg=5.27 cpu:bg=0.127 cpu:cached=0.000788 sensors=0.000496 sensors:fg=0.000490 sensors:bg=0.00000600
+      (on battery, screen on) screen=0.290 cpu=1.75 cpu:fg=1.69 cpu:bg=0.0584 cpu:cached=0.000788 sensors=0.000166 sensors:fg=0.000160 sensors:bg=0.00000600
+      (on battery, screen off/doze) cpu=3.64 cpu:fg=3.57 cpu:bg=0.0682 sensors=0.000330 sensors:fg=0.000330
+  UID 0: 4.02 bg: 4.02
+      cpu=4.02 cpu:bg=4.02
+      (on battery, screen on) cpu=1.32 cpu:bg=1.32
+      (on battery, screen off/doze) cpu=2.70 cpu:bg=2.70
+  UID u0a105: 0.402 fg: 0.277 (10m 23s 905ms) bg: 0.00276 fgs: 0.122 (4m 50s 990ms)
+      cpu=0.402 cpu:fg=0.277 cpu:bg=0.00276 cpu:fgs=0.122
+      (on battery, screen on) cpu=0.128 cpu:fg=0.00645 cpu:fgs=0.121
+      (on battery, screen off/doze) cpu=0.274 cpu:fg=0.271 cpu:bg=0.00276 cpu:fgs=0.000758
+  UID u0a116: 0.400 bg: 0.400
+      cpu=0.315 cpu:bg=0.315 sensors=0.000173 sensors:bg=0.000173 wakelock=0.0843 (3s 70ms) wakelock:bg=0.0843 (3s 70ms)
+      (on battery, screen on) cpu=0.100 cpu:bg=0.100 sensors=0.000173 sensors:bg=0.000173 wakelock=0.0843 (3s 70ms) wakelock:bg=0.0843 (3s 70ms)
+      (on battery, screen off/doze) cpu=0.215 cpu:bg=0.215
+  UID 1010: 0.387 bg: 0.387
+      cpu=0.387 cpu:bg=0.387
+      (on battery, screen on) cpu=0.129 cpu:bg=0.129
+      (on battery, screen off/doze) cpu=0.258 cpu:bg=0.258
+  UID u0a107: 0.367 bg: 0.367 (15m 9s 189ms) fgs: 0 (85ms)
+      cpu=0.367 cpu:bg=0.367
+      (on battery, screen on) cpu=0.121 cpu:bg=0.121
+      (on battery, screen off/doze) cpu=0.246 cpu:bg=0.246
+  UID u0a97: 0.251 bg: 0.0150 (4s 907ms) fgs: 0.00856 (18s 818ms) cached: 0.228 (14m 18s 805ms)
+      cpu=0.251 cpu:bg=0.0150 cpu:fgs=0.00856 cpu:cached=0.228
+      (on battery, screen on) cpu=0.0798 cpu:bg=0.00544 cpu:fgs=0.00161 cpu:cached=0.0728
+      (on battery, screen off/doze) cpu=0.171 cpu:bg=0.00952 cpu:fgs=0.00694 cpu:cached=0.155
+  UID 1066: 0.230 bg: 0.230
+      cpu=0.230 cpu:bg=0.230
+      (on battery, screen on) cpu=0.0733 cpu:bg=0.0733
+      (on battery, screen off/doze) cpu=0.157 cpu:bg=0.157
+  UID u0a49: 0.223 bg: 0.223
+      cpu=0.219 cpu:bg=0.219 wakelock=0.00401 (146ms) wakelock:bg=0.00401 (146ms)
+      (on battery, screen on) cpu=0.0651 cpu:bg=0.0651 wakelock=0.00401 (146ms) wakelock:bg=0.00401 (146ms)
+      (on battery, screen off/doze) cpu=0.154 cpu:bg=0.154
+  UID u0a51: 0.127 bg: 0.127
+      cpu=0.127 cpu:bg=0.127
+      (on battery, screen on) cpu=0.0414 cpu:bg=0.0414
+      (on battery, screen off/doze) cpu=0.0858 cpu:bg=0.0858
+  UID 1036: 0.0997 bg: 0.0997
+      cpu=0.0997 cpu:bg=0.0997
+      (on battery, screen on) cpu=0.0315 cpu:bg=0.0315
+      (on battery, screen off/doze) cpu=0.0682 cpu:bg=0.0682
+  UID u0a55: 0.0969 bg: 0.0969
+      cpu=0.00782 cpu:bg=0.00782 wakelock=0.0891 (3s 243ms) wakelock:bg=0.0891 (3s 243ms)
+      (on battery, screen on) cpu=0.00227 cpu:bg=0.00227 wakelock=0.0891 (3s 243ms) wakelock:bg=0.0891 (3s 243ms)
+      (on battery, screen off/doze) cpu=0.00555 cpu:bg=0.00555
+  UID u0a50: 0.0697 bg: 0.0697
+      cpu=0.0697 cpu:bg=0.0697
+      (on battery, screen on) cpu=0.0207 cpu:bg=0.0207
+      (on battery, screen off/doze) cpu=0.0490 cpu:bg=0.0490
+  UID 1080: 0.0623 bg: 0.0623
+      cpu=0.0623 cpu:bg=0.0623
+      (on battery, screen on) cpu=0.0200 cpu:bg=0.0200
+      (on battery, screen off/doze) cpu=0.0423 cpu:bg=0.0423
+  UID 2000: 0.0446 bg: 0.0446
+      cpu=0.0446 cpu:bg=0.0446
+      (on battery, screen on) cpu=0.0116 cpu:bg=0.0116
+      (on battery, screen off/doze) cpu=0.0330 cpu:bg=0.0330
+  UID 1073: 0.0435 bg: 0.0435
+      cpu=0.0435 cpu:bg=0.0435
+      (on battery, screen on) cpu=0.0144 cpu:bg=0.0144
+      (on battery, screen off/doze) cpu=0.0291 cpu:bg=0.0291
+  UID u0a91: 0.0395 bg: 0.0395
+      cpu=0.0395 cpu:bg=0.0395
+      (on battery, screen on) cpu=0.0128 cpu:bg=0.0128
+      (on battery, screen off/doze) cpu=0.0267 cpu:bg=0.0267
+  UID u0a140: 0.0289 fg: 0.000595 (1s 335ms) bg: 0.00515 cached: 0.0231 (15m 8s 535ms)
+      cpu=0.0289 cpu:fg=0.000595 cpu:bg=0.00515 cpu:cached=0.0231
+      (on battery, screen on) cpu=0.0105 cpu:fg=0.000595 cpu:bg=0.00515 cpu:cached=0.00471
+      (on battery, screen off/doze) cpu=0.0184 cpu:cached=0.0184
+  UID 1002: 0.0275 bg: 0.0275
+      cpu=0.0275 cpu:bg=0.0275
+      (on battery, screen on) cpu=0.00925 cpu:bg=0.00925
+      (on battery, screen off/doze) cpu=0.0182 cpu:bg=0.0182
+  UID 1041: 0.0245 bg: 0.0245
+      cpu=0.0245 cpu:bg=0.0245
+      (on battery, screen on) cpu=0.00763 cpu:bg=0.00763
+      (on battery, screen off/doze) cpu=0.0169 cpu:bg=0.0169
+  UID u0a84: 0.0185 bg: 0.0185
+      cpu=0.0185 cpu:bg=0.0185
+      (on battery, screen on) cpu=0.00585 cpu:bg=0.00585
+      (on battery, screen off/doze) cpu=0.0126 cpu:bg=0.0126
+  UID 1001: 0.0176 bg: 0.0176
+      cpu=0.0176 cpu:bg=0.0176
+      (on battery, screen on) cpu=0.00487 cpu:bg=0.00487
+      (on battery, screen off/doze) cpu=0.0127 cpu:bg=0.0127
+  UID 1027: 0.0151 bg: 0.0151
+      cpu=0.0151 cpu:bg=0.0151
+      (on battery, screen on) cpu=0.00460 cpu:bg=0.00460
+      (on battery, screen off/doze) cpu=0.0104 cpu:bg=0.0104
+  UID 1069: 0.0127 bg: 0.0127
+      cpu=0.0127 cpu:bg=0.0127
+      (on battery, screen on) cpu=0.00374 cpu:bg=0.00374
+      (on battery, screen off/doze) cpu=0.00892 cpu:bg=0.00892
+  UID u0a92: 0.00888 fg: 0 (15ms) bg: 0.00764 (2ms) cached: 0.00125 (14m 26s 206ms)
+      cpu=0.00888 cpu:bg=0.00764 cpu:cached=0.00125
+      (on battery, screen on) cpu=0.00233 cpu:bg=0.00211 cpu:cached=0.000216
+      (on battery, screen off/doze) cpu=0.00655 cpu:bg=0.00553 cpu:cached=0.00103
+  UID 1020: 0.00400 bg: 0.00400
+      cpu=0.00400 cpu:bg=0.00400
+      (on battery, screen on) cpu=0.00126 cpu:bg=0.00126
+      (on battery, screen off/doze) cpu=0.00273 cpu:bg=0.00273
+  UID 1021: 0.00274 bg: 0.00274
+      cpu=0.00274 cpu:bg=0.00274
+      (on battery, screen on) cpu=0.000571 cpu:bg=0.000571
+      (on battery, screen off/doze) cpu=0.00217 cpu:bg=0.00217
+  UID u0a141: 0.00229 bg: 0.00229
+      cpu=0.00229 cpu:bg=0.00229
+      (on battery, screen on) cpu=0.000577 cpu:bg=0.000577
+      (on battery, screen off/doze) cpu=0.00171 cpu:bg=0.00171
+  UID u0a46: 0.00170 bg: 0.00170
+      wakelock=0.00170 (62ms) wakelock:bg=0.00170 (62ms)
+      (on battery, screen on) wakelock=0.00170 (62ms) wakelock:bg=0.00170 (62ms)
+  UID u0a40: 0.00162 bg: 0.00162
+      cpu=0.00162 cpu:bg=0.00162
+      (on battery, screen on) cpu=0.000379 cpu:bg=0.000379
+      (on battery, screen off/doze) cpu=0.00124 cpu:bg=0.00124
+  UID u0a48: 0.00132 bg: 0.00132
+      cpu=0.00132 cpu:bg=0.00132
+      (on battery, screen off/doze) cpu=0.00132 cpu:bg=0.00132
+  UID u0a103: 0.00120 bg: 0.00120
+      cpu=0.00120 cpu:bg=0.00120
+      (on battery, screen on) cpu=0.000288 cpu:bg=0.000288
+      (on battery, screen off/doze) cpu=0.000913 cpu:bg=0.000913
+  UID u0a94: 0.00102 bg: 0.0000540 (10ms) fgs: 0 (18s 742ms) cached: 0.000968 (10m 26s 817ms)
+      cpu=0.00102 cpu:bg=0.0000540 cpu:cached=0.000968
+      (on battery, screen on) cpu=0.000270 cpu:cached=0.000270
+      (on battery, screen off/doze) cpu=0.000752 cpu:bg=0.0000540 cpu:cached=0.000698
+  UID 9999: 0.000931 bg: 0.000931
+      cpu=0.000931 cpu:bg=0.000931
+      (on battery, screen on) cpu=0.000150 cpu:bg=0.000150
+      (on battery, screen off/doze) cpu=0.000781 cpu:bg=0.000781
+  UID u0a64: 0.000643 bg: 0.000643
+      cpu=0.000643 cpu:bg=0.000643
+      (on battery, screen on) cpu=0.000108 cpu:bg=0.000108
+      (on battery, screen off/doze) cpu=0.000535 cpu:bg=0.000535
+  UID 1013: 0.000438 bg: 0.000438
+      cpu=0.000438 cpu:bg=0.000438
+      (on battery, screen on) cpu=0.0000540 cpu:bg=0.0000540
+      (on battery, screen off/doze) cpu=0.000384 cpu:bg=0.000384
+  UID 2918: 0.000366 bg: 0.000366
+      cpu=0.000366 cpu:bg=0.000366
+      (on battery, screen on) cpu=0.0000540 cpu:bg=0.0000540
+      (on battery, screen off/doze) cpu=0.000312 cpu:bg=0.000312
+  UID u0a121: 0.000216 bg: 0.000216
+      cpu=0.000216 cpu:bg=0.000216
+      (on battery, screen off/doze) cpu=0.000216 cpu:bg=0.000216
+  UID 1068: 0.000108 bg: 0.000108
+      cpu=0.000108 cpu:bg=0.000108
+      (on battery, screen off/doze) cpu=0.000108 cpu:bg=0.000108
+  UID 2903: 0.000108 bg: 0.000108
+      cpu=0.000108 cpu:bg=0.000108
+      (on battery, screen off/doze) cpu=0.000108 cpu:bg=0.000108
+  UID u0a115: 0.000108 bg: 0.000108
+      cpu=0.000108 cpu:bg=0.000108
+      (on battery, screen off/doze) cpu=0.000108 cpu:bg=0.000108
+  UID u0a118: 0.000108 bg: 0.000108
+      cpu=0.000108 cpu:bg=0.000108
+      (on battery, screen off/doze) cpu=0.000108 cpu:bg=0.000108
+
+  All kernel wake locks:
+  Kernel Wake lock SuspendControl.TotalSuspendDelay: 10m 3s 525ms (48 times) realtime
+  Kernel Wake lock SuspendControl.FailedSuspendDelay: 10m 2s 893ms (41 times) realtime
+  Kernel Wake lock UsfSensorHalWorker: 43s 621ms (18675 times) realtime
+  Kernel Wake lock PowerManagerService.WakeLocks: 11s 269ms (151 times) realtime
+  Kernel Wake lock PowerManagerService.Broadcasts: 4s 974ms (75 times) realtime
+  Kernel Wake lock PowerManagerService.Display: 3s 390ms (116 times) realtime
+  Kernel Wake lock qcom_rx_wakelock: 3s 322ms (59 times) realtime
+  Kernel Wake lock PowerManager.SuspendLockout: 3s 132ms (75 times) realtime
+  Kernel Wake lock hal_bluetooth_lock: 2s 307ms (4 times) realtime
+  Kernel Wake lock 4a94000.qcom,qup_uart: 2s 208ms (4 times) realtime
+  Kernel Wake lock userspace-abort: 1s 900ms (19244 times) realtime
+  Kernel Wake lock nanohub_logs: 812ms (862 times) realtime
+  Kernel Wake lock SuspendControl.NormalSuspendDelay: 631ms (7 times) realtime
+  Kernel Wake lock SensorService_wakelock: 593ms (38 times) realtime
+  Kernel Wake lock event7: 368ms (83 times) realtime
+  Kernel Wake lock chre_daemon_msg_handler: 252ms (84 times) realtime
+  Kernel Wake lock google-battery: 150ms (30 times) realtime
+  Kernel Wake lock SensorsHAL_WAKEUP: 143ms (38 times) realtime
+  Kernel Wake lock NETLINK: 138ms (111 times) realtime
+  Kernel Wake lock qbg: 105ms (14 times) realtime
+  Kernel Wake lock CHG_PLCY_QBG_WL: 101ms (17 times) realtime
+  Kernel Wake lock UNIX: 78ms (137 times) realtime
+  Kernel Wake lock : 47ms (20 times) realtime
+  Kernel Wake lock CHG_PLCY_HVDCP2_WL: 36ms (10 times) realtime
+  Kernel Wake lock CHG_PLCY_SOH_WL: 32ms (10 times) realtime
+  Kernel Wake lock adsp_wdog: 31ms (2 times) realtime
+  Kernel Wake lock battery: 30ms (3 times) realtime
+  Kernel Wake lock qcom-step-chg: 30ms (3 times) realtime
+  Kernel Wake lock CHG_PLCY_PPS_WL: 29ms (10 times) realtime
+  Kernel Wake lock bms: 28ms (7 times) realtime
+  Kernel Wake lock nanohub: 26ms (136 times) realtime
+  Kernel Wake lock CHG_PLCY_HVDCP_WL: 25ms (10 times) realtime
+  Kernel Wake lock CHG_PLCY_STD_PD_WL: 25ms (10 times) realtime
+  Kernel Wake lock CHG_PLCY_MAIN_WL: 22ms (52 times) realtime
+  Kernel Wake lock CHG_PLCY_CTM_WL: 20ms (10 times) realtime
+  Kernel Wake lock google-charger: 3ms (12 times) realtime
+  Kernel Wake lock qcom-qbg: 2ms (7 times) realtime
+
+  All partial wake locks:
+  Wake lock u0a116 SystemUIRCDCLock: 3s 654ms (25 times) max=504 actual=3796 realtime
+  Wake lock u0a55 CloudNodeRpcWakeLock: 3s 458ms (11 times) max=394 actual=3506 realtime
+  Wake lock 1000 DisplayOffload: 1s 982ms (51 times) max=68 actual=2380 realtime
+  Wake lock 1000 WifiSuspend: 975ms (67 times) max=35 actual=1053 realtime
+  Wake lock u0a107 CloudNodeSyncWakeLock: 293ms (2 times) max=281 actual=372 realtime
+  Wake lock u0a49 SysUi:ModuleBus: 170ms (38 times) max=28 actual=281 realtime
+  Wake lock u0a116 AmbientDreamProxy: 137ms (8 times) max=40 actual=281 realtime
+  Wake lock u0a107 CallbackRunner: 129ms (12 times) max=49 actual=236 realtime
+  Wake lock u0a46 *alarm*: 63ms (9 times) max=19 actual=135 realtime
+  Wake lock u0a107 GCM_WORK: 51ms (1 times) max=102 actual=102 realtime
+  Wake lock u0a116 *alarm*: 36ms (9 times) max=14 actual=80 realtime
+  Wake lock u0a97 *job*e/#SyncWorker#@androidx.work.systemjobscheduler@com.fitbit.FitbitMobile/androidx.work.impl.background.systemjob.SystemJobService: 29ms (1 times) max=57 actual=57 realtime
+  Wake lock 1000 *alarm*: 27ms (9 times) max=14 actual=55 realtime
+  Wake lock u0a107 *gms_scheduler*:internal: 21ms (2 times) max=36 actual=46 realtime
+  Wake lock u0a51 WearHealthServices::HealthEvent: 18ms (1 times) max=35 actual=35 realtime
+  Wake lock u0a107 GOOGLE_C2DM: 10ms (1 times) max=26 actual=26 realtime
+  Wake lock u0a49 notification_tray_update: 6ms (1 times) max=6 realtime
+  Wake lock u0a107 GCM_READ: 4ms (1 times) max=4 realtime
+  Wake lock u0a107 IntentOp:com.google.android.gms/.chimera.PersistentIntentOperationService: 2ms (1 times) max=9 actual=9 realtime
+  Wake lock u0a107 IntentOp:.gcm.GcmInternalReceiverIntentOperation: 1ms (1 times) max=3 actual=3 realtime
+  Wake lock u0a107 *gms_scheduler*/com.google.android.gms/.auth.account.be.accountstate.GcmTaskService realtime
+
+  All wakeup reasons:
+  Wakeup reason Abort: Pending Wakeup Sources: nanohub: 8m 53s 259ms (29 times) realtime
+  Wakeup reason 215 WLAN_CE_2: 12s 747ms (6 times) realtime
+  Wakeup reason Abort: Pending Wakeup Sources: nanohub userspace-abort: 6s 919ms (2 times) realtime
+  Wakeup reason Abort: Device spi0.0 failed to suspend noirq: error -16: 245ms (1 times) realtime
+  Wakeup reason 16 mpm:131 autobahn-irq realtime
+  Wakeup reason Abort: Device c800000.qcom,icnss failed to suspend noirq: error -11 realtime
+  Wakeup reason Abort: Pending Wakeup Sources: nanohub nanohub realtime
+  Wakeup reason Abort: Pending Wakeup Sources: nanohub_logs realtime
+  Wakeup reason Abort: Pending Wakeup Sources: event7 nanohub nanohub userspace-abort realtime
+  Wakeup reason Abort: Last active Wakeup Source: eventpoll realtime
+
+  Resource Power Manager Stats
+    ADSP.Sleep: 15m 21s 284ms realtime (9 times)
+    MODEM.Sleep: 12m 37s 976ms realtime (4827 times)
+    SOC.VDD_MIN: 8s 966ms realtime (7 times)
+    APSS.Sleep: 8m 29s 311ms realtime (35846 times)
+
+  CPU scaling:  policy0: 614400 864000 1363200 1708800
+
+  0:
+    Wi-Fi network: 0B received, 288B sent (packets 0 received, 4 sent)
+       WiFi Scan time:  0ms (0,0%)
+       WiFi Sleep time:  15m 22s 64ms (100,0%)
+       WiFi Idle time:   0ms (0,0%)
+       WiFi Rx time:     0ms (0,0%)
+       WiFi Tx time:     1ms (0,0%)
+    Total cpu time: u=2s 388ms s=2m 12s 580ms 
+    Total cpu time per freq: 48205 1131 1077 34969
+    Total screen-off cpu time per freq: 33945 756 748 25161
+    Proc kworker/0:1-sock_diag_events:
+      CPU: 0ms usr + 910ms krn ; 0ms fg
+    Proc kworker/2:0H-kblockd:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc kworker/u8:19-memlat_wq:
+      CPU: 0ms usr + 100ms krn ; 0ms fg
+    Proc kworker/3:1H-kblockd:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc halt_drain_rqs:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc kworker/u8:11-events_unbound:
+      CPU: 0ms usr + 190ms krn ; 0ms fg
+    Proc storaged:
+      CPU: 10ms usr + 10ms krn ; 0ms fg
+    Proc autobahn_mac_initiator:
+      CPU: 0ms usr + 56s 160ms krn ; 0ms fg
+    Proc kworker/1:2-events:
+      CPU: 0ms usr + 110ms krn ; 0ms fg
+    Proc msm-watchdog:
+      CPU: 0ms usr + 40ms krn ; 0ms fg
+    Proc migration/3:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc migration/2:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc migration/1:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc ksoftirqd/3:
+      CPU: 0ms usr + 160ms krn ; 0ms fg
+    Proc ksoftirqd/2:
+      CPU: 0ms usr + 60ms krn ; 0ms fg
+    Proc ksoftirqd/1:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc irq/125-4520300.qcom,bwmon-ddr:
+      CPU: 0ms usr + 4s 900ms krn ; 0ms fg
+    Proc irq/101-4744000.sdhci:
+      CPU: 0ms usr + 70ms krn ; 0ms fg
+    Proc irq/142-qbg-sdam:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/u8:4-events_unbound:
+      CPU: 0ms usr + 60ms krn ; 0ms fg
+    Proc adsp_wdog:
+      CPU: 0ms usr + 40ms krn ; 0ms fg
+    Proc kworker/2:5H-kverityd:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc cds_ol_rx_thread:
+      CPU: 0ms usr + 460ms krn ; 0ms fg
+    Proc irq/205-pixart_pat9xxx_irq:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc rcuop/3:
+      CPU: 0ms usr + 220ms krn ; 0ms fg
+    Proc rcuop/2:
+      CPU: 0ms usr + 210ms krn ; 0ms fg
+    Proc rcuop/1:
+      CPU: 0ms usr + 240ms krn ; 0ms fg
+    Proc rcuop/0:
+      CPU: 0ms usr + 290ms krn ; 0ms fg
+    Proc rcuog/2:
+      CPU: 0ms usr + 140ms krn ; 0ms fg
+    Proc rcuog/0:
+      CPU: 0ms usr + 160ms krn ; 0ms fg
+    Proc sysproxyd:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc scheduler_thread:
+      CPU: 0ms usr + 320ms krn ; 0ms fg
+    Proc wlan_logging_thread:
+      CPU: 0ms usr + 280ms krn ; 0ms fg
+    Proc kworker/3:2H-events_highpri:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc kworker/u8:5-events_unbound:
+      CPU: 0ms usr + 2s 830ms krn ; 0ms fg
+    Proc kworker/u8:3-memlat_wq:
+      CPU: 0ms usr + 1s 260ms krn ; 0ms fg
+    Proc kworker/3:2:
+      CPU: 0ms usr + 210ms krn ; 0ms fg
+    Proc kworker/3:1:
+      CPU: 0ms usr + 200ms krn ; 0ms fg
+    Proc kworker/2:1:
+      CPU: 0ms usr + 120ms krn ; 0ms fg
+    Proc kworker/2:0:
+      CPU: 0ms usr + 640ms krn ; 0ms fg
+    Proc mcu_mgmtd:
+      CPU: 540ms usr + 670ms krn ; 0ms fg
+    Proc kworker/u8:15-memlat_wq:
+      CPU: 0ms usr + 130ms krn ; 0ms fg
+    Proc kthreadd:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/2:3H-kverityd:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc glink-rpm_requests:
+      CPU: 0ms usr + 9s 630ms krn ; 0ms fg
+    Proc kworker/u8:8-memlat_wq:
+      CPU: 0ms usr + 730ms krn ; 0ms fg
+    Proc irq/209-NVT-ts:
+      CPU: 0ms usr + 630ms krn ; 0ms fg
+    Proc kworker/u8:6-events_unbound:
+      CPU: 0ms usr + 80ms krn ; 0ms fg
+    Proc f2fs_discard-254:54:
+      CPU: 0ms usr + 130ms krn ; 0ms fg
+    Proc kworker/3:0-mm_percpu_wq:
+      CPU: 0ms usr + 320ms krn ; 0ms fg
+    Proc glink-IPCRTR:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc hwrng:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc rcu_preempt:
+      CPU: 0ms usr + 230ms krn ; 0ms fg
+    Proc vold:
+      CPU: 20ms usr + 20ms krn ; 0ms fg
+    Proc netd:
+      CPU: 40ms usr + 240ms krn ; 0ms fg
+    Proc init:
+      CPU: 570ms usr + 680ms krn ; 0ms fg
+    Proc kworker/1:1-events:
+      CPU: 0ms usr + 440ms krn ; 0ms fg
+    Proc kworker/u8:13-memlat_wq:
+      CPU: 0ms usr + 50ms krn ; 0ms fg
+    Proc kgsl-events:
+      CPU: 0ms usr + 280ms krn ; 0ms fg
+    Proc kworker/u8:7-events_unbound:
+      CPU: 0ms usr + 90ms krn ; 0ms fg
+    Proc kworker/u8:16-wmi_rx_diag_event_work_:
+      CPU: 0ms usr + 4s 250ms krn ; 0ms fg
+    Proc kworker/2:1H-kverityd:
+      CPU: 0ms usr + 100ms krn ; 0ms fg
+    Proc jbd2/mmcblk0p54-8:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc jbd2/mmcblk0p16-8:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc crtc_commit:89:
+      CPU: 0ms usr + 4s 220ms krn ; 0ms fg
+    Proc autobahn_proxy:
+      CPU: 0ms usr + 12s 150ms krn ; 0ms fg
+    Proc kworker/u8:14-wmi_rx_diag_event_work_:
+      CPU: 0ms usr + 200ms krn ; 0ms fg
+    Proc kswapd0:
+      CPU: 0ms usr + 730ms krn ; 0ms fg
+    Proc qseecom-unload-ta:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc ueventd:
+      CPU: 540ms usr + 170ms krn ; 0ms fg
+    Proc kworker/u8:20-events_unbound:
+      CPU: 0ms usr + 80ms krn ; 0ms fg
+    Proc zygote:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc msm_irqbalance:
+      CPU: 310ms usr + 550ms krn ; 0ms fg
+    Proc kworker/2:1-pm:
+      CPU: 0ms usr + 180ms krn ; 0ms fg
+    Proc kworker/u8:8-events_unbound:
+      CPU: 0ms usr + 100ms krn ; 0ms fg
+    Proc iptables-restore:
+      CPU: 60ms usr + 160ms krn ; 0ms fg
+    Proc kgsl_devfreq_notifier:
+      CPU: 0ms usr + 3s 850ms krn ; 0ms fg
+    Proc kgsl_dispatcher:
+      CPU: 0ms usr + 680ms krn ; 0ms fg
+    Proc kworker/0:2H-events_highpri:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc rcub/0:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kcompactd0:
+      CPU: 0ms usr + 40ms krn ; 0ms fg
+    Proc kworker/u8:0-events_unbound:
+      CPU: 0ms usr + 50ms krn ; 0ms fg
+    Proc psimon:
+      CPU: 0ms usr + 100ms krn ; 0ms fg
+    Proc kworker/u8:4-memlat_wq:
+      CPU: 0ms usr + 2s 430ms krn ; 0ms fg
+    Proc kworker/u8:17-events_unbound:
+      CPU: 0ms usr + 2s 660ms krn ; 0ms fg
+    Proc kworker/u8:9-events_unbound:
+      CPU: 0ms usr + 1s 540ms krn ; 0ms fg
+    Proc ip6tables-restore:
+      CPU: 60ms usr + 160ms krn ; 0ms fg
+    Proc crtc_event:89:
+      CPU: 0ms usr + 2s 20ms krn ; 0ms fg
+    Proc f2fs_ckpt-254:54:
+      CPU: 0ms usr + 220ms krn ; 0ms fg
+    Proc glink-fastrpcglink-apps-dsp:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/u8:1-events_unbound:
+      CPU: 0ms usr + 500ms krn ; 0ms fg
+    Proc kworker/1:9H-kverityd:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc f2fs_gc-254:54:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc irq/100-mmc0:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc android.hardware.power-service.pixel-libperfmgr:
+      CPU: 130ms usr + 430ms krn ; 0ms fg
+    Proc kworker/0:0-events:
+      CPU: 0ms usr + 1s 10ms krn ; 0ms fg
+    Proc rcu_exp_gp_kthread_worker:
+      CPU: 0ms usr + 70ms krn ; 0ms fg
+    Proc update_engine:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc thermal-engine-v2:
+      CPU: 100ms usr + 340ms krn ; 0ms fg
+    Proc kworker/u8:2-memlat_wq:
+      CPU: 0ms usr + 2s 270ms krn ; 0ms fg
+    Proc kworker/u8:10-events_unbound:
+      CPU: 0ms usr + 3s 500ms krn ; 0ms fg
+    Proc kworker/u8:2-events_unbound:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  1000:
+    Wi-Fi network: 608B received, 0B sent (packets 8 received, 0 sent)
+       WiFi Scan time:  0ms (0,0%)
+       WiFi Sleep time:  15m 22s 55ms (100,0%)
+       WiFi Idle time:   0ms (0,0%)
+       WiFi Rx time:     12ms (0,0%)
+       WiFi Tx time:     0ms (0,0%)
+    User activity: 37 other, 159 touch
+    Wake lock WifiSuspend: 975ms partial (67 times) max=35 actual=1053 realtime
+    Wake lock *alarm*: 27ms partial (9 times) max=14 actual=55 realtime
+    Wake lock NotificationManagerService:post:android realtime
+    Wake lock DisplayOffload: 1s 982ms partial (51 times) max=68 actual=2380 realtime
+    Wake lock dream:dream realtime
+    Wake lock com.android.server.stats.StatsCompanionService$PullingAlarmListener realtime
+    TOTAL wake: 2s 984ms blamed partial, 3s 399ms actual partial realtime
+    WiFi Multicast Wakelock count = 0 time = 15m 21s 673ms
+    Sensor 65545: 15m 20s 322ms realtime (75 times)
+    Sensor 65576: 3m 18s 812ms blamed realtime, 15m 21s 673ms realtime (0 times)
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=1m 36s 120ms s=2m 3s 171ms 
+    Total cpu time per freq: 85407 3074 2662 115310
+    Total screen-off cpu time per freq: 60273 2000 1783 82483
+    Proc com.google.wear.services:
+      CPU: 970ms usr + 420ms krn ; 0ms fg
+    Proc pd-mapper:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc com.google.android.wearable.pixel.settings.provider:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc hvdcp_opti:
+      CPU: 160ms usr + 190ms krn ; 0ms fg
+    Proc vendor.qti.hardware.display.composer-service:
+      CPU: 6s 110ms usr + 9s 0ms krn ; 0ms fg
+    Proc android.hardware.sensors-service.multihal:
+      CPU: 19s 730ms usr + 27s 480ms krn ; 0ms fg
+    Proc servicemanager:
+      CPU: 200ms usr + 90ms krn ; 0ms fg
+    Proc qseecomd:
+      CPU: 0ms usr + 90ms krn ; 0ms fg
+    Proc android.hardware.usb-service.qti:
+      CPU: 70ms usr + 200ms krn ; 0ms fg
+    Proc com.google.SSRestartDetector:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc pixelstats-vendor:
+      CPU: 90ms usr + 70ms krn ; 0ms fg
+    Proc time_daemon:
+      CPU: 0ms usr + 50ms krn ; 0ms fg
+    Proc com.android.keychain:
+      CPU: 10ms usr + 20ms krn ; 0ms fg
+    Proc cnd:
+      CPU: 80ms usr + 220ms krn ; 0ms fg
+    Proc android.hardware.thermal-service.pixel:
+      CPU: 920ms usr + 1s 730ms krn ; 0ms fg
+    Proc surfaceflinger:
+      CPU: 14s 120ms usr + 11s 750ms krn ; 0ms fg
+    Proc android.system.suspend-service:
+      CPU: 17s 160ms usr + 42s 360ms krn ; 0ms fg
+    Proc android.hardware.power.stats-service.pixel:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc com.google.android.apps.wearable.settings:
+      CPU: 280ms usr + 270ms krn ; 0ms fg
+    Proc adsprpcd:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc cnss-daemon:
+      CPU: 30ms usr + 80ms krn ; 0ms fg
+    Proc system:
+      CPU: 33s 130ms usr + 26s 690ms krn ; 0ms fg
+    Proc ssgtzd:
+      CPU: 0ms usr + 50ms krn ; 0ms fg
+    Proc vendor.qti.hardware.qteeconnector@1.0-service:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc hwservicemanager:
+      CPU: 10ms usr + 30ms krn ; 0ms fg
+    Proc pm-service:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc vendor.google.wearable.wac.whshal@3.0-service:
+      CPU: 180ms usr + 340ms krn ; 0ms fg
+    Proc android.hardware.usb.gadget-service.qti:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc vendor.qti.hardware.display.allocator-service:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc sscrpcd:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc android.hardware.health-service.sw5100:
+      CPU: 420ms usr + 1s 750ms krn ; 0ms fg
+    Proc vndservicemanager:
+      CPU: 10ms usr + 30ms krn ; 0ms fg
+    Apk com.google.wear.services:
+      Service com.google.wear.services.infra.gcore.service.GcoreWearableListenerService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 1
+  1001:
+    Total cpu time: u=62ms s=331ms 
+    Total cpu time per freq: 125 26 63 183
+    Total screen-off cpu time per freq: 97 18 58 149
+    Proc nicmd:
+      CPU: 0ms usr + 310ms krn ; 0ms fg
+    Proc ipacm:
+      CPU: 30ms usr + 100ms krn ; 0ms fg
+    Proc qms:
+      CPU: 30ms usr + 80ms krn ; 0ms fg
+    Proc ipacm-diag:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+  1002:
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=229ms s=314ms 
+    Total cpu time per freq: 24 33 46 424
+    Total screen-off cpu time per freq: 14 4 9 323
+    Proc android.hardware.bluetooth@1.0-service-qti:
+      CPU: 10ms usr + 110ms krn ; 0ms fg
+    Proc com.google.android.bluetooth:
+      CPU: 230ms usr + 290ms krn ; 0ms fg
+  1003:
+    (nothing executed)
+  1010:
+    Total cpu time: u=2s 148ms s=5s 410ms 
+    Total cpu time per freq: 2985 266 185 4457
+    Total screen-off cpu time per freq: 2093 195 131 3118
+    Proc wpa_supplicant:
+      CPU: 200ms usr + 880ms krn ; 0ms fg
+    Proc android.hardware.wifi-service-lazy:
+      CPU: 2s 60ms usr + 4s 790ms krn ; 0ms fg
+    Proc wificond:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  1013:
+    Total cpu time: u=0ms s=17ms 
+    Total cpu time per freq: 7 1 3 8
+    Total screen-off cpu time per freq: 6 1 3 8
+    Proc audioadsprpcd:
+      CPU: 0ms usr + 40ms krn ; 0ms fg
+  1017:
+    (nothing executed)
+  1020:
+    Wi-Fi network: 137,53KB received, 14,09KB sent (packets 786 received, 60 sent)
+       WiFi Scan time:  0ms (0,0%)
+       WiFi Sleep time:  15m 20s 603ms (99,8%)
+       WiFi Idle time:   0ms (0,0%)
+       WiFi Rx time:     1s 433ms (0,2%)
+       WiFi Tx time:     33ms (0,0%)
+    Total cpu time per freq: 97 4 1 17
+    Total screen-off cpu time per freq: 74 4 1 12
+    Proc mdnsd:
+      CPU: 50ms usr + 120ms krn ; 0ms fg
+  1021:
+    Total cpu time: u=6ms s=62ms 
+    Total cpu time per freq: 9 1 10 51
+    Total screen-off cpu time per freq: 9 1 10 42
+    Proc android.hardware.gnss-aidl-service-qti:
+      CPU: 10ms usr + 60ms krn ; 0ms fg
+    Proc loc_launcher:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc xtra-daemon:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+  1027:
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=149ms s=137ms 
+    Total cpu time per freq: 3 1 2 290
+    Total screen-off cpu time per freq: 3 1 2 204
+    Proc android.hardware.nfc-service.nxp:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc com.google.android.nfc:
+      CPU: 150ms usr + 140ms krn ; 0ms fg
+  1036:
+    Total cpu time: u=806ms s=1s 101ms 
+    Total cpu time per freq: 230 30 44 1628
+    Total screen-off cpu time per freq: 153 23 30 1138
+    Proc logd:
+      CPU: 830ms usr + 1s 110ms krn ; 0ms fg
+  1040:
+    (nothing executed)
+  1041:
+    Total cpu time: u=186ms s=281ms 
+    Total cpu time per freq: 10 2 7 459
+    Total screen-off cpu time per freq: 10 2 6 321
+    Proc audioserver:
+      CPU: 120ms usr + 170ms krn ; 0ms fg
+    Proc audiohalservice.qti:
+      CPU: 40ms usr + 150ms krn ; 0ms fg
+  1046:
+    (nothing executed)
+  1058:
+    Total cpu time per freq: 1 0 1 2
+    Total screen-off cpu time per freq: 1 0 1 1
+    Proc tombstoned:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  1066:
+    Total cpu time: u=2s 711ms s=1s 537ms 
+    Total cpu time per freq: 107 66 69 4086
+    Total screen-off cpu time per freq: 82 50 55 2863
+    Proc statsd:
+      CPU: 2s 700ms usr + 1s 590ms krn ; 0ms fg
+  1067:
+    Total cpu time per freq: 0 0 1 3
+    Total screen-off cpu time per freq: 0 0 1 3
+    (nothing executed)
+  1068:
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=1ms s=7ms 
+    Total cpu time per freq: 1 0 1 7
+    Total screen-off cpu time per freq: 1 0 1 6
+    Proc com.android.se:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  1069:
+    Total cpu time per freq: 10 3 7 240
+    Total screen-off cpu time per freq: 9 2 5 172
+    Proc lmkd:
+      CPU: 60ms usr + 220ms krn ; 0ms fg
+  1072:
+    Total cpu time: u=0ms s=4ms 
+    Total cpu time per freq: 1 0 0 4
+    Total screen-off cpu time per freq: 1 0 0 2
+    (nothing executed)
+  1073:
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=644ms s=244ms 
+    Total cpu time per freq: 306 39 53 519
+    Total screen-off cpu time per freq: 204 24 46 344
+    Proc com.android.networkstack.process:
+      CPU: 640ms usr + 270ms krn ; 0ms fg
+  1080:
+    Total cpu time per freq: 186 11 9 1020
+    Total screen-off cpu time per freq: 142 9 7 706
+    Proc chre:
+      CPU: 590ms usr + 540ms krn ; 0ms fg
+    Proc android.hardware.contexthub-service.wac:
+      CPU: 50ms usr + 70ms krn ; 0ms fg
+  1082:
+    (nothing executed)
+  2000:
+    Wi-Fi network: 15,33KB received, 334,13KB sent (packets 187 received, 407 sent)
+       WiFi Scan time:  0ms (0,0%)
+       WiFi Sleep time:  15m 21s 928ms (100,0%)
+       WiFi Idle time:   0ms (0,0%)
+       WiFi Rx time:     87ms (0,0%)
+       WiFi Tx time:     56ms (0,0%)
+    Total cpu time: u=315ms s=506ms 
+    Total cpu time per freq: 50 7 25 767
+    Total screen-off cpu time per freq: 7 1 2 43
+    Proc adbd:
+      CPU: 20ms usr + 130ms krn ; 0ms fg
+  2903:
+    Total cpu time: u=0ms s=8ms 
+    Total cpu time per freq: 2 0 1 5
+    Total screen-off cpu time per freq: 2 0 1 5
+    Proc tftp_server:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  2910:
+    (nothing executed)
+  2918:
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=0ms s=16ms 
+    Total cpu time per freq: 1 1 2 12
+    Total screen-off cpu time per freq: 1 1 2 11
+    Proc .cacertservice:
+      CPU: 10ms usr + 20ms krn ; 0ms fg
+  9999:
+    Total cpu time: u=3ms s=42ms 
+    Total cpu time per freq: 19 0 5 21
+    Total screen-off cpu time per freq: 16 0 5 17
+    Proc traced_probes:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc traced:
+      CPU: 10ms usr + 30ms krn ; 0ms fg
+    Proc rmt_storage:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  u0a40:
+    Fg Service for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=15ms s=22ms 
+    Total cpu time per freq: 1 1 1 35
+    Total screen-off cpu time per freq: 1 1 1 6
+    Proc android.ext.services:
+      CPU: 10ms usr + 10ms krn ; 0ms fg
+  u0a42:
+    (nothing executed)
+  u0a43:
+    (nothing executed)
+  u0a44:
+    Cached for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+  u0a45:
+    (nothing executed)
+  u0a46:
+    Wake lock *alarm*: 63ms partial (9 times) max=19 actual=135, 135ms background partial (9 times) max=19 realtime
+    Cached for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+  u0a48:
+    Cached for: 2m 4s 502ms 
+    Total running: 2m 4s 502ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 6 21
+    Total screen-off cpu time per freq: 0 0 6 21
+  u0a49:
+    User activity: 1 other
+    Wake lock notification_load_haptics realtime
+    Wake lock notification realtime
+    Wake lock notification_tray_update: 6ms partial (1 times) max=6 realtime
+    Wake lock SysUi:ModuleBus: 170ms partial (38 times) max=28 actual=281 realtime
+    Wake lock *vibrator* realtime
+    Wake lock notification_play_haptic_pattern realtime
+    Wake lock notification_alert realtime
+    Wake lock notification_play_ringtone realtime
+    TOTAL wake: 176ms blamed partial, 287ms actual partial realtime
+    Sensor 65576: 3m 18s 812ms blamed realtime, 15m 21s 673ms realtime (0 times)
+    Vibrator: 300ms realtime (1 times)
+    Foreground services: 15m 21s 673ms realtime (0 times) (running)
+    Fg Service for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=2s 940ms s=1s 146ms 
+    Total cpu time per freq: 219 198 253 3503
+    Total screen-off cpu time per freq: 51 30 46 1972
+    Proc com.google.android.wearable.sysui:
+      CPU: 2s 320ms usr + 930ms krn ; 0ms fg
+    Apk com.google.android.wearable.sysui:
+      Service com.google.android.clockwork.sysui.experiences.complications.providers.UnreadNotificationsProviderService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 2
+      Service com.google.android.clockwork.sysui.experiences.complications.providers.BatteryProviderService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 2
+  u0a50:
+    Foreground services: 15m 21s 673ms realtime (0 times) (running)
+    Fg Service for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=828ms s=445ms 
+    Total cpu time per freq: 21 6 20 1271
+    Total screen-off cpu time per freq: 19 6 18 749
+    Proc com.google.android.wearable.assistant:
+      CPU: 850ms usr + 450ms krn ; 0ms fg
+  u0a51:
+    Wake lock WearHealthServices::HealthEvent: 18ms partial (1 times) max=35 actual=35 realtime
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=2s 142ms s=776ms 
+    Total cpu time per freq: 482 87 73 1869
+    Total screen-off cpu time per freq: 360 52 53 1286
+    Proc com.google.android.wearable.healthservices:
+      CPU: 2s 200ms usr + 750ms krn ; 0ms fg
+    Apk com.google.android.wearable.healthservices:
+      Service com.google.android.wearable.healthservices.measure.client.MeasureApiService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 1
+  u0a52:
+    (nothing executed)
+  u0a53:
+    Cached for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+  u0a55:
+    Wake lock CloudNodeRpcWakeLock: 3s 458ms partial (11 times) max=394 actual=3506 realtime
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=92ms s=95ms 
+    Total cpu time per freq: 7 9 11 147
+    Total screen-off cpu time per freq: 6 8 8 101
+    Proc com.google.android.wearable.app:
+      CPU: 90ms usr + 120ms krn ; 0ms fg
+    Apk com.google.android.wearable.app:
+      Service com.google.android.clockwork.wcs.application.gms.DispatchingWearableListenerService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 1
+  u0a56:
+    Cached for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+  u0a57:
+    (nothing executed)
+  u0a59:
+    (nothing executed)
+  u0a64:
+    Fg Service for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=6ms s=23ms 
+    Total cpu time per freq: 10 1 1 18
+    Total screen-off cpu time per freq: 8 1 1 15
+    Proc com.google.android.wearable.media.sessions:
+      CPU: 0ms usr + 40ms krn ; 0ms fg
+  u0a65:
+    Cached for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+  u0a72:
+    (nothing executed)
+  u0a75:
+    Cached for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+  u0a81:
+    Cached for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+  u0a84:
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=217ms s=126ms 
+    Total cpu time per freq: 4 1 2 351
+    Total screen-off cpu time per freq: 4 1 2 262
+    Proc .qtidataservices:
+      CPU: 230ms usr + 120ms krn ; 0ms fg
+  u0a86:
+    (nothing executed)
+  u0a88:
+    Cached for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+  u0a91:
+    Background for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=541ms s=259ms 
+    Total cpu time per freq: 199 15 18 577
+    Total screen-off cpu time per freq: 140 11 12 435
+    Proc com.google.android.apps.scone:
+      CPU: 530ms usr + 270ms krn ; 0ms fg
+    Apk com.google.android.apps.scone:
+      Service com.google.android.apps.scone.coex.StateService:
+        Created for: 15m 12s 419ms uptime
+        Starts: 1, launches: 0
+  u0a92:
+    Foreground for: 15ms 
+    Background for: 2ms 
+    Cached for: 15m 21s 656ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=93ms s=65ms 
+    Total cpu time per freq: 1 0 1 165
+    Total screen-off cpu time per freq: 1 0 1 165
+    Apk com.google.android.wearable.pixel.aspen:
+      Service com.google.android.wearable.pixel.aspen.autoconnect.ExerciseListenerService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 1
+  u0a94:
+    Foreground services: 18s 685ms realtime (3 times)
+    Fg Service for: 18s 685ms 
+    Background for: 10ms 
+    Cached for: 15m 2s 978ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=15ms s=13ms 
+    Total cpu time per freq: 0 1 2 24
+    Total screen-off cpu time per freq: 0 1 2 16
+    Proc com.google.android.wearable.protolayout.renderer:
+      CPU: 10ms usr + 30ms krn ; 0ms fg
+    Apk com.google.android.wearable.protolayout.renderer:
+      Service com.google.android.clockwork.prototiles.renderer.service.ProtoTilesRelayService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 3
+  u0a95:
+    Cached for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+  u0a97:
+    Wake lock *job*e/#SyncWorker#@androidx.work.systemjobscheduler@com.fitbit.FitbitMobile/androidx.work.impl.background.systemjob.SystemJobService: 29ms partial (1 times) max=57 actual=57, 57ms background partial (1 times) max=57 realtime
+    Job #SyncWorker#@androidx.work.systemjobscheduler@com.fitbit.FitbitMobile/androidx.work.impl.background.systemjob.SystemJobService: 51ms realtime (1 times), 51ms background (1 times)
+    Job Completions #SyncWorker#@androidx.work.systemjobscheduler@com.fitbit.FitbitMobile/androidx.work.impl.background.systemjob.SystemJobService: successful_finish(1x)
+    Sensor 65576: 3m 18s 812ms blamed realtime, 15m 21s 673ms realtime (0 times), 15m 3s 19ms background (0 times)
+    Foreground services: 18s 654ms realtime (3 times)
+    Fg Service for: 18s 654ms 
+    Background for: 997ms 
+    Cached for: 15m 2s 22ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=2s 168ms s=2s 592ms 
+    Total cpu time per freq: 395 115 141 4153
+    Total screen-off cpu time per freq: 263 99 120 3111
+    Proc com.fitbit.FitbitMobile:
+      CPU: 2s 260ms usr + 2s 650ms krn ; 0ms fg
+    Apk com.fitbit.FitbitMobile:
+      Service androidx.work.impl.background.systemjob.SystemJobService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 1
+      Service com.fitbit.tile.primarygoal.TilePrimaryGoalService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 3
+  u0a98:
+    (nothing executed)
+  u0a99:
+    (nothing executed)
+  u0a103:
+    Sensor 65576: 3m 18s 812ms blamed realtime, 15m 21s 673ms realtime (0 times)
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=5ms s=31ms 
+    Total cpu time per freq: 14 1 1 19
+    Total screen-off cpu time per freq: 1 1 1 14
+    Proc com.google.android.wearable.pixel.pdms:
+      CPU: 10ms usr + 30ms krn ; 0ms fg
+  u0a105:
+    Fg Service for: 5m 0s 81ms 
+    Foreground for: 10m 21s 592ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=6s 443ms s=779ms 
+    Total cpu time per freq: 17 2 3 7439
+    Total screen-off cpu time per freq: 11 2 3 5064
+    Proc com.google.android.wearable.watchface.rwf:
+      CPU: 6s 400ms usr + 760ms krn ; 0ms fg
+  u0a106:
+    (nothing executed)
+  u0a107:
+    Wi-Fi network: 222,81KB received, 435,84KB sent (packets 1892 received, 2202 sent)
+       WiFi Scan time:  0ms (0,0%)
+       WiFi Sleep time:  15m 16s 883ms (99,4%)
+       WiFi Idle time:   0ms (0,0%)
+       WiFi Rx time:     3s 661ms (0,4%)
+       WiFi Tx time:     1s 531ms (0,2%)
+    Wake lock IntentOp:com.google.android.gms/.chimera.PersistentIntentOperationService: 2ms partial (1 times) max=9 actual=9, 9ms background partial (1 times) max=9 realtime
+    Wake lock GOOGLE_C2DM: 10ms partial (1 times) max=26 actual=26, 26ms background partial (1 times) max=26 realtime
+    Wake lock *gms_scheduler*/com.google.android.gms/.auth.account.be.accountstate.GcmTaskService: 2ms background partial (0 times) max=2 realtime
+    Wake lock *gms_scheduler*:internal: 21ms partial (2 times) max=36 actual=46, 46ms background partial (2 times) max=36 realtime
+    Wake lock GCM_WORK: 51ms partial (1 times) max=102 actual=102, 102ms background partial (1 times) max=102 realtime
+    Wake lock GCM_READ: 4ms partial (1 times) max=4, 4ms background partial (1 times) max=4 realtime
+    Wake lock CallbackRunner: 129ms partial (12 times) max=49 actual=236, 236ms background partial (12 times) max=49 realtime
+    Wake lock IntentOp:.gcm.GcmInternalReceiverIntentOperation: 1ms partial (1 times) max=3 actual=3, 3ms background partial (1 times) max=3 realtime
+    Wake lock CloudNodeSyncWakeLock: 293ms partial (2 times) max=281 actual=372, 372ms background partial (2 times) max=281 realtime
+    TOTAL wake: 511ms blamed partial, 616ms actual partial, 616ms actual background partial realtime
+    Sensor 65563: 15m 21s 673ms realtime (0 times), 15m 21s 588ms background (0 times)
+    Foreground services: 85ms realtime (1 times)
+    Fg Service for: 85ms 
+    Background for: 15m 21s 588ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=4s 599ms s=2s 280ms 
+    Total cpu time per freq: 353 123 200 6253
+    Total screen-off cpu time per freq: 227 77 146 4170
+    Proc com.google.android.gms:
+      CPU: 110ms usr + 180ms krn ; 0ms fg
+    Proc com.google.android.gms.persistent:
+      CPU: 4s 720ms usr + 2s 330ms krn ; 0ms fg
+    Apk com.google.android.gms:
+      Service com.google.android.gms.auth.account.be.accountstate.GcmTaskService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 1
+      Service com.google.android.gms.chimera.PersistentIntentOperationService:
+        Created for: 14ms uptime
+        Starts: 2, launches: 1
+  u0a115:
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=2ms s=5ms 
+    Total cpu time per freq: 1 0 1 7
+    Total screen-off cpu time per freq: 1 0 1 6
+    Proc com.google.android.grilservice:
+      CPU: 10ms usr + 10ms krn ; 0ms fg
+  u0a116:
+    User activity: 38 other
+    Wake lock *alarm*: 36ms partial (9 times) max=14 actual=80 realtime
+    Wake lock AmbientDreamProxy: 137ms partial (8 times) max=40 actual=281 realtime
+    Wake lock SystemUIRCDCLock: 3s 654ms partial (25 times) max=504 actual=3796 realtime
+    TOTAL wake: 3s 827ms blamed partial, 4s 43ms actual partial realtime
+    Sensor 65570: 15m 21s 673ms realtime (0 times)
+    Sensor 65576: 2m 6s 425ms blamed realtime, 10m 32s 126ms realtime (74 times)
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=3s 466ms s=2s 226ms 
+    Total cpu time per freq: 51 35 39 5743
+    Total screen-off cpu time per freq: 42 30 32 4126
+    Proc com.google.android.apps.wearable.systemui:
+      CPU: 3s 480ms usr + 2s 240ms krn ; 0ms fg
+    Apk com.google.android.apps.wearable.systemui:
+      Wakeup alarm *walarm*:SystemUI: 9 times
+      Service com.google.android.clockwork.systemui.ambient.AmbientDream:
+        Created for: 0ms uptime
+        Starts: 0, launches: 74
+  u0a117:
+    Cached for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+  u0a118:
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=0ms s=7ms 
+    Total cpu time per freq: 1 1 1 7
+    Total screen-off cpu time per freq: 1 1 1 5
+    Proc com.qti.phone:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  u0a120:
+    (nothing executed)
+  u0a121:
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=1ms s=17ms 
+    Total cpu time per freq: 7 0 1 11
+    Total screen-off cpu time per freq: 6 0 1 9
+    Proc com.google.android.pixelsystemservice:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+  u0a122:
+    Cached for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+  u0a131:
+    (nothing executed)
+  u0a135:
+    (nothing executed)
+  u0a140:
+    Wake lock *launch* realtime
+    Foreground activities: 696ms realtime (1 times)
+    Top for: 1s 335ms 
+    Cached for: 15m 20s 338ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=306ms s=216ms 
+    Total cpu time per freq: 3 0 0 534
+    Total screen-off cpu time per freq: 3 0 0 534
+    Proc com.google.android.permissioncontroller:
+      CPU: 310ms usr + 210ms krn ; 360ms fg
+  u0a141:
+    Foreground for: 15m 21s 673ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=7ms s=55ms 
+    Total cpu time per freq: 7 2 5 47
+    Total screen-off cpu time per freq: 7 2 5 40
+    Proc com.google.android.providers.media.module:
+      CPU: 20ms usr + 90ms krn ; 0ms fg
+  u0a142:
+    (nothing executed)
+  u0a144:
+    (nothing executed)
+  u0a147:
+    Wake lock *vibrator* realtime
+    Wake lock *launch* realtime
+    Sensor 65537: 14m 56s 224ms realtime (1 times)
+    Sensor 65543: 14m 56s 215ms realtime (1 times)
+    Vibrator: 272ms realtime (1 times)
+    Foreground activities: 15m 20s 973ms realtime (1 times) (running)
+    Top for: 15m 21s 588ms 
+    Cached for: 85ms 
+    Total running: 15m 21s 673ms 
+    Total cpu time: u=1m 27s 740ms s=12s 889ms 
+    Total cpu time per freq: 17147 773 850 84934
+    Total screen-off cpu time per freq: 12562 560 583 62325
+    Proc com.example.padeltracker:
+      CPU: 1m 23s 670ms usr + 12s 160ms krn ; 12s 840ms fg
+    Apk com.example.padeltracker:
+      Service androidx.health.services.client.VersionApiService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 1
+      Service com.example.padeltracker.presentation.service.MatchSetupListenerService:
+        Created for: 0ms uptime
+        Starts: 0, launches: 1
+
+Per process state tracking available: true
+Total cpu time reads: 0
+Batching Duration (min): 145
+All UID cpu time reads since the later of device start or stats reset: 56
+UIDs removed since the later of device start or stats reset: 0
+Currently mapped isolated uids:
+
+BatteryStats constants:
+    track_cpu_active_cluster_time=true
+    kernel_uid_readers_throttle_time=1000
+    external_stats_collection_rate_limit_ms=600000
+    battery_level_collection_delay_ms=300000
+    procstate_change_collection_delay_ms=60000
+    max_history_size=1572864
+    max_history_buffer_kb=64
+    battery_charged_delay_ms=120000
+    battery_charging_enforce_level=10
+    per_uid_modem_power_model=modem_activity_info_rx_tx
+    phone_on_external_stats_collection=true
+    reset_while_plugged_in_minimum_duration_hours=47
+
+CPU power brackets; cluster/freq in MHz(avg current in mA):
+    0: 614(151.0)
+    1: 864(169.0), 1363(177.0)
+    2: 1708(195.0)
+
+CPU wakeup stats:
+  Config:
+    wakeup_stats_retention_ms=+3d0h0m0s0ms
+    wakeup_matching_window_ms=+1s0ms
+    waking_activity_retention_ms=+5m0s0ms
+  
+  Irq device map:
+    Loaded from xml resource: 0x117000d
+    Map:
+      bt_host_wake: [Bluetooth]
+      hs_uart_wakeup: [Bluetooth]
+      nanohub-irq1: [Bluetooth]
+  
+  Recent waking activity:
+    Subsystem Alarm:
+      -26s774ms: u0a116 [PER ], 
+      -2m26s833ms: u0a116 [PER ], 
+      -3m26s833ms: u0a116 [PER ], 
+      -4m26s833ms: u0a116 [PER ], 
+    Subsystem Wifi:
+      -20598d8h29m25s59ms: 1020 [??], 2000 [CEM ], u0a56 [CEM ], u0a75 [CEM ], u0a107 [BTOP], 
+      -20598d8h29m25s60ms: 1020 [??], 2000 [CEM ], u0a56 [CEM ], u0a75 [CEM ], u0a107 [BTOP], 
+      -20598d8h29m25s61ms: 2000 [CEM ], 
+    Subsystem Sensor:
+      -25s540ms: u0a116 [PER ], 
+      -26s939ms: u0a116 [PER ], 
+      -35s420ms: u0a116 [PER ], 
+      -45s499ms: u0a116 [PER ], 
+      -46s939ms: u0a116 [PER ], 
+      -55s219ms: u0a116 [PER ], 
+      -57s59ms: u0a116 [PER ], 
+      -1m4s619ms: u0a116 [PER ], 
+      -1m14s219ms: u0a116 [PER ], 
+      -1m16s59ms: u0a116 [PER ], 
+      -1m18s579ms: u0a116 [PER ], 
+      -1m25s379ms: u0a116 [PER ], 
+      -1m36s338ms: u0a116 [PER ], 
+      -1m54s619ms: u0a116 [PER ], 
+      -1m56s299ms: u0a116 [PER ], 
+      -2m4s579ms: u0a116 [PER ], 
+      -2m14s938ms: u0a116 [PER ], 
+      -2m16s578ms: u0a116 [PER ], 
+      -2m25s98ms: u0a116 [PER ], 
+      -2m35s378ms: u0a116 [PER ], 
+      -2m37s58ms: u0a116 [PER ], 
+      -2m44s698ms: u0a116 [PER ], 
+      -2m46s298ms: u0a116 [PER ], 
+      -2m55s258ms: u0a116 [PER ], 
+      -2m57s18ms: u0a116 [PER ], 
+      -3m3s418ms: u0a116 [PER ], 
+      -3m6s258ms: u0a116 [PER ], 
+      -3m15s257ms: u0a116 [PER ], 
+      -3m35s577ms: u0a116 [PER ], 
+      -3m37s57ms: u0a116 [PER ], 
+      -3m44s457ms: u0a116 [PER ], 
+      -3m55s257ms: u0a116 [PER ], 
+      -3m57s17ms: u0a116 [PER ], 
+      -4m4s897ms: u0a116 [PER ], 
+      -4m25s137ms: u0a116 [PER ], 
+      -4m26s737ms: u0a116 [PER ], 
+      -4m34s456ms: u0a116 [PER ], 
+      -4m44s936ms: u0a116 [PER ], 
+      -4m46s696ms: u0a116 [PER ], 
+      -4m54s416ms: u0a116 [PER ], 
+      -5m5s536ms: u0a116 [PER ], 
+      -5m22s255ms: u0a116 [PER ], 
+  
+  Current proc-state map (57):
+    1000:PER , 1001:NONE, 1002:PER , 1027:PER , 1068:PER , 1073:PER , 2000:NONE, 2918:PER , u0a40:BFGS, u0a42:NONE, u0a43:NONE, u0a44:CEM , u0a45:NONE, u0a46:CEM , u0a48:NONE, u0a49:FGS , u0a50:FGS , u0a51:PER , u0a52:NONE, u0a53:CEM , u0a55:PER , u0a56:CEM , u0a57:NONE, u0a59:NONE, u0a64:BFGS, u0a65:CEM , u0a72:NONE, u0a75:CEM , u0a81:CAC , u0a84:PER , u0a86:NONE, u0a88:CEM , u0a91:SVC , u0a92:CEM , u0a94:CEM , u0a95:CEM , u0a97:CAC , u0a98:NONE, u0a99:NONE, u0a103:PER , u0a105:BFGS, u0a106:NONE, u0a107:BTOP, u0a115:PER , u0a116:PER , u0a117:CEM , u0a118:PER , u0a120:NONE, u0a121:PER , u0a122:CEM , u0a131:NONE, u0a135:NONE, u0a140:CEM , u0a141:PER , u0a142:NONE, u0a144:NONE, u0a147:TOP 
+  
+  Wakeup events:
+  Attribution stats:
+    Total: 0
+

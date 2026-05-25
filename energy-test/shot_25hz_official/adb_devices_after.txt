@@ -1,0 +1,4 @@
+﻿List of devices attached
+R3CY40DZAZT            device product:pa1qxeea model:SM_S931B device:pa1q transport_id:10
+adb-3A271RTJWWKM0B-kb07zj._adb-tls-connect._tcp device product:aurora model:Google_Pixel_Watch_2 device:aurora transport_id:11
+

@@ -1,0 +1,6 @@
+﻿name=shot_25_run2b
+finished_at=2026-05-25T12:14:40.7392604+02:00
+phone_serial=R3CY40DZAZT
+watch_serial=adb-3A271RTJWWKM0B-kb07zj._adb-tls-connect._tcp
+skip_phone=False
+bugreport=False
