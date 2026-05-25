@@ -59,9 +59,15 @@ ROOT
 │   │   ├── ui/
 │   │   │   └── WearApp.kt [Zoe]
 │   │   ├── viewmodel/
+<<<<<<< HEAD
 │   │   │   └── MatchViewModel.kt [Zoe]
 │   │   └── MainActivity.kt [Zoe]
 │   └── build.gradle.kts
+=======
+│   │   │   └── MatchViewModel.kt
+│   │   └── MainActivity.kt
+│   └
+>>>>>>> origin/main
 │
 ├── shared
 │   ├── src/main/java/com/example/padeltracker/shared/
@@ -78,6 +84,23 @@ ROOT
 │   │   │   ├── ShotFeatureExtractor.kt [Samu]
 │   │   │   └── ShotWindow.kt
 │   │   └── MatchSetup.kt
-│   └── build.gradle.kts
+│   └
 │
-└── build.gradle.kts
+└─
+
+
+-> SAMUELE MARCHI'S LOG:
+    Number of commits: 40
+    Number of lines: 24.799
+
+    Non coding activities:
+    - Collection of padel shots in an actual padel court
+    - Optimal Shot threshold found experimentally trying the shots
+    - Dataset Exploration, Analysis, Preprocessing and model training (Python)
+
+-> ZOI TSAGKARAKI'S LOG:
+    Number of commits: 19
+    Number of lines: 5.134
+
+    Non coding activities:
+    - Collection of padel shots in an actual padel court
