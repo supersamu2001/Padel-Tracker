@@ -2,9 +2,12 @@ package com.example.padeltracker.shared
 
 /**
  * Shared data contract for initializing a match from the phone to the watch.
+ *
+ * (DATA CLASS: Class that exists just to store a set of data)
  */
 data class MatchSetup(
     val matchId: String,
+    val tournamentName: String = "",
     val teamA: TeamSetup,
     val teamB: TeamSetup,
     val rules: MatchRules = MatchRules(),
@@ -30,17 +33,9 @@ data class MatchRules(
     val minimumAdvantage: Int = 2
 )
 
-/**
- * Constants for Wear OS communication.
- */
-object WearCommunicationConstants {
-    const val WATCH_CAPABILITY = "padel_tracker_watch"
-    const val MATCH_SETUP_PATH = "/match/setup"
-    const val MATCH_ENDED_PATH = "/match/ended"
-}
-
 object MatchSetupDataKeys {
     const val MATCH_ID = "match_id"
+    const val TOURNAMENT_NAME = "tournament_name"
     const val CREATED_AT = "created_at"
     const val SENT_AT = "sent_at"
 

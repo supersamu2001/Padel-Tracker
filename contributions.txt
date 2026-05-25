@@ -1,0 +1,100 @@
+Padel-Tracker Files Contribution
+==============================
+
+ROOT
+├── app
+│   ├── src/main/java/com/example/padeltracker/
+│   │   ├── data/
+│   │   │   ├── AppDatabase.kt [Zoe]
+│   │   │   ├── HistoryRepository.kt
+│   │   │   ├── MatchDao.kt [Zoe]
+│   │   │   ├── MatchPreferences.kt [Samu]
+│   │   │   └── MatchRecord.kt [Zoe]
+│   │   ├── ml/
+│   │   │   ├── PadelModel.java [Samu]
+│   │   │   ├── ShotClassifier.kt [Samu]
+│   │   │   └── ShotDetectionState.kt [Samu]
+│   │   ├── service/
+│   │   │   ├── MatchEndedListenerService.kt [Zoe]
+│   │   │   ├── SensorDataListenerService.kt [Samu]
+│   │   │   ├── SensorStatusState.kt [Samu]
+│   │   │   └── ShotLogger.kt [Samu]
+│   │   ├── ui/
+│   │   │   ├── components/
+│   │   │   │   └── TennisBallView.kt [Zoe]
+│   │   │   ├── screens/
+│   │   │   │   ├── GameAnalysisScreen.kt [Samu, Zoe]
+│   │   │   │   ├── HistoryScreen.kt [Samu, Zoe]
+│   │   │   │   ├── HomeScreen.kt [Zoe]
+│   │   │   │   ├── LiveScoreScreen.kt [Zoe]
+│   │   │   │   └── SetupScreen.kt [Zoe]
+│   │   │   └── theme/
+│   │   │       ├── Color.kt
+│   │   │       ├── Theme.kt
+│   │   │       └── Type.kt
+│   │   ├── wear/
+│   │   │   ├── PhoneMatchEndedEventBus.kt
+│   │   │   └── WearMatchSetupSender.kt [Zoe]
+│   │   └── MainActivity.kt [Samu, Zoe]
+│   └
+│
+├── wear
+│   ├── src/main/java/com/example/padeltracker/presentation/
+│   │   ├── communication/
+│   │   │   └── MatchEndedSender.kt [Zoe]
+│   │   ├── data/
+│   │   │   └── PendingMatchSetupStore.kt
+│   │   ├── model/
+│   │   │   ├── DomainModel.kt
+│   │   │   └── MatchSetupMappers.kt
+│   │   ├── scoring/
+│   │   │   └── PadelScoreEngine.kt
+│   │   ├── sensors/
+│   │   │   ├── WearExperimentPipeline.kt
+│   │   │   └── WearSensorManager.kt [Samu, Zoe]
+│   │   ├── service/
+│   │   │   └── MatchSetupListenerService.kt [Zoe]
+│   │   ├── theme/
+│   │   │   └── Theme.kt
+│   │   ├── ui/
+│   │   │   └── WearApp.kt
+│   │   ├── viewmodel/
+│   │   │   └── MatchViewModel.kt [Zoe]
+│   │   └── MainActivity.kt
+│   └── build.gradle.kts
+│
+├── shared
+│   ├── src/main/java/com/example/padeltracker/shared/
+│   │   ├── communication/
+│   │   │   ├── SensorPacketSerializer.kt
+│   │   │   └── WearPaths.kt [Samu]
+│   │   ├── experiment/
+│   │   │   ├── ExperimentConfig.kt [Samu]
+│   │   │   └── ExperimentMode.kt
+│   │   ├── sensors/
+│   │   │   └── ImuModels.kt
+│   │   ├── shotrecognition/
+│   │   │   ├── ShotDetector.kt
+│   │   │   ├── ShotFeatureExtractor.kt [Samu]
+│   │   │   └── ShotWindow.kt
+│   │   └── MatchSetup.kt
+│   └── build.gradle.kts
+│
+└── build.gradle.kts
+
+-> SAMUELE MARCHI'S LOG:
+    Number of commits: 40
+    Number of lines: 24.799
+
+    Non coding activities:
+    - Collection of padel shots in an actual padel court
+    - Optimal Shot threshold found experimentally trying the shots
+    - Dataset Exploration, Analysis, Preprocessing and model training (Python)
+
+-> ZOI TSAGKARAKI'S LOG:
+    Number of commits: 19
+    Number of lines: 5.134
+
+    Non coding activities:
+    - Collection of padel shots in an actual padel court
+

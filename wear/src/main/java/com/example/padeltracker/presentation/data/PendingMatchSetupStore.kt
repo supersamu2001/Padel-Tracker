@@ -2,22 +2,30 @@ package com.example.padeltracker.presentation.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.core.content.edit
 import com.example.padeltracker.shared.MatchRules
 import com.example.padeltracker.shared.MatchSetup
 import com.example.padeltracker.shared.PlayerSetup
 import com.example.padeltracker.shared.TeamSetup
+import com.example.padeltracker.shared.debug.DebugLogger
 import org.json.JSONArray
 import org.json.JSONObject
 
+/**
+ * Save temporary the set-up of the match received from the phone,
+ * so that if the app closes accidentally, the set-up setting won't be lost.
+ *
+ * Bridge between the arrival of setup message from the phone and the actual start of the match.
+ * This class ensures robustness and reliability in this phase.
+ */
 class PendingMatchSetupStore(context: Context) {
-
+    // settings saved through the Android SharedPreferences, that save them in key-value pairs
     private val prefs = context.applicationContext.getSharedPreferences(
         PREFS_NAME,
         Context.MODE_PRIVATE
     )
 
+    // Convert the MatchSet object into a JSON string, in order to be saved into the SharedPreferences
     fun save(setup: MatchSetup) {
         val json = setup.toJson().toString()
 
@@ -25,35 +33,38 @@ class PendingMatchSetupStore(context: Context) {
             putString(KEY_SETUP_JSON, json)
         }
 
-        Log.d(TAG, "Pending match setup saved: ${setup.matchId}")
+        DebugLogger.d(TAG, "Pending match setup saved: ${setup.matchId}")
     }
 
+    // Retrieve data in memory, reading the JSON string and converting it into a Kotlin object
     fun load(): MatchSetup? {
         val json = prefs.getString(KEY_SETUP_JSON, null) ?: return null
 
         return try {
             JSONObject(json).toMatchSetup()
         } catch (error: Exception) {
-            Log.e(TAG, "Failed to load pending match setup", error)
+            DebugLogger.e(TAG, "Failed to load pending match setup", error)
             null
         }
     }
 
+    // Read the setup in memory and delete it immediately after
     fun consume(): MatchSetup? {
         val setup = load()
         if (setup != null) {
             clear()
-            Log.d(TAG, "Pending match setup consumed: ${setup.matchId}")
+            DebugLogger.d(TAG, "Pending match setup consumed: ${setup.matchId}")
         }
         return setup
     }
 
+    // Remove the data from the memory
     fun clear() {
         prefs.edit {
             remove(KEY_SETUP_JSON)
         }
 
-        Log.d(TAG, "Pending match setup cleared")
+        DebugLogger.d(TAG, "Pending match setup cleared")
     }
 
     fun registerChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
@@ -69,6 +80,7 @@ class PendingMatchSetupStore(context: Context) {
     private fun MatchSetup.toJson(): JSONObject {
         return JSONObject().apply {
             put("matchId", matchId)
+            put("tournamentName", tournamentName)
             put("createdAt", createdAt)
             put("teamA", teamA.toJson())
             put("teamB", teamB.toJson())
@@ -110,6 +122,7 @@ class PendingMatchSetupStore(context: Context) {
 
         return MatchSetup(
             matchId = optString("matchId", "unknown_match"),
+            tournamentName = optString("tournamentName", ""),
             createdAt = optLong("createdAt", 0L),
             teamA = optJSONObject("teamA")?.toTeamSetup(
                 fallbackId = "team_a",

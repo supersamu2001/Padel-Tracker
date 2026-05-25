@@ -46,9 +46,6 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
-        jniLibs {
-            useLegacyPackaging = true
-        }
     }
 }
 
@@ -70,14 +67,9 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Room Database with KSP for match history
-    val roomVersion = "2.8.4"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
-
-    // TensorFlow Lite
-    implementation("org.tensorflow:tensorflow-lite:2.16.1")
-    // implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
     // Testing libraries
     testImplementation("junit:junit:4.13.2")

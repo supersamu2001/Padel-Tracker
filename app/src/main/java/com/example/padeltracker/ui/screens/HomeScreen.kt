@@ -21,12 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.padeltracker.R
-import com.example.padeltracker.service.SensorStatusState
 import com.example.padeltracker.ui.theme.*
 import com.example.padeltracker.ui.components.TennisBallView
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @Composable
 fun HomeScreen(
@@ -34,11 +30,13 @@ fun HomeScreen(
     onNewGameClick: () -> Unit,
     onHistoryClick: () -> Unit
 ) {
+    /**
     val lastDataTime by SensorStatusState.lastMessageReceived.collectAsState()
     val accValues by SensorStatusState.lastAccValues.collectAsState()
     val gyroValues by SensorStatusState.lastGyroValues.collectAsState()
     val lastShotTime by SensorStatusState.lastShotTime.collectAsState()
     val lastShotSamples by SensorStatusState.lastShotSamplesCount.collectAsState()
+    */
 
     val infiniteTransition = rememberInfiniteTransition(label = "ball_anim")
     val offsetY by infiniteTransition.animateFloat(
@@ -74,9 +72,9 @@ fun HomeScreen(
             Text(
                 text = "Padel Tracker",
                 fontSize = 42.sp,
-                fontWeight = FontWeight.Black,
+                fontWeight = FontWeight.ExtraBold,
                 color = Color.White,
-                letterSpacing = 2.sp
+
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -105,6 +103,7 @@ fun HomeScreen(
                 )
             }
 
+            /**
             // INFO: Sensor data reception status
             lastDataTime?.let { timestamp ->
                 val timeString = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
@@ -124,6 +123,7 @@ fun HomeScreen(
                     fontSize = 10.sp, color = Color.White.copy(alpha = 0.7f)
                 )
             }
+            */
 
             /**
             // Detected Shots Section
@@ -208,7 +208,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = "Track every smash, analyze your game, and own the court.",
+                    text = "Keep the score, track every shot and analyze your game.",
                     fontSize = 14.sp,
                     color = Color.White.copy(alpha = 0.8f),
                     lineHeight = 20.sp

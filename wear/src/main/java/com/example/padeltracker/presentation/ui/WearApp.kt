@@ -23,6 +23,15 @@ import com.example.padeltracker.presentation.model.*
 import com.example.padeltracker.presentation.theme.PadelTrackerTheme
 import com.example.padeltracker.presentation.viewmodel.MatchViewModel
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+import com.example.padeltracker.shared.experiment.ExperimentConfig
+import com.example.padeltracker.shared.debug.DebugLogger
+
 // Shared style constants
 private val TeamAColor = Color(0xFF00BCD4) // Cyan/Blue
 private val TeamBColor = Color(0xFFE91E63) // Magenta/Purple
@@ -32,17 +41,57 @@ private const val BorderAlpha = 0.1f
 @Composable
 fun WearApp(viewModel: MatchViewModel) {
     val state = viewModel.state.value
-    val heartRate by viewModel.heartRate //heartbeat
+    val heartRate by viewModel.heartRate
+    val experimentConfig = remember { ExperimentConfig() }
+
+    // NEW PERMISSION REQUEST BLOCK
+    val context = LocalContext.current
+
+    val permissionsToRequest = arrayOf(
+        Manifest.permission.BODY_SENSORS,
+        "android.permission.health.READ_HEART_RATE"
+    )
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val bodySensorsGranted = permissions[Manifest.permission.BODY_SENSORS] ?: false
+        val heartRateGranted = permissions["android.permission.health.READ_HEART_RATE"] ?: false
+        
+        if (experimentConfig.debugMode) {
+            if (bodySensorsGranted && heartRateGranted) {
+                DebugLogger.d("PERMISSIONS", "All health permissions GRANTED!")
+            } else {
+                DebugLogger.d("PERMISSIONS", "Some health permissions DENIED! Body: $bodySensorsGranted, HR: $heartRateGranted")
+            }
+        }
+        viewModel.startMatch()
+    }
+
     
     PadelTrackerTheme {
         AppScaffold {
             when (state.currentMatch.status) {
                 MatchStatus.WAITING_FOR_SETUP -> WaitingForSetupScreen()
-                MatchStatus.NOT_STARTED -> StartMatchScreen(state, onStart = { viewModel.startMatch() })
+                MatchStatus.NOT_STARTED -> StartMatchScreen(
+                    state = state,
+                    onStart = {
+                        val hasBodySensors = ContextCompat.checkSelfPermission(context, Manifest.permission.BODY_SENSORS) == PackageManager.PERMISSION_GRANTED
+                        val hasHeartRate = ContextCompat.checkSelfPermission(context, "android.permission.health.READ_HEART_RATE") == PackageManager.PERMISSION_GRANTED
+                        
+                        if (hasBodySensors && hasHeartRate) {
+                            viewModel.startMatch()
+                        } else {
+                            // Request the missing permissions.
+                            permissionLauncher.launch(permissionsToRequest)
+                        }
+                    }
+                )
+
                 MatchStatus.SELECTING_SERVER -> SelectServerScreen(onSelect = { viewModel.selectInitialServer(it) })
                 MatchStatus.IN_PROGRESS -> MatchScoreScreen(
                     state = state,
-                    heartRate = heartRate, //pernaw palmous
+                    heartRate = heartRate,
                     onAddPoint = { viewModel.addPoint(it) },
                     onUndo = { viewModel.undo() },
                     onEndMatch = { viewModel.endMatchEarly() }
@@ -232,7 +281,8 @@ fun ScoreHeader(
         }
 
         // show heart if heartbeat>0
-        if (heartRate > 0) {
+        /*if (heartRate > 0)
+       // {
             Text(
                 text = "❤️ ${heartRate.toInt()} BPM",
                 style = MaterialTheme.typography.labelSmall,
@@ -240,8 +290,8 @@ fun ScoreHeader(
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold
             )
-        }
-
+      //  }
+*/
         Text(
             text = "SETS: $teamASets - $teamBSets",
             style = MaterialTheme.typography.labelSmall,

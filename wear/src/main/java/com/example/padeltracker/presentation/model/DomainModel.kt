@@ -1,5 +1,9 @@
 package com.example.padeltracker.presentation.model
 
+/**
+ * Set of internal data structures for match state (Sets, Games, Players) and match configurations
+ */
+
 enum class TeamId {
     TEAM_A, TEAM_B
 }
@@ -46,6 +50,7 @@ data class SetState(
 data class MatchState(
     val teamA: Team,
     val teamB: Team,
+    val tournamentName: String = "",
     val config: MatchConfig = MatchConfig(),
     val currentSet: SetState = SetState(),
     val completedSets: List<SetState> = emptyList(),

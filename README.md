@@ -1,69 +1,94 @@
 # Padel-Tracker 🎾
 
-Padel-Tracker is a complete Android application (Smartphone + Wear OS) designed to track Padel matches and analyze player performance in real-time using Machine Learning.
+Padel-Tracker is a comprehensive Android application (Smartphone + Wear OS) designed to track Padel matches and analyze player performance in real-time using Machine Learning.
 
 ## 🏗️ Project Architecture
 
 The project follows a distributed architecture to optimize energy consumption and performance:
-- **Smartwatch (Wear OS)**: Exclusively handles sensor data collection (20Hz frequency) and quick score management on the wrist.
-- **Smartphone**: Receives raw data via Bluetooth (Wearable Data Layer), performs inference using a TensorFlow Lite model, and saves statistics in the local database.
+- **Smartwatch (Wear OS)**: Handles sensor data collection (25Hz sampling frequency), real-time shot detection based on IMU thresholds, and live score management.
+- **Smartphone**: Receives processed features or raw windows via Bluetooth, performs high-level classification using a Random Forest model, and saves statistics to a local Room database.
 
 ---
 
-## 📂 Folder and File Structure
+## 📂 Project Structure
 
 ### 📱 `:app` Module (Smartphone)
-Contains the analysis logic, data management, and the main user interface.
+Manages the main user interface, advanced analysis logic, and data persistence.
 
-- **`src/main/java/com/example/padeltracker/`**
-    - `MainActivity.kt`: Entry point of the app, manages the main navigation between screens.
-    - **`data/`**: Local database management (Room).
-        - `AppDatabase.kt`: SQLite database configuration.
-        - `MatchDao.kt`: Interface for queries (inserting and reading matches).
-        - `MatchRecord.kt`: Table model that saves the details of each match (score, duration, shots).
-    - **`ml/`**: The heart of the artificial intelligence.
-        - `ShotClassifier.kt`: Loads the `.tflite` model and performs inference on sensor data.
-        - `ShotDetectionState.kt`: Singleton that maintains the live count of detected shots (Forehand, Backhand, etc.).
-    - **`service/`**:
-        - `SensorDataListenerService.kt`: Background service that receives data packets from the smartwatch even if the app is closed.
-    - **`ui/`**: Graphical interface in Jetpack Compose.
-        - `screens/`: Contains the main screens (`HomeScreen`, `SetupScreen`, `LiveScoreScreen`, `HistoryScreen`).
-- **`src/main/assets/`**
-    - `padel_shot_classifier.tflite`: The trained Machine Learning model to recognize shots.
+- **`data/`**: Local database and preferences management.
+    - `AppDatabase.kt`: SQLite database configuration via Room.
+    - `MatchDao.kt`: Interface for database queries (Insert, Delete, Query).
+    - `MatchRecord.kt`: Table model for saved match details.
+    - `HistoryRepository.kt`: Bridge between the DAO and the UI for history management.
+    - `MatchPreferences.kt`: Player name management via DataStore for field pre-filling during the match set-up
+- **`ml/`**: Machine Learning integration.
+    - `ShotClassifier.kt`: Orchestrates the classification process by extracting features and calling the model.
+    - `PadelModel.java`: The core ML model (Random Forest) converted into native Java code for maximum performance.
+    - `ShotDetectionState.kt`: Singleton that maintains the live count of detected shots.
+- **`service/`**: Background services.
+    - `SensorDataListenerService.kt`: Receives real-time sensor packets and features from the watch.
+    - `MatchEndedListenerService.kt`: Listens for the match-ended signal and saves the final data to Room.
+    - `SensorStatusState.kt`: Maintains live sensor state for the Home screen monitoring dashboard (used for debug).
+    - `ShotLogger.kt`: Utility for saving sensor data to CSV files (for dataset creation and offline training).
+- **`wear/`**: Bridge components for Wear OS communication.
+    - `WearMatchSetupSender.kt`: Sends the match set-up and configuration (players, rules) to the watch.
+    - `PhoneMatchEndedEventBus.kt`: Internal event bus to notify the UI when a match is ended and saved.
+- **`ui/screens/`**: Graphical interface built with Jetpack Compose.
+    - `HomeScreen.kt`: Main dashboard with connection status.
+    - `SetupScreen.kt`: Match configuration (teams and players names).
+    - `LiveScoreScreen.kt`: Real-time score display during the match.
+    - `GameAnalysisScreen.kt`: Detailed post-match analysis with graphs, stats, and sharing capabilities.
+    - `HistoryScreen.kt`: List of past matches with winner highlights and deletion capabilities.
 
 ### ⌚ `:wear` Module (Smartwatch)
-Optimized for use during sports activities.
+Optimized for performance and energy efficiency during sports activities.
 
-- **`src/main/java/com/example/padeltracker/presentation/`**
-    - `MainActivity.kt`: Main activity for Wear OS.
-    - **`sensors/`**
-        - `WearSensorManager.kt`: Manages the activation of Accelerometer and Gyroscope at 20Hz and sends data to the smartphone.
-    - **`viewmodel/`**
-        - `MatchViewModel.kt`: Manages the state of the current match on the watch.
-    - **`scoring/`**
-        - `PadelScoreEngine.kt`: Logic for calculating Padel-specific scores.
+- **`presentation/`**:
+    - `MainActivity.kt`: Entry point for the Wear OS app, manages initial permissions.
+    - **`ui/`**:
+        - `WearApp.kt`: The main UI orchestrator. It handles the navigation flow between different match states (Waiting, Setup, Scoring, Finished) and manages health-related permissions.
+    - **`sensors/`**:
+        - `WearSensorManager.kt`: Orchestrates IMU sensors and high-level communication logic.
+        - `WearExperimentPipeline.kt`: Manages the flow of sensor data through detection and feature extraction.
+    - **`scoring/`**:
+        - `PadelScoreEngine.kt`: Contains the pure logic for Padel scoring rules (sets, games, tie-breaks).
+    - **`service/`**:
+        - `MatchSetupListenerService.kt`: Background service that receives match configuration from the phone.
+    - **`data/`**:
+        - `PendingMatchSetupStore.kt`: Robustly persists the received setup via SharedPreferences until the match starts.
+    - **`viewmodel/`**:
+        - `MatchViewModel.kt`: Manages the live state of the match, heart rate history, and duration.
+    - **`communication/`**:
+        - `MatchEndedSender.kt`: Sends the final match summary to the phone through MessageClient using a JSON payload.
+    - **`model/`**:
+        - `DomainModel.kt`: Internal data structures for match state (Sets, Games, Players).
+        - `MatchSetupMappers.kt`: Converts shared communication models into internal domain models.
 
 ### 🤝 `:shared` Module (Shared Code)
-Contains classes and constants used by both the app and the wear module.
+Common logic and models used by both modules to ensure binary compatibility.
 
-- **`src/main/java/com/example/padeltracker/shared/`**
-    - `MatchSetup.kt`: Data model for match settings (player names, match rules) and Wear OS communication constants.
-    - `SensorConstants.kt`: Defines the communication paths for Bluetooth.
+- **`MatchSetup.kt`**: Data model and keys for match configuration exchange.
+- **`shotrecognition/`**:
+    - `ShotDetector.kt`: Threshold-based logic for real-time candidate detection.
+    - `ShotWindow.kt`: Data model representing the sensor data window around a hit.
+    - `ShotFeatureExtractor.kt`: Extracts 40 statistical features (Mean, Median, Std, Min, Max) from IMU windows.
+- **`sensors/`**:
+    - `ImuModels.kt`: Unified structures for sensor samples (`ImuVector`).
+- **`communication/`**:
+    - `WearPaths.kt`: Centralized definitions of Bluetooth message paths.
+    - `SensorPacketSerializer.kt`: Optimized binary serialization for high-frequency sensor data.
+- **`experiment/`**:
+    - `ExperimentConfig.kt`: Centralized configuration for sampling rates, thresholds, and durations.
+    - `ExperimentMode.kt`: Enum defining processing modes (Raw, Features, Windows).
 
 ---
 
 ## 🚀 Main Features
-1. **Live Tracking**: Real-time visualization of shots made directly on the smartphone screen during the match.
-2. **Live Match Dashboard**: Real-time scoreboard and isolated match timer running symmetrically between devices.
-3. **Heart Rate Monitoring**: Tracks BPM during the match and visualizes heart rate zones in the post-game analysis screen.
-4. **AI Integration**: Automatic recognition of:
-    - Forehand
-    - Backhand
-    - Smash
-    - Lob
-    - Serves
-5. **Match History**: Local database to review the results and statistics of all past matches.
-6. **Wear OS Synchronization**: Match configuration on the phone and score management via the watch.
+1. **AI Shot Recognition**: Automatic classification of 6 different types of shots using a native Java-implemented Random Forest.
+2. **Hybrid Processing**: Flexible data pipeline (Raw stream vs Feature extraction) to balance between debugging needs and battery life.
+3. **Live Dashboard**: Real-time score synchronization and heart rate monitoring across devices.
+4. **Comprehensive Analysis**: Post-game summary with heart rate trends, shot distribution, and dynamic achievement badges.
+5. **Robust Persistence**: Automatic local history management and reliable inter-device setup synchronization.
 
 ---
 
@@ -71,6 +96,6 @@ Contains classes and constants used by both the app and the wear module.
 - **Language**: Kotlin
 - **UI**: Jetpack Compose (Mobile & Wear)
 - **Database**: Room Persistence Library
-- **ML**: TensorFlow Lite
-- **Connectivity**: Google Play Services Wearable API (DataLayer for large payloads & MessageClient for low-latency live events)
-- **Dependency Management**: Gradle (Kotlin DSL)
+- **ML**: Random Forest implementation
+- **Connectivity**: Google Play Services Wearable API
+- **Sensing**: Android SensorManager & Health Services (Heart Rate)

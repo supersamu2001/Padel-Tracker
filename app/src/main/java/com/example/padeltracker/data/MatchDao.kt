@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
+// DEFINE OPERATIONS TO INTERACT WITH THE DATABASE
 @Dao
 interface MatchDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

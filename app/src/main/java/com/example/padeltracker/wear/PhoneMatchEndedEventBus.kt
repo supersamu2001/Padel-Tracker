@@ -5,6 +5,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 
 /**
  * Simple in-app event bus used to notify the phone UI that the Wear match ended.
+ *
+ * Called by the MainActivity to inform it to show the AnalysisScreen
+ *
  */
 object PhoneMatchEndedEventBus {
     private val _events = MutableSharedFlow<Long>(extraBufferCapacity = 1)

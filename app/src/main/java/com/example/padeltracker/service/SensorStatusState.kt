@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.asStateFlow
  * Singleton object to track the status of data arriving from the watch.
  */
 
+// Used for debug
+
 object SensorStatusState {
     private val _lastMessageReceived = MutableStateFlow<Long?>(null)
     val lastMessageReceived = _lastMessageReceived.asStateFlow()

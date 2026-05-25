@@ -1,7 +1,7 @@
 package com.example.padeltracker.service
 
 import android.content.Context
-import android.util.Log
+import com.example.padeltracker.shared.debug.DebugLogger
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
@@ -9,10 +9,12 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Create and populate the dataset of the shots in order to train a ML model
+ */
 class ShotLogger(private val context: Context) {
     private val TAG = "ShotLogger"
-    //private val fileName = "padel_shots_dataset.csv"
-    // simplify labeling
+
     private val fileName = "padel_shots_dataset_score_marker.csv"
 
     init {
@@ -24,14 +26,12 @@ class ShotLogger(private val context: Context) {
         if (!file.exists()) {
             try {
                 val writer = FileWriter(file)
-                //simplify labeling
-                //writer.append("shot_id,timestamp,sample_index,acc_x,acc_y,acc_z,gyro_x,gyro_y,gyro_z\n")
                 writer.append("shot_id,timestamp,score_marker,sample_index,acc_x,acc_y,acc_z,gyro_x,gyro_y,gyro_z\n")
                 writer.flush()
                 writer.close()
-                Log.d(TAG, "CSV file created at: ${file.absolutePath}")
+                DebugLogger.d(TAG, "CSV file created at: ${file.absolutePath}")
             } catch (e: IOException) {
-                Log.e(TAG, "Error creating CSV file: ${e.message}")
+                DebugLogger.e(TAG, "Error creating CSV file: ${e.message}")
             }
         }
     }
@@ -41,11 +41,11 @@ class ShotLogger(private val context: Context) {
      * CSV format:
      * shotId => identifier of the shot
      * timestamp => human-readable date and hour
+     * score_marker => score in format "S0-0_G0-0"
      * sample_index => sample index within the shot (from 0 to 40)
      * acc_x, acc_y, acc_z => accelerometer values
      * gyro_x, gyro_y, gyro_z => gyroscope values
      */
-    //simplify labeling
     //fun logShot(accSamples: List<FloatArray>, gyroSamples: List<FloatArray>) {
     fun logShot(
         accSamples: List<FloatArray>,
@@ -69,7 +69,6 @@ class ShotLogger(private val context: Context) {
                 
                 writer.append("$shotId,")
                 writer.append("$timestamp,")
-                // simplify labeling
                 writer.append("$scoreMarker,")
                 writer.append("$i,")
                 writer.append("${acc[0]},${acc[1]},${acc[2]},")
@@ -78,9 +77,9 @@ class ShotLogger(private val context: Context) {
             
             writer.flush()
             writer.close()
-            Log.d(TAG, "Shot $shotId saved to CSV (${numSamples} samples)")
+            DebugLogger.d(TAG, "Shot $shotId saved to CSV (${numSamples} samples)")
         } catch (e: IOException) {
-            Log.e(TAG, "Error writing to CSV: ${e.message}")
+            DebugLogger.e(TAG, "Error writing to CSV: ${e.message}")
         }
     }
 }

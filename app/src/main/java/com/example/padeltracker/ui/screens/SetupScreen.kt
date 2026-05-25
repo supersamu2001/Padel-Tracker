@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -35,20 +36,28 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
     val scope = rememberCoroutineScope()
     val prefs = remember { MatchPreferences(context) }
 
-    // Intercept system back button to go back to Home
-    BackHandler {
-        onBackClick()
-    }
+    // Load saved names from DataStore
+    val savedNames by prefs.playerNamesFlow.collectAsState(initial = listOf("", "", "", ""))
 
     // Define our custom Red color for reuse
     val activeRed = Color(0xFFD32F2F)
 
-    // States for inputs - Initialized as empty strings for a fresh start every time
+    // States for inputs
     var tournamentName by remember { mutableStateOf("") }
     var tAP1 by remember { mutableStateOf("") }
     var tAP2 by remember { mutableStateOf("") }
     var tBP1 by remember { mutableStateOf("") }
     var tBP2 by remember { mutableStateOf("") }
+
+    // Pre-fill fields when savedNames are loaded
+    LaunchedEffect(savedNames) {
+        if (savedNames.size >= 4) {
+            if (tAP1.isEmpty() && savedNames[0].isNotEmpty()) tAP1 = savedNames[0]
+            if (tAP2.isEmpty() && savedNames[1].isNotEmpty()) tAP2 = savedNames[1]
+            if (tBP1.isEmpty() && savedNames[2].isNotEmpty()) tBP1 = savedNames[2]
+            if (tBP2.isEmpty() && savedNames[3].isNotEmpty()) tBP2 = savedNames[3]
+        }
+    }
 
     // The form is valid only when the tournament name and all 4 players are filled
     val isFormValid = tournamentName.isNotBlank() &&
@@ -56,6 +65,11 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
             tBP1.isNotBlank() && tBP2.isNotBlank()
 
     val scrollState = rememberScrollState()
+
+    // Intercept system back button to go back to Home
+    BackHandler {
+        onBackClick()
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -97,7 +111,7 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
 
             Column(modifier = Modifier.padding(horizontal = 24.dp)) {
                 Text(
-                    "Create new\ntournament",
+                    "Create new\nmatch",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Black,
                     color = Color.White,
@@ -105,7 +119,7 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    "Fill in the details to create a new padel tournament 🎾",
+                    "Fill in the details to create a new padel match 🎾",
                     color = Color.White.copy(alpha = 0.9f),
                     fontSize = 14.sp
                 )
@@ -121,7 +135,14 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
                             value = tournamentName,
                             onValueChange = { tournamentName = it },
                             modifier = Modifier.fillMaxWidth(),
-                            placeholder = { Text("Monday tournament", color = Color.LightGray) },
+                            placeholder = { Text("Name of the match ", color = Color.LightGray) },
+                            trailingIcon = {
+                                if (tournamentName.isNotEmpty()) {
+                                    IconButton(onClick = { tournamentName = "" }) {
+                                        Icon(Icons.Default.Clear, contentDescription = "Clear", tint = Color.Gray)
+                                    }
+                                }
+                            },
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedTextColor = Color.Black,
                                 unfocusedTextColor = Color.Black,
@@ -155,6 +176,13 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
                             onValueChange = { tAP1 = it },
                             label = { Text("Player 1 Name") },
                             modifier = Modifier.fillMaxWidth(),
+                            trailingIcon = {
+                                if (tAP1.isNotEmpty()) {
+                                    IconButton(onClick = { tAP1 = "" }) {
+                                        Icon(Icons.Default.Clear, contentDescription = "Clear", tint = Color.Gray)
+                                    }
+                                }
+                            },
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedTextColor = Color.Black,
                                 unfocusedTextColor = Color.Black,
@@ -170,6 +198,13 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
                             onValueChange = { tAP2 = it },
                             label = { Text("Player 2 Name") },
                             modifier = Modifier.fillMaxWidth(),
+                            trailingIcon = {
+                                if (tAP2.isNotEmpty()) {
+                                    IconButton(onClick = { tAP2 = "" }) {
+                                        Icon(Icons.Default.Clear, contentDescription = "Clear", tint = Color.Gray)
+                                    }
+                                }
+                            },
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedTextColor = Color.Black,
                                 unfocusedTextColor = Color.Black,
@@ -192,6 +227,13 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
                             onValueChange = { tBP1 = it },
                             label = { Text("Player 1 Name") },
                             modifier = Modifier.fillMaxWidth(),
+                            trailingIcon = {
+                                if (tBP1.isNotEmpty()) {
+                                    IconButton(onClick = { tBP1 = "" }) {
+                                        Icon(Icons.Default.Clear, contentDescription = "Clear", tint = Color.Gray)
+                                    }
+                                }
+                            },
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedTextColor = Color.Black,
                                 unfocusedTextColor = Color.Black,
@@ -207,6 +249,13 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
                             onValueChange = { tBP2 = it },
                             label = { Text("Player 2 Name") },
                             modifier = Modifier.fillMaxWidth(),
+                            trailingIcon = {
+                                if (tBP2.isNotEmpty()) {
+                                    IconButton(onClick = { tBP2 = "" }) {
+                                        Icon(Icons.Default.Clear, contentDescription = "Clear", tint = Color.Gray)
+                                    }
+                                }
+                            },
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedTextColor = Color.Black,
                                 unfocusedTextColor = Color.Black,
@@ -231,6 +280,7 @@ fun MatchSetupScreen(onBackClick: () -> Unit, onSendToWatch: (MatchSetup) -> Uni
 
                         val setup = MatchSetup(
                             matchId = UUID.randomUUID().toString(),
+                            tournamentName = tournamentName,
                             teamA = TeamSetup(
                                 id = "team_a",
                                 name = "Team A",

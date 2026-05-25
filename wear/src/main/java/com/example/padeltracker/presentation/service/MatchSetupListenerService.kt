@@ -1,12 +1,12 @@
 package com.example.padeltracker.presentation.service
 
-import android.util.Log
 import com.example.padeltracker.shared.MatchRules
 import com.example.padeltracker.shared.MatchSetup
 import com.example.padeltracker.shared.MatchSetupDataKeys
 import com.example.padeltracker.shared.PlayerSetup
 import com.example.padeltracker.shared.TeamSetup
-import com.example.padeltracker.shared.WearCommunicationConstants
+import com.example.padeltracker.shared.communication.WearPaths
+import com.example.padeltracker.shared.debug.DebugLogger
 import com.example.padeltracker.presentation.data.PendingMatchSetupStore
 import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
@@ -15,36 +15,38 @@ import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.WearableListenerService
 
 /**
- * Receives match setup data sent from the phone through the Wear OS Data Layer.
+ * Receives match setup data sent from the phone (teams and players)
  */
 class MatchSetupListenerService : WearableListenerService() {
 
+    // Called when a match setup is received from the phone
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         super.onDataChanged(dataEvents)
 
-        Log.d(TAG, "onDataChanged called")
+        DebugLogger.d(TAG, "onDataChanged called")
 
         dataEvents.forEach { event ->
             val dataItem = event.dataItem
             val path = dataItem.uri.path
 
-            Log.d(TAG, "Data event received. type=${event.type}, path=$path")
+            DebugLogger.d(TAG, "Data event received. type=${event.type}, path=$path")
 
             if (event.type == DataEvent.TYPE_CHANGED &&
-                path == WearCommunicationConstants.MATCH_SETUP_PATH
+                path == WearPaths.MATCH_SETUP
             ) {
+                // Convert the data received into a MatchSetup object
                 val dataMap = DataMapItem.fromDataItem(dataItem).dataMap
                 val setup = dataMap.toMatchSetup()
 
-                Log.d(TAG, "Match setup received successfully")
+                DebugLogger.d(TAG, "Match setup received successfully")
                 PendingMatchSetupStore(applicationContext).save(setup)
-                Log.d(TAG, "Match setup saved as pending setup")
+                DebugLogger.d(TAG, "Match setup saved as pending setup")
 
-                Log.d(TAG, "matchId=${setup.matchId}")
-                Log.d(TAG, "createdAt=${setup.createdAt}")
-                Log.d(TAG, "teamA=${setup.teamA.name}: ${setup.teamA.players.joinToString { it.name }}")
-                Log.d(TAG, "teamB=${setup.teamB.name}: ${setup.teamB.players.joinToString { it.name }}")
-                Log.d(
+                DebugLogger.d(TAG, "matchId=${setup.matchId}")
+                DebugLogger.d(TAG, "createdAt=${setup.createdAt}")
+                DebugLogger.d(TAG, "teamA=${setup.teamA.name}: ${setup.teamA.players.joinToString { it.name }}")
+                DebugLogger.d(TAG, "teamB=${setup.teamB.name}: ${setup.teamB.players.joinToString { it.name }}")
+                DebugLogger.d(
                     TAG,
                     "rules=setsToWin:${setup.rules.setsToWin}, " +
                         "gamesToWinSet:${setup.rules.gamesToWinSet}, " +
@@ -56,11 +58,13 @@ class MatchSetupListenerService : WearableListenerService() {
         }
     }
 
+    // Take the data packet sent by the phone and convert it into a structured object (MatchSetup) that can be used by the watch module
     private fun DataMap.toMatchSetup(): MatchSetup {
         val defaultRules = MatchRules()
 
         return MatchSetup(
             matchId = getString(MatchSetupDataKeys.MATCH_ID) ?: "unknown_match",
+            tournamentName = getString(MatchSetupDataKeys.TOURNAMENT_NAME) ?: "",
             createdAt = getLong(MatchSetupDataKeys.CREATED_AT),
             teamA = TeamSetup(
                 id = getString(MatchSetupDataKeys.TEAM_A_ID) ?: "team_a",

@@ -1,101 +1,57 @@
 package com.example.padeltracker.presentation.communication
 
 import android.content.Context
-import android.util.Log
-import com.example.padeltracker.shared.WearCommunicationConstants
-import com.google.android.gms.wearable.PutDataMapRequest
+import com.example.padeltracker.shared.communication.WearPaths
+import com.example.padeltracker.shared.debug.DebugLogger
 import com.google.android.gms.wearable.Wearable
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import org.json.JSONObject
 
 /**
- * Sends a match-ended event from the Wear app to connected devices.
+ * Sends the completed match summary from the Wear app to connected phones.
+ *
+ * Called by MatchViewModel when the user confirms the end of the match.
  */
+
 class MatchEndedSender(
     private val context: Context
 ) {
-    fun sendMatchEnded(heartRateHistory: String,
-                       avgHeartRate: Int,
-                       teamAPlayers: String,
-                       teamBPlayers: String,
-                       score: String,
-                       winner: String,
-                       duration: String,
-                       forehands: Int,
-                       backhands: Int,
-                       smashes: Int,
-                       services: Int,
-                       forehandLobs: Int,
-                       backhandLobs: Int)
-
-    {
-
-        val payload = System.currentTimeMillis().toString().toByteArray()
-
-        Log.d(TAG, "Preparing to send match ended message")
-
-        // new, date
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        val currentDate = dateFormat.format(Date())
-
-        // send the heartbeat history to the phone (for the graph)
-        val putDataReq = PutDataMapRequest.create("/match_result").apply {
-            dataMap.putString("heartRateHistory", heartRateHistory)
-            dataMap.putLong("timestamp", System.currentTimeMillis())
-
-            dataMap.putString("date", currentDate)
-            dataMap.putString("duration", duration)
-            dataMap.putString("score", score)
-            dataMap.putString("teamAPlayers", teamAPlayers)
-            dataMap.putString("teamBPlayers", teamBPlayers)
-            dataMap.putString("winner", winner)
-            dataMap.putInt("avgHeartRate", avgHeartRate)
-            dataMap.putInt("forehands", forehands)
-            dataMap.putInt("backhands", backhands)
-            dataMap.putInt("smashes", smashes)
-            dataMap.putInt("services", services)
-            dataMap.putInt("forehandLobs", forehandLobs)
-            dataMap.putInt("backhandLobs", backhandLobs)
-        }.asPutDataRequest()
-
-        putDataReq.setUrgent()
-
-        Wearable.getDataClient(context).putDataItem(putDataReq)
-            .addOnSuccessListener {
-                Log.d(TAG, "Successfully synced Heart Rate History to phone!")
-            }
-            .addOnFailureListener { error ->
-                Log.e(TAG, "Failed to sync DataMap", error)
-            }
+    fun sendMatchEnded(
+        score: String,
+        avgHeartRate: Int,
+        teamAPlayers: String,
+        teamBPlayers: String,
+        winner: String,
+        duration: String,
+        heartRateHistory: String,
+        tournamentName: String
+    ) {
+        val payload = JSONObject()
+            .put("score", score)
+            .put("avgHeartRate", avgHeartRate)
+            .put("teamAPlayers", teamAPlayers)
+            .put("teamBPlayers", teamBPlayers)
+            .put("winner", winner)
+            .put("duration", duration)
+            .put("heartRateHistory", heartRateHistory)
+            .put("tournamentName", tournamentName)
+            .toString()
+            .toByteArray(Charsets.UTF_8)
 
         Wearable.getNodeClient(context).connectedNodes
             .addOnSuccessListener { nodes ->
                 if (nodes.isEmpty()) {
-                    Log.d(TAG, "No connected nodes found for match ended message")
+                    DebugLogger.d(TAG, "No connected nodes found for match ended message")
                     return@addOnSuccessListener
                 }
 
                 nodes.forEach { node ->
-                    Log.d(
-                        TAG,
-                        "Sending match ended message to ${node.displayName} (${node.id})"
-                    )
-
                     Wearable.getMessageClient(context)
-                        .sendMessage(
-                            node.id,
-                            WearCommunicationConstants.MATCH_ENDED_PATH,
-                            payload
-                        )
+                        .sendMessage(node.id, WearPaths.MATCH_ENDED, payload)
                         .addOnSuccessListener {
-                            Log.d(
-                                TAG,
-                                "Match ended message sent to ${node.displayName} (${node.id})"
-                            )
+                            DebugLogger.d(TAG, "Match ended message sent to ${node.displayName} (${node.id})")
                         }
                         .addOnFailureListener { error ->
-                            Log.e(
+                            DebugLogger.e(
                                 TAG,
                                 "Failed to send match ended message to ${node.displayName} (${node.id})",
                                 error
@@ -104,7 +60,7 @@ class MatchEndedSender(
                 }
             }
             .addOnFailureListener { error ->
-                Log.e(TAG, "Failed to get connected nodes", error)
+                DebugLogger.e(TAG, "Failed to get connected nodes", error)
             }
     }
 

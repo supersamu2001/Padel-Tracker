@@ -1,13 +1,18 @@
 package com.example.padeltracker.wear
 
 import android.content.Context
-import android.util.Log
 import com.example.padeltracker.shared.MatchSetup
 import com.example.padeltracker.shared.MatchSetupDataKeys
-import com.example.padeltracker.shared.WearCommunicationConstants
+import com.example.padeltracker.shared.communication.WearPaths
+import com.example.padeltracker.shared.debug.DebugLogger
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 
+/**
+ * Send the match set up to the phone
+ *
+ * (Search for "Wearable.getDataClient" to see the lines of the actual transmission of data)
+ */
 class WearMatchSetupSender(private val context: Context) {
 
     fun sendMatchSetup(
@@ -17,9 +22,10 @@ class WearMatchSetupSender(private val context: Context) {
     ) {
         try {
             val request = PutDataMapRequest.create(
-                WearCommunicationConstants.MATCH_SETUP_PATH
+                WearPaths.MATCH_SETUP
             ).apply {
                 dataMap.putString(MatchSetupDataKeys.MATCH_ID, setup.matchId)
+                dataMap.putString(MatchSetupDataKeys.TOURNAMENT_NAME, setup.tournamentName)
                 dataMap.putLong(MatchSetupDataKeys.CREATED_AT, setup.createdAt)
                 dataMap.putLong(MatchSetupDataKeys.SENT_AT, System.currentTimeMillis())
 
@@ -55,18 +61,23 @@ class WearMatchSetupSender(private val context: Context) {
                 dataMap.putInt(MatchSetupDataKeys.MINIMUM_ADVANTAGE, setup.rules.minimumAdvantage)
             }.asPutDataRequest().setUrgent()
 
+            // Actual sending of setup data to the watch
             Wearable.getDataClient(context).putDataItem(request)
                 .addOnSuccessListener {
-                    Log.d("WATCH_SETUP", "Successfully sent match setup to watch")
+                    DebugLogger.d(TAG, "Successfully sent match setup to watch")
                     onSuccess()
                 }
                 .addOnFailureListener { error ->
-                    Log.e("WATCH_SETUP", "Failed to send match setup to watch", error)
+                    DebugLogger.e(TAG, "Failed to send match setup to watch", error)
                     onFailure(error)
                 }
         } catch (e: Exception) {
-            Log.e("WATCH_SETUP", "Exception while sending match setup", e)
+            DebugLogger.e(TAG, "Exception while sending match setup", e)
             onFailure(e)
         }
+    }
+
+    companion object {
+        private const val TAG = "WATCH_SETUP"
     }
 }

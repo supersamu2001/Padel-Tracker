@@ -39,7 +39,6 @@ fun HistoryScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            // ΔΙΟΡΘΩΣΗ: Αλλάξαμε το historyscreen_jpg σε historyscreen
             painter = painterResource(id = R.drawable.historyscreen),
             contentDescription = null,
             contentScale = ContentScale.Crop,
@@ -81,7 +80,17 @@ fun HistoryScreen(
 }
 
 @Composable
-fun MatchHistoryCard(match: MatchRecord, onClick: () -> Unit, onDelete: () -> Unit) {    Card(
+fun MatchHistoryCard(match: MatchRecord, onClick: () -> Unit, onDelete: () -> Unit) {
+    // Logic to clean the score: remove the third set if it is 0-0
+    val displayScore = if (match.score.endsWith(", 0-0")) {
+        match.score.removeSuffix(", 0-0")
+    } else if (match.score.endsWith(" 0-0")) {
+        match.score.removeSuffix(" 0-0")
+    } else {
+        match.score
+    }
+
+    Card(
         modifier = Modifier.fillMaxWidth().clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.9f))
@@ -89,7 +98,12 @@ fun MatchHistoryCard(match: MatchRecord, onClick: () -> Unit, onDelete: () -> Un
         Column(modifier = Modifier.padding(16.dp)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text(text = match.date, fontSize = 12.sp, color = Color.Gray)
-                Text(text = "Final Score", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color(0xFFD32F2F))
+                Text(
+                    text = if (match.tournamentName.isNotBlank()) match.tournamentName else "Final Score",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFFD32F2F)
+                )
                 IconButton(onClick = onDelete) {
                     Icon(
                         imageVector = Icons.Default.Delete,
@@ -101,11 +115,24 @@ fun MatchHistoryCard(match: MatchRecord, onClick: () -> Unit, onDelete: () -> Un
             Spacer(modifier = Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(text = match.teamAPlayers, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    Text(text = "vs", fontSize = 12.sp, color = Color.Gray)
-                    Text(text = match.teamBPlayers, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    val isTeamAWinner = match.winner == "Team A"
+                    val isTeamBWinner = match.winner == "Team B"
+
+                    Text(
+                        text = match.teamAPlayers,
+                        fontWeight = if (isTeamAWinner) FontWeight.ExtraBold else FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = if (isTeamAWinner) Color.Black else Color.Gray
+                    )
+                    Text(text = "vs", fontSize = 12.sp, color = Color.LightGray)
+                    Text(
+                        text = match.teamBPlayers,
+                        fontWeight = if (isTeamBWinner) FontWeight.ExtraBold else FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = if (isTeamBWinner) Color.Black else Color.Gray
+                    )
                 }
-                Text(text = match.score, fontSize = 24.sp, fontWeight = FontWeight.Black, color = Color(0xFF008080))
+                Text(text = displayScore, fontSize = 24.sp, fontWeight = FontWeight.Black, color = Color(0xFF008080))
             }
         }
     }

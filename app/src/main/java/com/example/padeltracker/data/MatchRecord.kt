@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 // This class represents a single match in our database table
+// ACTUAL ENTITY OF THE DATABASE
 @Entity(tableName = "matches")
 data class MatchRecord(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -20,5 +21,6 @@ data class MatchRecord(
     val services: Int,         // Total services
     val teamAPlayers: String,  // Names of Team A
     val teamBPlayers: String,   // Names of Team B
-    val winner: String         // Example: "Team A" or "Team B"
+    val winner: String,         // Example: "Team A" or "Team B"
+    val tournamentName: String = "" // Name of the tournament
 )

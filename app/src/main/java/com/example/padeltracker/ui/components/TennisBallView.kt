@@ -10,6 +10,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 
+/**
+ * Draw the padel tennis ball on the HomeScreen
+ */
 @Composable
 fun TennisBallView(modifier: Modifier = Modifier) {
     Canvas(modifier = modifier) {

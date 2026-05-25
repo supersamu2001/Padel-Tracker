@@ -17,12 +17,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
 import com.example.padeltracker.R
 import com.example.padeltracker.shared.MatchSetup
+import com.example.padeltracker.shared.communication.WearPaths
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.delay
 import java.util.Locale
-import com.example.padeltracker.data.MatchRecord
 
 @Composable
 fun LiveScoreScreen(
@@ -61,12 +61,12 @@ fun LiveScoreScreen(
         val messageListener = MessageClient.OnMessageReceivedListener { messageEvent: MessageEvent ->
             when (messageEvent.path) {
                 // Listen for the match start signal from the watch
-                "/match_started" -> {
+                WearPaths.MATCH_STARTED -> {
                     isMatchStarted = true
                     matchStatusText = "Match in progress..."
                 }
                 // Listen for score updates
-                "/live_score" -> {
+                WearPaths.LIVE_SCORE -> {
                     val newScore = String(messageEvent.data)
                     liveScoreString = newScore
                 }
@@ -134,7 +134,6 @@ fun LiveScoreScreen(
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            //new
             PadelScoreboard(
                 teamAName = teamAName,
                 teamBName = teamBName,
@@ -147,7 +146,6 @@ fun LiveScoreScreen(
     }
 }
 
-// 🟢 NEW: Custom UI Components for the professional Scoreboard look
 
 @Composable
 fun PadelScoreboard(teamAName: String, teamBName: String, scoreString: String) {

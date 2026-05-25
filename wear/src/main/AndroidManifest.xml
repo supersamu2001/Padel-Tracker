@@ -5,7 +5,12 @@
     <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
 
     <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.health.READ_HEART_RATE" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
     <uses-feature android:name="android.hardware.type.watch" />
 
     <application
@@ -28,6 +33,9 @@
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
+        <meta-data
+            android:name="health_permissions_show_permissions_rationale"
+            android:value=".presentation.MainActivity" />
 
         <activity
             android:name=".presentation.MainActivity"
@@ -38,6 +46,9 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
             </intent-filter>
         </activity>
 
