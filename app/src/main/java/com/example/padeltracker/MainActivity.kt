@@ -119,7 +119,7 @@ class MainActivity : ComponentActivity() {
                             } else {
                                 isWatchConnected = false
                                 scope.launch {
-                                    snackbarHostState.showSnackbar("No Padel Tracker watch connected")
+                                    snackbarHostState.showSnackbar("No APPADEL watch connected")
                                 }
                             }
                         }

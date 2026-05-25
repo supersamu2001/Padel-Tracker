@@ -70,7 +70,7 @@ fun HomeScreen(
 
             // APP NAME
             Text(
-                text = "Padel Tracker",
+                text = "APPADEL",
                 fontSize = 42.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = Color.White,

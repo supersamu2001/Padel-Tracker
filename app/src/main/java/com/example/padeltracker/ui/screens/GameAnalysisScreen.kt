@@ -509,7 +509,7 @@ fun MatchSummaryShareCard(record: MatchRecord, activeRed: Color) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // App Branding & Date
-            Text("PADEL TRACKER", fontSize = 16.sp, fontWeight = FontWeight.ExtraBold, color = activeRed)
+            Text("APPADEL", fontSize = 16.sp, fontWeight = FontWeight.ExtraBold, color = activeRed)
             Text("Match Summary • ${record.date}", color = Color.White.copy(alpha = 0.6f), fontSize = 10.sp)
 
             Spacer(modifier = Modifier.height(16.dp))

@@ -120,7 +120,7 @@ fun WaitingForSetupScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Padel Tracker",
+                text = "APPADEL",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
@@ -168,7 +168,7 @@ fun StartMatchScreen(state: ScoreTrackerState, onStart: () -> Unit) {
                     modifier = Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
                     transformation = SurfaceTransformation(transformationSpec),
                 ) {
-                    Text(text = "Padel Tracker", textAlign = TextAlign.Center)
+                    Text(text = "APPADEL", textAlign = TextAlign.Center)
                 }
             }
             item {
