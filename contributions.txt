@@ -61,7 +61,7 @@ ROOT
 │   │   ├── viewmodel/
 │   │   │   └── MatchViewModel.kt
 │   │   └── MainActivity.kt
-│   └── build.gradle.kts
+│   └
 │
 ├── shared
 │   ├── src/main/java/com/example/padeltracker/shared/
@@ -78,6 +78,17 @@ ROOT
 │   │   │   ├── ShotFeatureExtractor.kt [Samu]
 │   │   │   └── ShotWindow.kt
 │   │   └── MatchSetup.kt
-│   └── build.gradle.kts
+│   └
 │
-└── build.gradle.kts
+└─
+
+
+-> SAMUELE MARCHI'S LOG:
+    Number of commits: 40
+    Number of lines: 24.799
+
+    Non coding activities:
+    - Collection of padel shots in an actual padel court
+    - Optimal Shot threshold found experimentally trying the shots
+    - Dataset Exploration, Analysis, Preprocessing and model training (Python)
+
