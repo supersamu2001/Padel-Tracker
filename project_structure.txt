@@ -1,0 +1,83 @@
+Padel-Tracker Project Structure
+==============================
+
+ROOT
+├── app
+│   ├── src/main/java/com/example/padeltracker/
+│   │   ├── data/
+│   │   │   ├── AppDatabase.kt
+│   │   │   ├── HistoryRepository.kt
+│   │   │   ├── MatchDao.kt
+│   │   │   ├── MatchPreferences.kt [Samu]
+│   │   │   └── MatchRecord.kt
+│   │   ├── ml/
+│   │   │   ├── PadelModel.java [Samu]
+│   │   │   ├── ShotClassifier.kt [Samu]
+│   │   │   └── ShotDetectionState.kt [Samu]
+│   │   ├── service/
+│   │   │   ├── MatchEndedListenerService.kt
+│   │   │   ├── SensorDataListenerService.kt [Samu]
+│   │   │   ├── SensorStatusState.kt [Samu]
+│   │   │   └── ShotLogger.kt [Samu]
+│   │   ├── ui/
+│   │   │   ├── components/
+│   │   │   │   └── TennisBallView.kt
+│   │   │   ├── screens/
+│   │   │   │   ├── GameAnalysisScreen.kt [Samu]
+│   │   │   │   ├── HistoryScreen.kt [Samu]
+│   │   │   │   ├── HomeScreen.kt
+│   │   │   │   ├── LiveScoreScreen.kt
+│   │   │   │   └── SetupScreen.kt
+│   │   │   └── theme/
+│   │   │       ├── Color.kt
+│   │   │       ├── Theme.kt
+│   │   │       └── Type.kt
+│   │   ├── wear/
+│   │   │   ├── PhoneMatchEndedEventBus.kt
+│   │   │   └── WearMatchSetupSender.kt
+│   │   └── MainActivity.kt [Samu]
+│   └
+│
+├── wear
+│   ├── src/main/java/com/example/padeltracker/presentation/
+│   │   ├── communication/
+│   │   │   └── MatchEndedSender.kt
+│   │   ├── data/
+│   │   │   └── PendingMatchSetupStore.kt
+│   │   ├── model/
+│   │   │   ├── DomainModel.kt
+│   │   │   └── MatchSetupMappers.kt
+│   │   ├── scoring/
+│   │   │   └── PadelScoreEngine.kt
+│   │   ├── sensors/
+│   │   │   ├── WearExperimentPipeline.kt
+│   │   │   └── WearSensorManager.kt [Samu]
+│   │   ├── service/
+│   │   │   └── MatchSetupListenerService.kt
+│   │   ├── theme/
+│   │   │   └── Theme.kt
+│   │   ├── ui/
+│   │   │   └── WearApp.kt
+│   │   ├── viewmodel/
+│   │   │   └── MatchViewModel.kt
+│   │   └── MainActivity.kt
+│   └── build.gradle.kts
+│
+├── shared
+│   ├── src/main/java/com/example/padeltracker/shared/
+│   │   ├── communication/
+│   │   │   ├── SensorPacketSerializer.kt
+│   │   │   └── WearPaths.kt [Samu]
+│   │   ├── experiment/
+│   │   │   ├── ExperimentConfig.kt [Samu]
+│   │   │   └── ExperimentMode.kt
+│   │   ├── sensors/
+│   │   │   └── ImuModels.kt
+│   │   ├── shotrecognition/
+│   │   │   ├── ShotDetector.kt
+│   │   │   ├── ShotFeatureExtractor.kt [Samu]
+│   │   │   └── ShotWindow.kt
+│   │   └── MatchSetup.kt
+│   └── build.gradle.kts
+│
+└── build.gradle.kts
