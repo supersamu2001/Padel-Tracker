@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.update
  * The SensorDataListenerService updates these values, and the UI observes them.
  */
 object ShotDetectionState {
+    // shotCounts is a StateFlow because in future works we could add a live counter
     private val _shotCounts = MutableStateFlow(MapShotCounts())
     val shotCounts: StateFlow<MapShotCounts> = _shotCounts.asStateFlow()
 

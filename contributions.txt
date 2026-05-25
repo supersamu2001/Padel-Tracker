@@ -5,43 +5,43 @@ ROOT
 ├── app
 │   ├── src/main/java/com/example/padeltracker/
 │   │   ├── data/
-│   │   │   ├── AppDatabase.kt [Zoe]
+│   │   │   ├── AppDatabase.kt
 │   │   │   ├── HistoryRepository.kt
-│   │   │   ├── MatchDao.kt [Zoe]
+│   │   │   ├── MatchDao.kt
 │   │   │   ├── MatchPreferences.kt [Samu]
-│   │   │   └── MatchRecord.kt [Zoe]
+│   │   │   └── MatchRecord.kt
 │   │   ├── ml/
 │   │   │   ├── PadelModel.java [Samu]
 │   │   │   ├── ShotClassifier.kt [Samu]
 │   │   │   └── ShotDetectionState.kt [Samu]
 │   │   ├── service/
 │   │   │   ├── MatchEndedListenerService.kt
-│   │   │   ├── SensorDataListenerService.kt [Samu, Zoe]
+│   │   │   ├── SensorDataListenerService.kt [Samu]
 │   │   │   ├── SensorStatusState.kt [Samu]
 │   │   │   └── ShotLogger.kt [Samu]
 │   │   ├── ui/
 │   │   │   ├── components/
-│   │   │   │   └── TennisBallView.kt [Zoe]
+│   │   │   │   └── TennisBallView.kt
 │   │   │   ├── screens/
-│   │   │   │   ├── GameAnalysisScreen.kt [Samu, Zoe]
-│   │   │   │   ├── HistoryScreen.kt [Samu, Zoe]
-│   │   │   │   ├── HomeScreen.kt [Zoe]
-│   │   │   │   ├── LiveScoreScreen.kt [Zoe]
-│   │   │   │   └── SetupScreen.kt [Zoe]
+│   │   │   │   ├── GameAnalysisScreen.kt [Samu]
+│   │   │   │   ├── HistoryScreen.kt [Samu]
+│   │   │   │   ├── HomeScreen.kt
+│   │   │   │   ├── LiveScoreScreen.kt
+│   │   │   │   └── SetupScreen.kt
 │   │   │   └── theme/
 │   │   │       ├── Color.kt
 │   │   │       ├── Theme.kt
 │   │   │       └── Type.kt
 │   │   ├── wear/
 │   │   │   ├── PhoneMatchEndedEventBus.kt
-│   │   │   └── WearMatchSetupSender.kt [Zoe]
-│   │   └── MainActivity.kt [Samu, Zoe]
+│   │   │   └── WearMatchSetupSender.kt
+│   │   └── MainActivity.kt [Samu]
 │   └
 │
 ├── wear
 │   ├── src/main/java/com/example/padeltracker/presentation/
 │   │   ├── communication/
-│   │   │   └── MatchEndedSender.kt [Zoe]
+│   │   │   └── MatchEndedSender.kt
 │   │   ├── data/
 │   │   │   └── PendingMatchSetupStore.kt
 │   │   ├── model/
@@ -51,23 +51,17 @@ ROOT
 │   │   │   └── PadelScoreEngine.kt
 │   │   ├── sensors/
 │   │   │   ├── WearExperimentPipeline.kt
-│   │   │   └── WearSensorManager.kt [Samu, Zoe]
+│   │   │   └── WearSensorManager.kt [Samu]
 │   │   ├── service/
 │   │   │   └── MatchSetupListenerService.kt
 │   │   ├── theme/
 │   │   │   └── Theme.kt
 │   │   ├── ui/
-│   │   │   └── WearApp.kt [Zoe]
+│   │   │   └── WearApp.kt
 │   │   ├── viewmodel/
-<<<<<<< HEAD
-│   │   │   └── MatchViewModel.kt [Zoe]
-│   │   └── MainActivity.kt [Zoe]
-│   └── build.gradle.kts
-=======
 │   │   │   └── MatchViewModel.kt
 │   │   └── MainActivity.kt
-│   └
->>>>>>> origin/main
+│   └── build.gradle.kts
 │
 ├── shared
 │   ├── src/main/java/com/example/padeltracker/shared/
@@ -84,24 +78,6 @@ ROOT
 │   │   │   ├── ShotFeatureExtractor.kt [Samu]
 │   │   │   └── ShotWindow.kt
 │   │   └── MatchSetup.kt
-│   └
+│   └── build.gradle.kts
 │
-└─
-
-
--> SAMUELE MARCHI'S LOG:
-    Number of commits: 40
-    Number of lines: 24.799
-
-    Non coding activities:
-    - Collection of padel shots in an actual padel court
-    - Optimal Shot threshold found experimentally trying the shots
-    - Dataset Exploration, Analysis, Preprocessing and model training (Python)
-
--> ZOI TSAGKARAKI'S LOG:
-    Number of commits: 19
-    Number of lines: 5.134
-
-    Non coding activities:
-
-    - Collection of padel shots in an actual padel court
+└── build.gradle.kts
