@@ -115,8 +115,6 @@ fun GameAnalysisScreen(
                             graphicsLayer.record {
                                 this@drawWithContent.drawContent()
                             }
-                            // Draw normally so Compose keeps the layer "alive"
-                            drawContent()
                         }
                 ) {
                     MatchSummaryShareCard(record = record, activeRed = activeRed)
@@ -126,7 +124,7 @@ fun GameAnalysisScreen(
 
         // VISIBLE BACKGROUND
         Image(
-            painter = painterResource(id = R.drawable.statistics),
+            painter = painterResource(id = R.drawable.padel_court_from_above),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
