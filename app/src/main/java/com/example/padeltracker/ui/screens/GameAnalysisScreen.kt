@@ -14,7 +14,11 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberCompositionContext
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -92,6 +96,7 @@ fun GameAnalysisScreen(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
+    var redrawCounter by remember { mutableIntStateOf(0) }
 
     BackHandler {
         onGoHome()
@@ -100,17 +105,22 @@ fun GameAnalysisScreen(
     Box(modifier = Modifier.fillMaxSize()) {
 
         if (record != null) {
-            Box(
-                modifier = Modifier
-                    .wrapContentSize(unbounded = true)
-                    .drawWithContent {
-                        // 1. Record the visual output to our graphics layer for sharing
-                        graphicsLayer.record {
-                            this@drawWithContent.drawContent()
+            // key(redrawCounter) forces a total re-render of this block when redrawCounter changes
+            key(redrawCounter) {
+                Box(
+                    modifier = Modifier
+                        .wrapContentSize(unbounded = true)
+                        .drawWithContent {
+                            // Record the visual output to our graphics layer for sharing
+                            graphicsLayer.record {
+                                this@drawWithContent.drawContent()
+                            }
+                            // Draw normally so Compose keeps the layer "alive"
+                            drawContent()
                         }
-                    }
-            ) {
-                MatchSummaryShareCard(record = record, activeRed = activeRed)
+                ) {
+                    MatchSummaryShareCard(record = record, activeRed = activeRed)
+                }
             }
         }
 
@@ -142,6 +152,12 @@ fun GameAnalysisScreen(
                     if (record != null) {
                         coroutineScope.launch {
                             try {
+                                // 1. Trigger a redraw of the hidden card in order to be sure that the image
+                                // will be loaded correctly
+                                redrawCounter++
+                                // 2. Wait for the next frame to be rendered
+                                kotlinx.coroutines.yield() 
+                                // 3. Take the screenshot
                                 val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
                                 shareBitmap(context, bitmap)
                             } catch (e: Exception) {
