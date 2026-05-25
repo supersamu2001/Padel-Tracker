@@ -103,4 +103,5 @@ ROOT
     Number of lines: 5.134
 
     Non coding activities:
+
     - Collection of padel shots in an actual padel court
