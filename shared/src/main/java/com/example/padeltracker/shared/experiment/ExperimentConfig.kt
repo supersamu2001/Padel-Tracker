@@ -11,6 +11,7 @@ data class ExperimentConfig(
     //val mode: ExperimentMode = ExperimentMode.RAW_TO_PHONE,
     val mode: ExperimentMode = ExperimentMode.FEATURES_TO_PHONE,
     //val mode: ExperimentMode = ExperimentMode.SHOT_TO_PHONE,
+    // true -> log and debug feature, false everything disable for power consumption purpose
     val debugMode: Boolean = false,
     /**
      * Sensor sampling frequency.
@@ -20,20 +21,13 @@ data class ExperimentConfig(
     val samplingHz: Int = 25,
 
     /**
-     * Number of samples kept before the trigger sample.
+     * Time kept before and after the trigger sample.
      *
-     * With the default value, the shot window contains 25 samples
-     * before the detected shot.
+     * The actual number of samples is derived from samplingHz so the
+     * shot window covers the same time span at different frequencies.
      */
-    val preTriggerSamples: Int = 25,
-
-    /**
-     * Number of samples collected after the trigger sample.
-     *
-     * With the default value, the shot window contains 25 samples
-     * after the detected shot.
-     */
-    val postTriggerSamples: Int = 25,
+    val preTriggerDurationMillis: Int = 1_000,
+    val postTriggerDurationMillis: Int = 1_000,
 
     /**
      * Acceleration threshold used for shot detection.
@@ -103,19 +97,13 @@ data class ExperimentConfig(
      *
      * Formula:
      * pre-trigger samples + trigger sample + post-trigger samples.
-     *
-     * Default:
-     * 25 + 1 + 25 = 51 samples.
      */
     val totalShotSamples: Int
         get() = preTriggerSamples + 1 + postTriggerSamples
 
-    /**
-     * Approximate shot window duration in milliseconds.
-     *
-     * Default:
-     * 51 samples at 25 Hz = 2040 ms.
-     */
-    val shotWindowDurationMs: Int
-        get() = totalShotSamples * 1000 / samplingHz
+    val preTriggerSamples: Int
+        get() = samplingHz * preTriggerDurationMillis / 1_000
+
+    val postTriggerSamples: Int
+        get() = samplingHz * postTriggerDurationMillis / 1_000
 }

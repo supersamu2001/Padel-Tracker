@@ -1,6 +1,7 @@
 package com.example.padeltracker.presentation.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
@@ -8,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +30,7 @@ import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.core.content.ContextCompat
 import com.example.padeltracker.shared.experiment.ExperimentConfig
 import com.example.padeltracker.shared.debug.DebugLogger
@@ -322,12 +325,13 @@ fun TeamScoreArea(
         modifier = modifier
             .fillMaxSize()
             .padding(1.dp)
-            .background(color.copy(alpha = 0.05f), shape = RoundedCornerShape(10.dp))
+            .background(color.copy(alpha = 0.12f))
             .clickable(onClick = onClick)
             .padding(horizontal = 4.dp, vertical = 4.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -339,47 +343,43 @@ fun TeamScoreArea(
                 textAlign = TextAlign.Center
             )
 
+            Spacer(modifier = Modifier.height(2.dp))
+
             Text(
                 text = points,
-                style = MaterialTheme.typography.displayMedium,
+                fontSize = 38.sp,
                 fontWeight = FontWeight.Black,
                 color = color
             )
 
             if (isServing) {
+                Spacer(modifier = Modifier.height(1.dp))
                 Text(
-                    text = "SERVING",
+                    text = "S. $servingPlayer",
                     style = MaterialTheme.typography.labelSmall,
                     color = color,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 9.sp,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = servingPlayer,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = color.copy(alpha = 0.9f),
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 9.sp,
+                    fontSize = 10.sp,
                     textAlign = TextAlign.Center
                 )
             } else {
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }
 }
 
 @Composable
-fun UndoArea(onUndo: () -> Unit) {
+fun UndoArea(
+    modifier: Modifier = Modifier,
+    onUndo: () -> Unit
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .height(34.dp)
-            .background(
-                Color.White.copy(alpha = 0.02f),
-                shape = RoundedCornerShape(topStart = 14.dp, topEnd = 14.dp)
-            )
+            .fillMaxHeight()
+            .heightIn(min = 30.dp)
+            .background(Color.Black.copy(alpha = 0.28f))
             .combinedClickable(
                 onClick = { /* Normal tap ignored */ },
                 onLongClick = onUndo
@@ -391,7 +391,8 @@ fun UndoArea(onUndo: () -> Unit) {
             style = MaterialTheme.typography.labelSmall,
             color = Color.Gray,
             fontSize = 12.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 3.dp)
         )
     }
 }
@@ -413,13 +414,21 @@ fun MatchScoreScreen(
         TeamId.TEAM_B -> match.teamB.players.getOrNull(match.servingPlayerIndex ?: 0)?.name ?: "Player"
         else -> "Player"
     }
+    val layoutDirection = LocalLayoutDirection.current
 
     var showEndMatchAction by remember { mutableStateOf(false) }
 
     ScreenScaffold { contentPadding ->
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier.fillMaxSize().padding(contentPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        start = contentPadding.calculateStartPadding(layoutDirection),
+                        top = contentPadding.calculateTopPadding(),
+                        end = contentPadding.calculateEndPadding(layoutDirection),
+                        bottom = 0.dp
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // 1. Compact Header with menu trigger
@@ -432,59 +441,64 @@ fun MatchScoreScreen(
                     onMenuClick = { showEndMatchAction = true }
                 )
 
-                // 2. Main Score Area (Tappable Zones)
-                Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-                    Row(modifier = Modifier.fillMaxSize()) {
-                        // Team A Zone (Left)
-                        TeamScoreArea(
-                            modifier = Modifier.weight(1f),
-                            label = "Team A",
-                            points = formatPointDisplay(
-                                match.currentSet.currentGame.teamAPoints,
-                                match.currentSet.currentGame.teamBPoints,
-                                match.currentSet.currentGame.type
-                            ),
-                            isServing = match.servingTeam == TeamId.TEAM_A,
-                            servingPlayer = currentServingPlayerName,
-                            color = TeamAColor,
-                            onClick = { onAddPoint(TeamId.TEAM_A) }
-                        )
-
-                        // Vertical Separator
-                        Box(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(1.dp)
-                                .background(Color.White.copy(alpha = BorderAlpha))
-                        )
-
-                        // Team B Zone (Right)
-                        TeamScoreArea(
-                            modifier = Modifier.weight(1f),
-                            label = "Team B",
-                            points = formatPointDisplay(
-                                match.currentSet.currentGame.teamBPoints,
-                                match.currentSet.currentGame.teamAPoints,
-                                match.currentSet.currentGame.type
-                            ),
-                            isServing = match.servingTeam == TeamId.TEAM_B,
-                            servingPlayer = currentServingPlayerName,
-                            color = TeamBColor,
-                            onClick = { onAddPoint(TeamId.TEAM_B) }
-                        )
-                    }
-                }
-
-                // Horizontal Separator
-                Box(
+                // 2. Connected control area: Team A, Team B, and Undo.
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(1.dp)
-                        .background(Color.White.copy(alpha = BorderAlpha))
-                )
+                        .weight(1f)
+                        .padding(horizontal = 4.dp)
+                        .clip(RoundedCornerShape(18.dp))
+                        .border(1.dp, Color.White.copy(alpha = BorderAlpha), RoundedCornerShape(18.dp))
+                ) {
+                    Row(modifier = Modifier.weight(3.8f).fillMaxWidth()) {
+                            TeamScoreArea(
+                                modifier = Modifier.weight(1f),
+                                label = "Team A",
+                                points = formatPointDisplay(
+                                    match.currentSet.currentGame.teamAPoints,
+                                    match.currentSet.currentGame.teamBPoints,
+                                    match.currentSet.currentGame.type
+                                ),
+                                isServing = match.servingTeam == TeamId.TEAM_A,
+                                servingPlayer = currentServingPlayerName,
+                                color = TeamAColor,
+                                onClick = { onAddPoint(TeamId.TEAM_A) }
+                            )
 
-                // 3. Bottom Undo Area
-                UndoArea(onUndo = onUndo)
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .width(1.dp)
+                                    .background(Color.White.copy(alpha = BorderAlpha))
+                            )
+
+                            TeamScoreArea(
+                                modifier = Modifier.weight(1f),
+                                label = "Team B",
+                                points = formatPointDisplay(
+                                    match.currentSet.currentGame.teamBPoints,
+                                    match.currentSet.currentGame.teamAPoints,
+                                    match.currentSet.currentGame.type
+                                ),
+                                isServing = match.servingTeam == TeamId.TEAM_B,
+                                servingPlayer = currentServingPlayerName,
+                                color = TeamBColor,
+                                onClick = { onAddPoint(TeamId.TEAM_B) }
+                            )
+                        }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .background(Color.White.copy(alpha = BorderAlpha))
+                    )
+
+                    UndoArea(
+                        modifier = Modifier.weight(1f),
+                        onUndo = onUndo
+                    )
+                }
             }
 
             // End Match Confirmation Overlay
