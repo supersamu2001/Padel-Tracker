@@ -17,7 +17,7 @@ val Context.dataStore by preferencesDataStore(name = "tournament_prefs")
  */
 class MatchPreferences(private val context: Context) {
 
-    // 2. Define the Keys to know exactly where each name is saved
+    // Define the Keys to know exactly where each name is saved
     companion object {
         val TEAM_A_P1 = stringPreferencesKey("team_a_p1")
         val TEAM_A_P2 = stringPreferencesKey("team_a_p2")
@@ -25,7 +25,7 @@ class MatchPreferences(private val context: Context) {
         val TEAM_B_P2 = stringPreferencesKey("team_b_p2")
     }
 
-    // 3. Function to SAVE the data (runs asynchronously in the background)
+    // Function to SAVE the data (runs asynchronously in the background)
     suspend fun savePlayerNames(a1: String, a2: String, b1: String, b2: String) {
         context.dataStore.edit { preferences ->
             preferences[TEAM_A_P1] = a1
@@ -35,7 +35,7 @@ class MatchPreferences(private val context: Context) {
         }
     }
 
-    // 4. Function to READ the data (returns a Flow/Stream of the saved list)
+    // Function to READ the data (returns a Flow/Stream of the saved list)
     val playerNamesFlow: Flow<List<String>> = context.dataStore.data.map { preferences ->
         listOf(
             preferences[TEAM_A_P1] ?: "", // If no name is found, return an empty string ""
