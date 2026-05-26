@@ -138,6 +138,11 @@ ROOT
     Number of commits: 6
     Number of lines: 580
 
+Summary of the code:
+   - App module: Implemented local persistence architecture (HistoryRepository, MatchDao queries)
+   - App module: Developed history screen state management (HistoryViewModel) and Jetpack Compose UI logic
+   - App module: Implemented DataSyncManager for real-time Wear OS to smartphone telemetry tracking
+
     Non coding activities:
     - Collection of padel shots in an actual padel court
     - App logo creation and brand naming (APPADEL)
