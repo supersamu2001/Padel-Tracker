@@ -6,7 +6,7 @@ ROOT
 │   ├── src/main/java/com/example/padeltracker/
 │   │   ├── data/
 │   │   │   ├── AppDatabase.kt [Zoe]
-│   │   │   ├── HistoryRepository.kt
+│   │   │   ├── HistoryRepository.kt [Samu]
 │   │   │   ├── MatchDao.kt [Zoe]
 │   │   │   ├── MatchPreferences.kt [Samu]
 │   │   │   └── MatchRecord.kt [Zoe]
@@ -61,7 +61,7 @@ ROOT
 │   │   ├── viewmodel/
 │   │   │   └── MatchViewModel.kt [Zoe, Federico]
 │   │   └── MainActivity.kt [Federico]
-│   └── build.gradle.kts
+│   └─
 │
 ├── shared
 │   ├── src/main/java/com/example/padeltracker/shared/
@@ -78,9 +78,9 @@ ROOT
 │   │   │   ├── ShotFeatureExtractor.kt [Samu, Federico]
 │   │   │   └── ShotWindow.kt [Federico]
 │   │   └── MatchSetup.kt [Federico]
-│   └── build.gradle.kts
+│   └─
 │
-└── build.gradle.kts
+└─
 
 -> SAMUELE MARCHI'S LOG:
     Number of commits: 43
