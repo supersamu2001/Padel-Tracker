@@ -135,8 +135,8 @@ ROOT
     - Energy consumption tests
 
 -> GIOANA NEZA'S LOG:
-    Number of commits: 6
-    Number of lines: 580
+    Number of commits: 8
+    Number of lines: 601
 
 Summary of the code:
    - App module: Implemented local persistence architecture (HistoryRepository, MatchDao queries)
