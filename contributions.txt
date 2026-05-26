@@ -98,7 +98,7 @@ ROOT
     Summary of the code:
     - Wear module: Initial sensor collection logic
     - Shared module: Function that implements the feature extraction from raw data
-    - App module: Initial smartphone-watch communication, all the ML pipeline and inference, details on Analysis screen
+    - App module: Initial smartphone-watch communication, all the ML pipeline and inference, details on Analysis screen, DataStore for players names
 
 -> ZOI TSAGKARAKI'S LOG:
     Number of commits: 19
