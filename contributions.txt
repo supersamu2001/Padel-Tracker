@@ -15,10 +15,10 @@ ROOT
 │   │   │   ├── ShotClassifier.kt [Samu]
 │   │   │   └── ShotDetectionState.kt [Samu]
 │   │   ├── service/
-│   │   │   ├── MatchEndedListenerService.kt [Zoe]
-│   │   │   ├── SensorDataListenerService.kt [Samu]
+│   │   │   ├── MatchEndedListenerService.kt [Zoe, Federico]
+│   │   │   ├── SensorDataListenerService.kt [Samu, Federico]
 │   │   │   ├── SensorStatusState.kt [Samu]
-│   │   │   └── ShotLogger.kt [Samu]
+│   │   │   └── ShotLogger.kt [Samu, Federico]
 │   │   ├── ui/
 │   │   │   ├── components/
 │   │   │   │   └── TennisBallView.kt [Zoe]
@@ -33,51 +33,51 @@ ROOT
 │   │   │       ├── Theme.kt
 │   │   │       └── Type.kt
 │   │   ├── wear/
-│   │   │   ├── PhoneMatchEndedEventBus.kt
-│   │   │   └── WearMatchSetupSender.kt [Zoe]
-│   │   └── MainActivity.kt [Samu, Zoe]
+│   │   │   ├── PhoneMatchEndedEventBus.kt [Federico]
+│   │   │   └── WearMatchSetupSender.kt [Zoe, Federico]
+│   │   └── MainActivity.kt [Samu, Zoe, Federico]
 │   └
 │
 ├── wear
 │   ├── src/main/java/com/example/padeltracker/presentation/
 │   │   ├── communication/
-│   │   │   └── MatchEndedSender.kt [Zoe]
+│   │   │   └── MatchEndedSender.kt [Zoe, Federico]
 │   │   ├── data/
-│   │   │   └── PendingMatchSetupStore.kt
+│   │   │   └── PendingMatchSetupStore.kt [Federico]
 │   │   ├── model/
-│   │   │   ├── DomainModel.kt
-│   │   │   └── MatchSetupMappers.kt
+│   │   │   ├── DomainModel.kt [Federico]
+│   │   │   └── MatchSetupMappers.kt [Federico]
 │   │   ├── scoring/
-│   │   │   └── PadelScoreEngine.kt
-│   │   ├── sensors/
-│   │   │   ├── WearExperimentPipeline.kt
-│   │   │   └── WearSensorManager.kt [Samu, Zoe]
+│   │   │   └── PadelScoreEngine.kt [Federico]
+│   │   ├── sensors/ 
+│   │   │   ├── WearExperimentPipeline.kt [Federico]
+│   │   │   └── WearSensorManager.kt [Samu, Zoe, Federico]
 │   │   ├── service/
-│   │   │   └── MatchSetupListenerService.kt [Zoe]
+│   │   │   └── MatchSetupListenerService.kt [Zoe, Federico]
 │   │   ├── theme/
 │   │   │   └── Theme.kt
 │   │   ├── ui/
-│   │   │   └── WearApp.kt
+│   │   │   └── WearApp.kt [Federico]
 │   │   ├── viewmodel/
-│   │   │   └── MatchViewModel.kt [Zoe]
-│   │   └── MainActivity.kt
+│   │   │   └── MatchViewModel.kt [Zoe, Federico]
+│   │   └── MainActivity.kt [Federico]
 │   └── build.gradle.kts
 │
 ├── shared
 │   ├── src/main/java/com/example/padeltracker/shared/
 │   │   ├── communication/
-│   │   │   ├── SensorPacketSerializer.kt
-│   │   │   └── WearPaths.kt [Samu]
+│   │   │   ├── SensorPacketSerializer.kt [Federico]
+│   │   │   └── WearPaths.kt [Samu, Federico]
 │   │   ├── experiment/
-│   │   │   ├── ExperimentConfig.kt [Samu]
-│   │   │   └── ExperimentMode.kt
+│   │   │   ├── ExperimentConfig.kt [Samu, Federico]
+│   │   │   └── ExperimentMode.kt [Federico]
 │   │   ├── sensors/
-│   │   │   └── ImuModels.kt
+│   │   │   └── ImuModels.kt [Federico]
 │   │   ├── shotrecognition/
-│   │   │   ├── ShotDetector.kt
-│   │   │   ├── ShotFeatureExtractor.kt [Samu]
-│   │   │   └── ShotWindow.kt
-│   │   └── MatchSetup.kt
+│   │   │   ├── ShotDetector.kt [Federico]
+│   │   │   ├── ShotFeatureExtractor.kt [Samu, Federico]
+│   │   │   └── ShotWindow.kt [Federico]
+│   │   └── MatchSetup.kt [Federico]
 │   └── build.gradle.kts
 │
 └── build.gradle.kts
@@ -98,3 +98,21 @@ ROOT
     Non coding activities:
     - Collection of padel shots in an actual padel court
 
+-> FEDERICO PINNA'S LOG:
+    Total number of commits: 39
+    Total number of lines: 77.581
+
+    Excluding energy-consumption logs, dataset files,
+    and initial Android Studio project scaffolding/restructuring:
+    Number of commits: 30
+    Number of lines: 6.874
+
+    Summury of the code:
+        Wear module: Padel score logic and wear ui, sensor collection and match-ended communication.
+        Shared module: Shared data models, communication paths, sensor packet serialization, experiment configuration and shot recognition utilities.
+        App module: Match setup flow, smartphone-watch communication and sensor data reception.
+
+    Non coding activities:
+    - Collection of padel shots in an actual padel court
+    - Optimal Shot threshold found experimentally trying the shots
+    - Energy consumption tests
