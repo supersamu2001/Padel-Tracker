@@ -1,13 +1,13 @@
 Padel-Tracker Files Contribution
-==============================
+================================
 
 ROOT
 ├── app
 │   ├── src/main/java/com/example/padeltracker/
 │   │   ├── data/
 │   │   │   ├── AppDatabase.kt [Zoe]
-│   │   │   ├── HistoryRepository.kt [Samu]
-│   │   │   ├── MatchDao.kt [Zoe]
+│   │   │   ├── HistoryRepository.kt [Gioana]
+│   │   │   ├── MatchDao.kt [Zoe, Gioana]
 │   │   │   ├── MatchPreferences.kt [Samu]
 │   │   │   └── MatchRecord.kt [Zoe]
 │   │   ├── ml/
@@ -15,6 +15,7 @@ ROOT
 │   │   │   ├── ShotClassifier.kt [Samu]
 │   │   │   └── ShotDetectionState.kt [Samu]
 │   │   ├── service/
+│   │   │   ├── DataSyncManager.kt [Gioana]
 │   │   │   ├── MatchEndedListenerService.kt [Zoe, Federico]
 │   │   │   ├── SensorDataListenerService.kt [Samu, Federico]
 │   │   │   ├── SensorStatusState.kt [Samu]
@@ -22,9 +23,11 @@ ROOT
 │   │   ├── ui/
 │   │   │   ├── components/
 │   │   │   │   └── TennisBallView.kt [Zoe]
+│   │   │   ├── viewmodels/
+│   │   │   │   └── HistoryViewModel.kt [Gioana]
 │   │   │   ├── screens/
 │   │   │   │   ├── GameAnalysisScreen.kt [Samu, Zoe]
-│   │   │   │   ├── HistoryScreen.kt [Samu, Zoe]
+│   │   │   │   ├── HistoryScreen.kt [Samu, Zoe, Gioana]
 │   │   │   │   ├── HomeScreen.kt [Zoe]
 │   │   │   │   ├── LiveScoreScreen.kt [Zoe]
 │   │   │   │   └── SetupScreen.kt [Zoe]
@@ -125,3 +128,12 @@ ROOT
     - Collection of padel shots in an actual padel court
     - Optimal Shot threshold found experimentally trying the shots
     - Energy consumption tests
+
+-> GIOANA NEZA'S LOG:
+    Number of commits: 6
+    Number of lines: 580
+
+    Non coding activities:
+    - Collection of padel shots in an actual padel court
+    - App logo creation and brand naming (APPADEL)
+    - Presentation slides preparation in Canva
