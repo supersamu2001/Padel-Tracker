@@ -83,13 +83,22 @@ ROOT
 └── build.gradle.kts
 
 -> SAMUELE MARCHI'S LOG:
-    Number of commits: 40
+    Number of commits: 43
     Number of lines: 24.799
+
+    Exluding initial project configuration and Java class of the ML model:
+    Number of commits: 37
+    Number of lines: 1995
 
     Non coding activities:
     - Collection of padel shots in an actual padel court
     - Optimal Shot threshold found experimentally trying the shots
     - Dataset Exploration, Analysis, Preprocessing and model training (Python)
+
+    Summary of the code:
+    - Wear module: Initial sensor collection logic
+    - Shared module: Function that implements the feature extraction from raw data
+    - App module: Initial smartphone-watch communication, all the ML pipeline and inference, details on Analysis screen
 
 -> ZOI TSAGKARAKI'S LOG:
     Number of commits: 19
@@ -107,7 +116,7 @@ ROOT
     Number of commits: 30
     Number of lines: 6.874
 
-    Summury of the code:
+    Summary of the code:
         Wear module: Padel score logic and wear ui, sensor collection and match-ended communication.
         Shared module: Shared data models, communication paths, sensor packet serialization, experiment configuration and shot recognition utilities.
         App module: Match setup flow, smartphone-watch communication and sensor data reception.
