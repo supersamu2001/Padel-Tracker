@@ -1,6 +1,6 @@
 # Padel-Tracker 🎾
 
-Padel-Tracker is a comprehensive Android application (Smartphone + Wear OS) designed to track Padel matches and analyze player performance in real-time using Machine Learning.
+Padel-Tracker is a comprehensive Android application (Smartphone + Wear OS) designed to track Padel matches and analyze player performance using Machine Learning.
 
 ## 🏗️ Project Architecture
 
